@@ -9,7 +9,6 @@
   This is based on a technique that I learned at Stony Brook
   University.
 -->
-
 <configurations>
 	<movieDbApi>
 		<apiKeyV3>Place v3 API here</apiKeyV3>
