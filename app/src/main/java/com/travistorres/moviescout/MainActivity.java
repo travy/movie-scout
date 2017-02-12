@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.travistorres.moviescout.utils.configs.ConfigurationsReader;
 import com.travistorres.moviescout.utils.networking.MovieDbUrlBuilder;
 
 import java.net.URL;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MovieDbUrlBuilder.setResources(getResources());
 
         //  TODO:  remove code below, used only for testing networking api
         URL ratingMovieUrl = MovieDbUrlBuilder.getRatingsMoviesUrl();

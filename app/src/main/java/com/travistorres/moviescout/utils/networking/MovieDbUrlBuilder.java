@@ -4,7 +4,10 @@
 
 package com.travistorres.moviescout.utils.networking;
 
+import android.content.res.Resources;
 import android.net.Uri;
+
+import com.travistorres.moviescout.utils.configs.ConfigurationsReader;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,15 +23,6 @@ import java.net.URL;
  */
 
 public class MovieDbUrlBuilder {
-    /*
-     * Specifies the api keys provided by movie db api when signed up.
-     *
-     * TODO:  Should read in keys from an XML configuration file
-     *
-     */
-    private final static String API_V3_KEY = "Insert Version 3 Key Here";
-    private final static String API_V4_KEY = "Insert Version 4 Key Here";
-
     /*
      * URI construction strings that will be utilized throughout the class for constructing valid
      * request to the movie db api.
@@ -49,6 +43,17 @@ public class MovieDbUrlBuilder {
      */
     public final static int SORT_BY_POPULARITY = 0x00;
     public final static int SORT_BY_RATING = 0x01;
+
+    private static Resources resources;
+
+    /**
+     * Specify the resources object.
+     *
+     * @param res The resources
+     */
+    public static void setResources(Resources res) {
+        resources = res;
+    }
 
     /**
      * Retrieves the URL for acquiring a list of movies that is sorted by popularity.
@@ -82,6 +87,8 @@ public class MovieDbUrlBuilder {
         String sortAction = (movieSortType == SORT_BY_POPULARITY) ?
                 POPULAR_MOVIE_SORT_ACTION : HIGH_RATING_MOVIE_SORT_ACTION;
 
+        String apiKeyV3 = ConfigurationsReader.getApiKey(resources);
+
         //  construct the movie db connection uri
         Uri uri = new Uri.Builder()
                 .scheme(URL_SCHEME)
@@ -89,7 +96,7 @@ public class MovieDbUrlBuilder {
                 .appendPath(API_V3_IDENTIFIER)
                 .appendPath(MOVIE_REQUEST_ACTION)
                 .appendPath(sortAction)
-                .appendQueryParameter(API_KEY_QUERY_NAME, API_V3_KEY)
+                .appendQueryParameter(API_KEY_QUERY_NAME, apiKeyV3)
                 .build();
 
         //  safely convert the uri into a url
