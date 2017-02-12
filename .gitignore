@@ -1,8 +1,5 @@
 # This file is based on settings used by both [Github](https://github.com/github/gitignore/blob/master/Android.gitignore) and the Udacity team
 
-# Configuration file which contains the API key
-configurations.xml
-
 # Built application files
 *.apk
 *.ap_
