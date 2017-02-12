@@ -11,9 +11,8 @@ Since the requirements for the app did not specify a target SDK, I've decided to
 This choice was made after reviewing the [Android Dashboard](https://developer.android.com/about/dashboards/index.html) which shows that most users are running newer versions of Android and reading about several articles explaining of the various security issues with Android Kitkat and lower.  Also since Google Materials seems to be supported by version 5.0 and up, this is what clinched the version for me.
 
 ##  Configurations
-This section is still under construction.
-
-This is where information regarding adding an API key will be listed.
+###  Movie DB API Keys
+In order to add your API v3/v4 key for use with the app you will need to open app/src/main/res/xml/configurations.xml and fill out the configurations for apiKeyV3 and apiKeyV4.  Once specified the app will be able to make request to the RESTful server.
 
 ##  Tested VM's
 This section is still under construction.
