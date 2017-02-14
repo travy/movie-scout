@@ -4,14 +4,20 @@
 
 package com.travistorres.moviescout;
 
+import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.travistorres.moviescout.utils.configs.ConfigurationsReader;
-import com.travistorres.moviescout.utils.networking.MovieDbRequest;
-import com.travistorres.moviescout.utils.networking.MovieDbUrlBuilder;
+import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
+import com.travistorres.moviescout.utils.networking.exceptions.HttpPageNotFoundException;
+import com.travistorres.moviescout.utils.networking.exceptions.HttpUnauthorizedException;
+import com.travistorres.moviescout.utils.networking.exceptions.NetworkingException;
+import com.travistorres.moviescout.utils.networking.moviedb.MovieDbUrlManager;
+import com.travistorres.moviescout.utils.networking.NetworkManager;
 
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -19,6 +25,8 @@ import java.net.URL;
  */
 
 public class MainActivity extends AppCompatActivity {
+    private TextView mRatingUrl;
+
     /**
      * TODO:  document method
      *
@@ -29,17 +37,51 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MovieDbUrlBuilder.setResources(getResources());
-
-        MovieDbRequest network = new MovieDbRequest();
-        String response = network.request(MovieDbUrlBuilder.getPopularMoviesUrl());
-
         //  TODO:  remove code below, used only for testing networking api
-        URL ratingMovieUrl = MovieDbUrlBuilder.getRatingsMoviesUrl();
-        TextView ratingView = (TextView) findViewById(R.id.popular_movie_url);
-        ratingView.setText(ratingMovieUrl.toString());
-        URL popularMovieUrl = MovieDbUrlBuilder.getPopularMoviesUrl();
-        TextView popularView = (TextView) findViewById(R.id.rating_movie_url);
-        popularView.setText(popularMovieUrl.toString());
+        mRatingUrl = (TextView) findViewById(R.id.popular_movie_url);
+
+        requestMovies();
+    }
+
+    private void requestMovies() {
+        Resources resources = getResources();
+        MovieDbUrlManager urlManager = new MovieDbUrlManager(resources);
+        URL popularMoviesUrl = urlManager.getPopularMoviesUrl();
+
+        new NetworkingTask().execute(popularMoviesUrl);
+    }
+
+    private class NetworkingTask extends AsyncTask <URL, Void, String> {
+
+        @Override
+        protected String doInBackground(URL... urls) {
+            if (urls.length <= 0) {
+                return null;
+            }
+
+            URL url = urls[0];
+
+            String response = null;
+            try {
+                response = NetworkManager.request(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (HttpConnectionTimeoutException e) {
+                e.printStackTrace();
+            } catch (HttpPageNotFoundException e) {
+                e.printStackTrace();
+            } catch (HttpUnauthorizedException e) {
+                e.printStackTrace();
+            } catch (NetworkingException e) {
+                e.printStackTrace();
+            }
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            mRatingUrl.setText(s);
+        }
     }
 }

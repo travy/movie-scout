@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Travis Anthony Torres
  */
 
-package com.travistorres.moviescout.utils.networking;
+package com.travistorres.moviescout.utils.networking.moviedb;
 
 import android.content.res.Resources;
 import android.net.Uri;
@@ -13,7 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * MovieDbUrlBuilder
+ * MovieDbUrlManager
  *
  * Provides URL's that are capable of safely retrieving content from the Movie DB API.  Using the
  * URI objects generated from this class will ensure that URL's are always well formed.
@@ -22,7 +22,7 @@ import java.net.URL;
  * @version February 11, 2017
  */
 
-public class MovieDbUrlBuilder {
+public class MovieDbUrlManager {
     /*
      * URI construction strings that will be utilized throughout the class for constructing valid
      * request to the movie db api.
@@ -44,14 +44,23 @@ public class MovieDbUrlBuilder {
     public final static int SORT_BY_POPULARITY = 0x00;
     public final static int SORT_BY_RATING = 0x01;
 
-    private static Resources resources;
+    private Resources resources;
+
+    /**
+     * Allocates memory for the builder and provides a system resource manager.
+     *
+     * @param resources System resources
+     */
+    public MovieDbUrlManager(Resources resources) {
+        setResources(resources);
+    }
 
     /**
      * Specify the resources object.
      *
      * @param res The resources
      */
-    public static void setResources(Resources res) {
+    public void setResources(Resources res) {
         resources = res;
     }
 
@@ -60,7 +69,7 @@ public class MovieDbUrlBuilder {
      *
      * @return URL the URL of the request or null on error
      */
-    public static URL getPopularMoviesUrl() {
+    public URL getPopularMoviesUrl() {
         return getSortedMoveListUrl(SORT_BY_POPULARITY);
     }
 
@@ -69,7 +78,7 @@ public class MovieDbUrlBuilder {
      *
      * @return URL The URL of the request or null on error
      */
-    public static URL getRatingsMoviesUrl() {
+    public URL getRatingsMoviesUrl() {
         return getSortedMoveListUrl(SORT_BY_RATING);
     }
 
@@ -82,7 +91,7 @@ public class MovieDbUrlBuilder {
      *
      * @return URL The URL of the movie or NULL on failure
      */
-    private static URL getSortedMoveListUrl(int movieSortType) {
+    private URL getSortedMoveListUrl(int movieSortType) {
         //  specify if movies should be sorted by popularity or by rating
         String sortAction = (movieSortType == SORT_BY_POPULARITY) ?
                 POPULAR_MOVIE_SORT_ACTION : HIGH_RATING_MOVIE_SORT_ACTION;
