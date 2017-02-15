@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (NetworkingException e) {
                 e.printStackTrace();
             }
-
+            Log.d("Copy me", url.toString());
             return response;
         }
 
