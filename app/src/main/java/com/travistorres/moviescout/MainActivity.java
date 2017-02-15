@@ -9,12 +9,13 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpPageNotFoundException;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpUnauthorizedException;
 import com.travistorres.moviescout.utils.networking.exceptions.NetworkingException;
-import com.travistorres.moviescout.utils.networking.moviedb.MovieDbUrlManager;
+import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
 import com.travistorres.moviescout.utils.networking.NetworkManager;
 
 import java.io.IOException;
@@ -30,6 +31,9 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mMovieListView;
 
+    //  TODO:  Remove after testing
+    private TextView mResponse;
+
     /**
      * TODO:  document method
      *
@@ -41,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
+
+        //  TODO:  remove response after testing
+        mResponse = (TextView) findViewById(R.id.response);
+        requestMovies();
     }
 
     private void requestMovies() {
@@ -81,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-
+            //  TODO:  remove after testing
+            mResponse.setText(s);
         }
     }
 }

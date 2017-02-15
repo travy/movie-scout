@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Travis Anthony Torres
  */
 
-package com.travistorres.moviescout.utils.networking.moviedb;
+package com.travistorres.moviescout.utils.moviedb;
 
 import android.content.res.Resources;
 import android.net.Uri;
