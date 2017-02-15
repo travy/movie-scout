@@ -16,7 +16,9 @@ import java.net.URL;
 import java.util.Scanner;
 
 /**
- * TODO:  document
+ * NetworkManager
+ *
+ * Handles networking over HTTP protocol.  Will acquire all request in some given String format.
  *
  * @author Travis Anthony Torres
  * @version February 12, 2017

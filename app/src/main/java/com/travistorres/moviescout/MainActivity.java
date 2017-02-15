@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
@@ -23,6 +22,9 @@ import java.net.URL;
 
 /**
  * TODO:  document the class
+ *
+ * @author Travis Anthony Torres
+ * @version February 12, 2017
  */
 
 public class MainActivity extends AppCompatActivity {
@@ -37,11 +39,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //  TODO:  remove code below, used only for testing networking api
-        mRatingUrl = (TextView) findViewById(R.id.popular_movie_url);
-
-        requestMovies();
     }
 
     private void requestMovies() {
@@ -76,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (NetworkingException e) {
                 e.printStackTrace();
             }
-            Log.d("Copy me", url.toString());
+
             return response;
         }
 
