@@ -8,7 +8,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.support.v7.widget.RecyclerView;
 
 import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpPageNotFoundException;
@@ -28,7 +28,7 @@ import java.net.URL;
  */
 
 public class MainActivity extends AppCompatActivity {
-    private TextView mRatingUrl;
+    private RecyclerView mMovieListView;
 
     /**
      * TODO:  document method
@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
     }
 
     private void requestMovies() {
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            mRatingUrl.setText(s);
+
         }
     }
 }
