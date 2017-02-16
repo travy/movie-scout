@@ -9,12 +9,6 @@
     android:padding="10dp"
     tools:context="com.travistorres.moviescout.MainActivity">
 
-    <!--  TODO:  should be removed  -->
-    <TextView
-        android:id="@+id/response"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <!--  TODO:  should replace with a movie poster  -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/movie_list_rv"

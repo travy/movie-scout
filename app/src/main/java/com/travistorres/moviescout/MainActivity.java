@@ -12,12 +12,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
+import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
+import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
+import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpPageNotFoundException;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpUnauthorizedException;
 import com.travistorres.moviescout.utils.networking.exceptions.NetworkingException;
-import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
 import com.travistorres.moviescout.utils.networking.NetworkManager;
 
 import java.io.IOException;
@@ -34,9 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mMovieListView;
     private LinearLayoutManager mMovieLayoutManager;
     private MovieListAdapter mMovieAdapter;
-
-    //  TODO:  Remove after testing
-    private TextView mResponse;
 
     /**
      * TODO:  document method
@@ -56,9 +55,6 @@ public class MainActivity extends AppCompatActivity {
         mMovieListView.setAdapter(mMovieAdapter);
         mMovieListView.setLayoutManager(mMovieLayoutManager);
 
-        //  TODO:  remove response after testing
-        mResponse = (TextView) findViewById(R.id.response);
-
         requestMovies();
     }
 
@@ -70,19 +66,20 @@ public class MainActivity extends AppCompatActivity {
         new NetworkingTask().execute(popularMoviesUrl);
     }
 
-    private class NetworkingTask extends AsyncTask <URL, Void, String> {
+    private class NetworkingTask extends AsyncTask <URL, Void, Movie[]> {
 
         @Override
-        protected String doInBackground(URL... urls) {
+        protected Movie[] doInBackground(URL... urls) {
             if (urls.length <= 0) {
                 return null;
             }
 
             URL url = urls[0];
 
-            String response = null;
+            Movie[] movieList = null;
             try {
-                response = NetworkManager.request(url);
+                String json = NetworkManager.request(url);
+                movieList = MovieDbParser.retrieveMovieList(json);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (HttpConnectionTimeoutException e) {
@@ -95,13 +92,12 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return response;
+            return movieList;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            //  TODO:  remove after testing
-            mResponse.setText(s);
+        protected void onPostExecute(Movie[] list) {
+            mMovieAdapter.setMoviesList(list);
         }
     }
 }

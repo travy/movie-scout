@@ -4,10 +4,8 @@
 
 package com.travistorres.moviescout.utils.moviedb.models;
 
-import java.util.Date;
-
 /**
- * TODO:  document
+ * Contains the information regarding a Movie item.
  *
  * @author Travis Anthony Torres
  * @version February 15, 2017
@@ -17,7 +15,7 @@ public class Movie {
     public String posterPath;
     public boolean isAdultFilm;
     public String overview;
-    public Date releaseDate;
+    public String releaseDate;  //  TODO:  should be a Date object
     public int[] genreIds;
     public int id;
     public String originalTitle;
