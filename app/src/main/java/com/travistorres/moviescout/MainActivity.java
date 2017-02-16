@@ -8,9 +8,11 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
+import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpPageNotFoundException;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpUnauthorizedException;
@@ -30,6 +32,8 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mMovieListView;
+    private LinearLayoutManager mMovieLayoutManager;
+    private MovieListAdapter mMovieAdapter;
 
     //  TODO:  Remove after testing
     private TextView mResponse;
@@ -44,10 +48,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mMovieAdapter = new MovieListAdapter();
+        mMovieLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+        //  configure the recycler view
         mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
+        mMovieListView.setAdapter(mMovieAdapter);
+        mMovieListView.setLayoutManager(mMovieLayoutManager);
 
         //  TODO:  remove response after testing
         mResponse = (TextView) findViewById(R.id.response);
+
         requestMovies();
     }
 
