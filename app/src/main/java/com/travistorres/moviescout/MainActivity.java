@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
 import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
@@ -37,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager mMovieLayoutManager;
     private MovieListAdapter mMovieAdapter;
 
+    private TextView mPageNotFoundTextView;
+    private TextView mNetworkingErrorTextView;
+    private TextView mUnauthorizedTextView;
+
     /**
      * TODO:  document method
      *
@@ -47,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mPageNotFoundTextView = (TextView) findViewById(R.id.page_not_found_error);
+        mNetworkingErrorTextView = (TextView) findViewById(R.id.network_connection_failed_error);
+        mUnauthorizedTextView = (TextView) findViewById(R.id.api_key_unauthorized_error);
+
+        //  configures adapter objects
         mMovieAdapter = new MovieListAdapter();
         mMovieLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
@@ -66,8 +76,31 @@ public class MainActivity extends AppCompatActivity {
         new NetworkingTask().execute(popularMoviesUrl);
     }
 
-    private class NetworkingTask extends AsyncTask <URL, Void, Movie[]> {
+    /**
+     * Display the page not found error message.
+     *
+     */
+    public void showPageNotFoundError() {
+        mPageNotFoundTextView.setVisibility(TextView.VISIBLE);
+    }
 
+    /**
+     * Displays the error message for when the api key was invalid.
+     *
+     */
+    public void showUnauthorizedError() {
+        mUnauthorizedTextView.setVisibility(TextView.VISIBLE);
+    }
+
+    /**
+     * Displays the networking errror message.
+     *
+     */
+    public void showNetworkingError() {
+        mNetworkingErrorTextView.setVisibility(TextView.VISIBLE);
+    }
+
+    private class NetworkingTask extends AsyncTask <URL, Void, Movie[]> {
         @Override
         protected Movie[] doInBackground(URL... urls) {
             if (urls.length <= 0) {
@@ -86,10 +119,13 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (HttpPageNotFoundException e) {
                 e.printStackTrace();
+                showPageNotFoundError();
             } catch (HttpUnauthorizedException e) {
                 e.printStackTrace();
+                showUnauthorizedError();
             } catch (NetworkingException e) {
                 e.printStackTrace();
+                showNetworkingError();
             }
 
             return movieList;
@@ -97,7 +133,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Movie[] list) {
-            mMovieAdapter.setMoviesList(list);
+            if (list != null) {
+                mMovieAdapter.setMoviesList(list);
+            }
         }
     }
 }
