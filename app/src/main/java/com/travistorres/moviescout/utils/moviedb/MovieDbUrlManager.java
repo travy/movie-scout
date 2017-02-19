@@ -33,7 +33,7 @@ public class MovieDbUrlManager {
     private final static String API_V3_IDENTIFIER = "3";
     private final static String MOVIE_REQUEST_ACTION = "movie";
     private final static String POPULAR_MOVIE_SORT_ACTION = "popular";
-    private final static String HIGH_RATING_MOVIE_SORT_ACTION = "rating";
+    private final static String HIGH_RATING_MOVIE_SORT_ACTION = "top_rated";
     private final static String API_KEY_QUERY_NAME = "api_key";
 
     /**
@@ -118,7 +118,7 @@ public class MovieDbUrlManager {
      *
      * @return URL The URL of the movie or NULL on failure
      */
-    private URL getSortedMoveListUrl(int movieSortType) {
+    public URL getSortedMoveListUrl(int movieSortType) {
         //  specify if movies should be sorted by popularity or by rating
         String sortAction = (movieSortType == SORT_BY_POPULARITY) ?
                 POPULAR_MOVIE_SORT_ACTION : HIGH_RATING_MOVIE_SORT_ACTION;

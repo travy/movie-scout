@@ -7,4 +7,7 @@
     <string name="network_failure_error_message">The network connection failed!</string>
 
     <string name="movie_poster_content_description">Movie Poster</string>
+
+    <string name="popularity_menu_item">Most Popular</string>
+    <string name="rating_menu_item">Highly Rated</string>
 </resources>

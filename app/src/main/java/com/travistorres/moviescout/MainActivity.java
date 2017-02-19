@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
@@ -44,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private final static int GRIDLAYOUT_COLUMN_COUNT = 2;
 
+    /*
+     * Specifies what the sort order should default to.
+     */
+    private final static int DEFAULT_SORT_ORDER = MovieDbUrlManager.SORT_BY_POPULARITY;
+
     private RecyclerView mMovieListView;
     private GridLayoutManager mMovieLayoutManager;
     private MovieListAdapter mMovieAdapter;
@@ -77,18 +84,53 @@ public class MainActivity extends AppCompatActivity {
         mMovieListView.setAdapter(mMovieAdapter);
         mMovieListView.setLayoutManager(mMovieLayoutManager);
 
-        requestMovies();
+        requestMovies(DEFAULT_SORT_ORDER);
     }
 
     /**
      * Will startup a sub-process for acquiring a list of movies and displaying them on the app.
      *
      */
-    private void requestMovies() {
+    private void requestMovies(int sortOrder) {
         MovieDbUrlManager urlManager = new MovieDbUrlManager(this);
-        URL popularMoviesUrl = urlManager.getPopularMoviesUrl();
+        URL popularMoviesUrl = urlManager.getSortedMoveListUrl(sortOrder);
 
         new NetworkingTask().execute(popularMoviesUrl);
+    }
+
+    /**
+     * Allows the menu to be displayed on the activity bar.
+     *
+     * @param menu
+     *
+     * @return true since the menu should always be shown
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        return true;
+    }
+
+    /**
+     * Determines the action to be performed when a button is pressed.
+     *
+     * @param item The item that was pressed by the user.
+     *
+     * @return some response
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.popularity_sort_button:
+                requestMovies(MovieDbUrlManager.SORT_BY_POPULARITY);
+                break;
+            case R.id.rating_sort_button:
+                requestMovies(MovieDbUrlManager.SORT_BY_RATING);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
