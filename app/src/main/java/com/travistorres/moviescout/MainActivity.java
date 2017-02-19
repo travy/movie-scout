@@ -25,7 +25,13 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * TODO:  document the class
+ * MainActivity
+ *
+ * The main activity is the first view area that the user will be brought to when the first open
+ * the app.  Here they will be shown a list of Movies that can be sorted either by popularity or
+ * highest rating.
+ *
+ * Each movie shown can then be pressed to reveal information regarding the selected title.
  *
  * @author Travis Anthony Torres
  * @version February 12, 2017
@@ -47,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mUnauthorizedTextView;
 
     /**
-     * TODO:  document method
+     * Responsible for loading all resource objects and triggering the events that will allow a
+     * list of movies to be displayed on the screen.
      *
      * @param savedInstanceState
      */
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //  obtain all error mesage objects
         mPageNotFoundTextView = (TextView) findViewById(R.id.page_not_found_error);
         mNetworkingErrorTextView = (TextView) findViewById(R.id.network_connection_failed_error);
         mUnauthorizedTextView = (TextView) findViewById(R.id.api_key_unauthorized_error);
@@ -72,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
         requestMovies();
     }
 
+    /**
+     * Will startup a sub-process for acquiring a list of movies and displaying them on the app.
+     *
+     */
     private void requestMovies() {
         MovieDbUrlManager urlManager = new MovieDbUrlManager(this);
         URL popularMoviesUrl = urlManager.getPopularMoviesUrl();
@@ -103,7 +115,23 @@ public class MainActivity extends AppCompatActivity {
         mNetworkingErrorTextView.setVisibility(TextView.VISIBLE);
     }
 
+    /**
+     * NetworkingTask
+     *
+     * A utility class which will run a sub-process that queries a list of movies over the network.
+     * The process runs separately from the MainActivity to keep the app responsive during times of
+     * low/non-existent network connectivity.
+     *
+     */
+
     private class NetworkingTask extends AsyncTask <URL, Void, Movie[]> {
+        /**
+         * Request a list of movies from the network resource.
+         *
+         * @param urls List of urls for acquiring the movies.  We only need one.
+         *
+         * @return List of movies that were queried.
+         */
         @Override
         protected Movie[] doInBackground(URL... urls) {
             if (urls.length <= 0) {
@@ -134,6 +162,12 @@ public class MainActivity extends AppCompatActivity {
             return movieList;
         }
 
+        /**
+         * Stores the list of movies in the adapter so they can be efficiently rendered onto the
+         * app.
+         *
+         * @param list acquired movies.
+         */
         @Override
         protected void onPostExecute(Movie[] list) {
             if (list != null) {
