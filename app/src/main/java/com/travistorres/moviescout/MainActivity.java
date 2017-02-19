@@ -9,14 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
 import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
+import com.travistorres.moviescout.utils.moviedb.adapters.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
@@ -41,7 +44,8 @@ import java.net.URL;
  * @version February 12, 2017
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements MovieClickedListener {
     /*
      *  Defines the number of columns in the grid layout.
      *
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         mUnauthorizedTextView = (TextView) findViewById(R.id.api_key_unauthorized_error);
 
         //  configures adapter objects
-        mMovieAdapter = new MovieListAdapter();
+        mMovieAdapter = new MovieListAdapter(this);
         mMovieLayoutManager = new GridLayoutManager(this, GRIDLAYOUT_COLUMN_COUNT);
 
         //  configure the recycler view
@@ -138,6 +142,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Specifies the procedure for handling when a Movie has been selected.
+     *
+     * @param clickedMovie
+     */
+    @Override
+    public void onClick(Movie clickedMovie) {
+        //  TODO:  display information about the movie
+        Log.d("click event", "clicked on " + clickedMovie.title);
+        Toast.makeText(this, clickedMovie.title, Toast.LENGTH_SHORT).show();
     }
 
     /**

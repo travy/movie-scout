@@ -21,7 +21,19 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHolder> {
-    private Movie[] movieList;
+    Movie[] movieList;
+
+    final MovieClickedListener clickHandler;
+
+    /**
+     * Allows the MovieClickListener operation to be specified.
+     *
+     * @param onClickListener Listener object which defines the operation to be performed when a
+     * movie has been selected.
+     */
+    public MovieListAdapter(MovieClickedListener onClickListener) {
+        clickHandler = onClickListener;
+    }
 
     /**
      * Constructs a new view for the movie item to be displayed on.
@@ -37,7 +49,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.movie_list_item, parent, false);
 
-        return new MovieListItemViewHolder(view);
+        return new MovieListItemViewHolder(view, this);
     }
 
     /**
