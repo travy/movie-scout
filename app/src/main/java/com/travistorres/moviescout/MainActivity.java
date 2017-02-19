@@ -7,7 +7,7 @@ package com.travistorres.moviescout;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
@@ -32,8 +32,14 @@ import java.net.URL;
  */
 
 public class MainActivity extends AppCompatActivity {
+    /*
+     *  Defines the number of columns in the grid layout.
+     *
+     */
+    private final static int GRIDLAYOUT_COLUMN_COUNT = 2;
+
     private RecyclerView mMovieListView;
-    private LinearLayoutManager mMovieLayoutManager;
+    private GridLayoutManager mMovieLayoutManager;
     private MovieListAdapter mMovieAdapter;
 
     private TextView mPageNotFoundTextView;
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         //  configures adapter objects
         mMovieAdapter = new MovieListAdapter();
-        mMovieLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mMovieLayoutManager = new GridLayoutManager(this, GRIDLAYOUT_COLUMN_COUNT);
 
         //  configure the recycler view
         mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
