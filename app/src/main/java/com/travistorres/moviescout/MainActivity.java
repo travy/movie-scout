@@ -11,6 +11,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mNetworkingErrorTextView;
     private TextView mUnauthorizedTextView;
 
+    private ProgressBar mLoadingIndicator;
+
     /**
      * Responsible for loading all resource objects and triggering the events that will allow a
      * list of movies to be displayed on the screen.
@@ -83,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
         mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
         mMovieListView.setAdapter(mMovieAdapter);
         mMovieListView.setLayoutManager(mMovieLayoutManager);
+
+        //  acquire the loading indicator
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
 
         requestMovies(DEFAULT_SORT_ORDER);
     }
@@ -168,6 +175,17 @@ public class MainActivity extends AppCompatActivity {
 
     private class NetworkingTask extends AsyncTask <URL, Void, Movie[]> {
         /**
+         * Allow users to see the loading indicator wheel.
+         *
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            mLoadingIndicator.setVisibility(View.VISIBLE);
+        }
+
+        /**
          * Request a list of movies from the network resource.
          *
          * @param urls List of urls for acquiring the movies.  We only need one.
@@ -212,6 +230,8 @@ public class MainActivity extends AppCompatActivity {
          */
         @Override
         protected void onPostExecute(Movie[] list) {
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
+
             if (list != null) {
                 mMovieAdapter.setMoviesList(list);
             }
