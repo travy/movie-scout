@@ -4,18 +4,18 @@
 
 package com.travistorres.moviescout;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
 import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
@@ -46,6 +46,12 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity
         implements MovieClickedListener {
+    /*
+     *  Specifies the key used for accessing the selected movie in a requested Activity.
+     *
+     */
+    public final static String SELECTED_MOVIE_EXTRA = "selectedMovie";
+
     /*
      *  Defines the number of columns in the grid layout.
      *
@@ -145,15 +151,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Specifies the procedure for handling when a Movie has been selected.
+     * Opens a new page where users will be able to see information regarding the Movie title that
+     * they selected from the list.
      *
-     * @param clickedMovie
+     * @param clickedMovie The selected movie
      */
     @Override
     public void onClick(Movie clickedMovie) {
-        //  TODO:  display information about the movie
-        Log.d("click event", "clicked on " + clickedMovie.title);
-        Toast.makeText(this, clickedMovie.title, Toast.LENGTH_SHORT).show();
+        Context context = this;
+        Class movieInfoPage = MovieInfoActivity.class;
+        Intent intent = new Intent(context, movieInfoPage);
+        intent.putExtra(SELECTED_MOVIE_EXTRA, clickedMovie);
+
+        startActivity(intent);
     }
 
     /**

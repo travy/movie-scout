@@ -5,6 +5,8 @@
 package com.travistorres.moviescout.utils.moviedb.models;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -21,7 +23,7 @@ import java.net.URL;
  * @version February 15, 2017
  */
 
-public class Movie {
+public class Movie implements Parcelable {
     public String posterPath;
     public boolean isAdultFilm;
     public String overview;
@@ -38,6 +40,22 @@ public class Movie {
     public double voteAverage;
 
     private Context context;
+
+    /**
+     * TODO:  document
+     *
+     */
+    public static final Parcelable.Creator<Movie> CREATOR
+            = new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel in) {
+
+            return null;
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     /**
      * Constructs a new Movie object.
@@ -79,5 +97,15 @@ public class Movie {
      */
     public void loadPosterIntoImageView(ImageView imageView) {
         Picasso.with(context).load(getPosterPathUrlString()).into(imageView);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }
