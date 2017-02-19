@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
 import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             Movie[] movieList = null;
             try {
                 String json = NetworkManager.request(url);
-                movieList = MovieDbParser.retrieveMovieList(json);
+                movieList = MovieDbParser.retrieveMovieList(json, getApplicationContext());
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (HttpConnectionTimeoutException e) {

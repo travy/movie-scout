@@ -21,10 +21,6 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHolder> {
-    private int currentPageNumber;
-    private int totalPages;
-    private int totalResults;
-
     private Movie[] movieList;
 
     /**
@@ -52,10 +48,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
      */
     @Override
     public void onBindViewHolder(MovieListItemViewHolder holder, int position) {
-        //  TODO:  request the poster and display that instead of the title
         Movie currentMovie = movieList[position];
-
-        holder.mMovieListItemView.setText(currentMovie.title);
+        currentMovie.loadPosterIntoImageView(holder.mPosterImageView);
     }
 
     /**
@@ -65,7 +59,6 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
      */
     @Override
     public int getItemCount() {
-        //  TODO:  return totalResults after testing with a single page to acquire all results from the database
         return movieList == null ? 0 : movieList.length;
     }
 

@@ -18,6 +18,8 @@ import java.net.URL;
  * Provides URL's that are capable of safely retrieving content from the Movie DB API.  Using the
  * URI objects generated from this class will ensure that URL's are always well formed.
  *
+ * TODO:  Class should request a Context rather than a Resource object
+ *
  * @author Travis Anthony Torres
  * @version February 11, 2017
  */
@@ -35,6 +37,33 @@ public class MovieDbUrlManager {
     private final static String POPULAR_MOVIE_SORT_ACTION = "popular";
     private final static String HIGH_RATING_MOVIE_SORT_ACTION = "rating";
     private final static String API_KEY_QUERY_NAME = "api_key";
+
+    /**
+     * Constants used for acquiring image resources.
+     *
+     */
+    private final static String IMAGE_HOSTING_DOMAIN = "image.tmdb.org";
+    private final static String IMAGE_HOSTING_PATH_ONE = "t";
+    private final static String IMAGE_HOSTING_PATH_TWO = "p";
+
+    /**
+     * Image Size Constants
+     *
+     */
+    private final static String W92_IMAGE_SIZE = "w92";
+    private final static String W154_IMAGE_SIZE = "w154";
+    private final static String W185_IMAGE_SIZE = "w185";
+    private final static String W342_IMAGE_SIZE = "w342";
+    private final static String W500_IMAGE_SIZE = "w500";
+    private final static String W780_IMAGE_SIZE = "w780";
+    private final static String ORIGINAL_IMAGE_SIZE = "original";
+
+    /**
+     * Default Image Size Constant.  By modifying this constant, you can easily modify the size
+     * of the movie posters as they appear in the movie list.
+     *
+     */
+    private final static String DEFAULT_IMAGE_SIZE = W500_IMAGE_SIZE;
 
     /*
      * Specifies values used for determining a users preference on how movies should be sorted
@@ -108,8 +137,51 @@ public class MovieDbUrlManager {
                 .appendQueryParameter(API_KEY_QUERY_NAME, apiKeyV3)
                 .build();
 
-        //  safely convert the uri into a url
+        return getUrl(uri);
+    }
+
+    /**
+     * Retrieves the URL for acquiring a Movie Poster.
+     *
+     * @param resourceName The resource name of the image on the server.
+     *
+     * @return A properly formatted URL for acquiring the movie poster.
+     */
+    public URL getMoviePosterUrl(String resourceName) {
+        return getMoviePosterUrl(resourceName, DEFAULT_IMAGE_SIZE);
+    }
+
+    /**
+     * Retrieves the URL for acquiring a Movie Poster
+     *
+     * @param resourceName The resource name of the image on the server.
+     * @param posterSize The size that the poster should appear as.
+     *
+     * @return A properly formatted URL for acquiring the movie poster.
+     */
+    public URL getMoviePosterUrl(String resourceName, String posterSize) {
+        Uri uri = new Uri.Builder()
+                .scheme(URL_SCHEME)
+                .authority(IMAGE_HOSTING_DOMAIN)
+                .appendPath(IMAGE_HOSTING_PATH_ONE)
+                .appendPath(IMAGE_HOSTING_PATH_TWO)
+                .appendPath(posterSize)
+                .appendPath(resourceName)
+                .build();
+
+        return getUrl(uri);
+    }
+
+    /**
+     * Converts a URI object into a valid URL.
+     *
+     * @param uri The URI to convert into a URL
+     *
+     * @return URL packaged uri
+     */
+    private static URL getUrl(Uri uri) {
         URL url = null;
+
         try {
             url = new URL(uri.toString());
         } catch (MalformedURLException e) {
