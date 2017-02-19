@@ -4,7 +4,6 @@
 
 package com.travistorres.moviescout;
 
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -68,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestMovies() {
-        Resources resources = getResources();
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(resources);
+        MovieDbUrlManager urlManager = new MovieDbUrlManager(this);
         URL popularMoviesUrl = urlManager.getPopularMoviesUrl();
 
         new NetworkingTask().execute(popularMoviesUrl);
@@ -92,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Displays the networking errror message.
+     * Displays the networking error message.
      *
      */
     public void showNetworkingError() {

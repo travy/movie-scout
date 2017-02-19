@@ -4,7 +4,7 @@
 
 package com.travistorres.moviescout.utils.moviedb;
 
-import android.content.res.Resources;
+import android.content.Context;
 import android.net.Uri;
 
 import com.travistorres.moviescout.utils.configs.ConfigurationsReader;
@@ -17,8 +17,6 @@ import java.net.URL;
  *
  * Provides URL's that are capable of safely retrieving content from the Movie DB API.  Using the
  * URI objects generated from this class will ensure that URL's are always well formed.
- *
- * TODO:  Class should request a Context rather than a Resource object
  *
  * @author Travis Anthony Torres
  * @version February 11, 2017
@@ -73,24 +71,24 @@ public class MovieDbUrlManager {
     public final static int SORT_BY_POPULARITY = 0x00;
     public final static int SORT_BY_RATING = 0x01;
 
-    private Resources resources;
+    private Context context;
 
     /**
      * Allocates memory for the builder and provides a system resource manager.
      *
-     * @param resources System resources
+     * @param context System context
      */
-    public MovieDbUrlManager(Resources resources) {
-        setResources(resources);
+    public MovieDbUrlManager(Context context) {
+        setContext(context);
     }
 
     /**
      * Specify the resources object.
      *
-     * @param res The resources
+     * @param mContext The context of the request
      */
-    public void setResources(Resources res) {
-        resources = res;
+    public void setContext(Context mContext) {
+        context = mContext;
     }
 
     /**
@@ -124,8 +122,7 @@ public class MovieDbUrlManager {
         //  specify if movies should be sorted by popularity or by rating
         String sortAction = (movieSortType == SORT_BY_POPULARITY) ?
                 POPULAR_MOVIE_SORT_ACTION : HIGH_RATING_MOVIE_SORT_ACTION;
-
-        String apiKeyV3 = ConfigurationsReader.getApiKey(resources);
+        String apiKeyV3 = ConfigurationsReader.getApiKey(context);
 
         //  construct the movie db connection uri
         Uri uri = new Uri.Builder()

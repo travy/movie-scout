@@ -5,7 +5,6 @@
 package com.travistorres.moviescout.utils.moviedb.models;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -14,6 +13,8 @@ import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
 import java.net.URL;
 
 /**
+ * Movie
+ *
  * Contains the information regarding a Movie item.
  *
  * @author Travis Anthony Torres
@@ -53,8 +54,7 @@ public class Movie {
      * @return Movie poster url
      */
     public URL getPosterUrl() {
-        Resources resources = context.getResources();
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(resources);
+        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
         URL posterUrl = urlManager.getMoviePosterUrl(posterPath);
 
         return posterUrl;
