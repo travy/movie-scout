@@ -4,6 +4,8 @@
 
 package com.travistorres.moviescout.utils.moviedb;
 
+import android.content.Context;
+
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 import org.json.JSONArray;
@@ -41,10 +43,11 @@ public class MovieDbParser {
      * Parse the given json string to acquire an array of Movie objects.
      *
      * @param json Response string from the service.
+     * @param context The applications context
      *
      * @return List of Movies
      */
-    public static Movie[] retrieveMovieList(String json) {
+    public static Movie[] retrieveMovieList(String json, Context context) {
         Movie[] movieList = null;
 
         try {
@@ -56,7 +59,7 @@ public class MovieDbParser {
             movieList = new Movie[listSize];
             for (int i = 0; i < listSize; ++i) {
                 JSONObject movieJson = (JSONObject) resultArray.get(i);
-                movieList[i] = mapJsonToMovie(movieJson);
+                movieList[i] = mapJsonToMovie(movieJson, context);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -70,16 +73,17 @@ public class MovieDbParser {
      * a Movie object.
      *
      * @param json Data to be mapped
+     * @param context The application context
      *
      * @return Movie object
      *
      * @throws JSONException When a referenced key was not found
      */
-    private static Movie mapJsonToMovie(JSONObject json)
+    private static Movie mapJsonToMovie(JSONObject json, Context context)
             throws JSONException {
-        Movie movie = new Movie();
+        Movie movie = new Movie(context);
 
-        movie.posterPath = json.getString(POSTER_PATH_KEY);
+        movie.posterPath = json.getString(POSTER_PATH_KEY).replace("/", "");
         movie.isAdultFilm = json.getBoolean(ADULT_KEY);
         movie.overview = json.getString(OVERVIEW_KEY);
         movie.releaseDate = json.getString(RELEASE_DATE_KEY); //  TODO:  represent as a valid date

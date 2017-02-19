@@ -4,6 +4,7 @@
 
 package com.travistorres.moviescout.utils.configs;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 
@@ -34,37 +35,37 @@ public final class ConfigurationsReader {
     /**
      * Retrieves the API V3 Key for use when requesting content from Movie DB API.
      *
-     * @param resources Activity resource object.
+     * @param context System Context
      *
      * @return The v3 api key.
      */
-    public static String getApiKey(Resources resources) {
-        return getConfig(resources, API_V3_KEY);
+    public static String getApiKey(Context context) {
+        return getConfig(context, API_V3_KEY);
     }
 
     /**
      * Retrieves the API Key for accessing the Movie DB API v4 features (if utilized).
      *
-     * @param resources Activity resource object.
+     * @param context System Context
      *
      * @return The v4 api key.
      */
-    public static String getApiV4Key(Resources resources) {
-        return getConfig(resources, API_V4_KEY);
+    public static String getApiV4Key(Context context) {
+        return getConfig(context, API_V4_KEY);
     }
 
     /**
      * Acquires the value specified for a specific configuration.
      *
-     * @param resources Activity resource object.
+     * @param context System context
      * @param configName The configuration key for the desired setting.
      *
      * @return The value of the configuration.
      */
-    public static String getConfig(Resources resources, String configName) {
+    public static String getConfig(Context context, String configName) {
         //  acquire the configs, only one should exist in memory to ensure consistency
         if (configs == null) {
-            configs = getConfigurationsList(resources);
+            configs = getConfigurationsList(context);
         }
 
         return configs.get(configName);
@@ -73,11 +74,12 @@ public final class ConfigurationsReader {
     /**
      * Acquires a collection containing all the specified configurations for the project.
      *
-     * @param resources Activity resource object.
+     * @param context system context
      *
      * @return Collection object containing all of the required configurations for the project.
      */
-    private static Configurations getConfigurationsList(Resources resources) {
+    private static Configurations getConfigurationsList(Context context) {
+        Resources resources = context.getResources();
         XmlResourceParser parser = resources.getXml(R.xml.configurations);
         Configurations configurations = null;
 

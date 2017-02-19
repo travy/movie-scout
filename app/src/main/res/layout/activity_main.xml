@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
     tools:context="com.travistorres.moviescout.MainActivity">
 
     <android.support.v7.widget.RecyclerView
@@ -14,6 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <!--  Loading Icon -->
+    <ProgressBar
+        android:id="@+id/loading_indicator_pb"
+        android:layout_gravity="center"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:visibility="invisible" />
+
+    <!--  Error Messages  -->
     <TextView
         android:id="@+id/page_not_found_error"
         android:fontFamily="monospace"
@@ -47,4 +55,4 @@
         android:textStyle="bold"
         android:visibility="invisible" />
 
-</LinearLayout>
+</FrameLayout>
