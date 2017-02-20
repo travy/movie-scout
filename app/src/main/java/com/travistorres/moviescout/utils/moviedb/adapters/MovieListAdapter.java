@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.utils.moviedb.exceptions.NoContextException;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 /**
@@ -61,7 +62,11 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
     @Override
     public void onBindViewHolder(MovieListItemViewHolder holder, int position) {
         Movie currentMovie = movieList[position];
-        currentMovie.loadPosterIntoImageView(holder.mPosterImageView);
+        try {
+            currentMovie.loadPosterIntoImageView(holder.mPosterImageView);
+        } catch (NoContextException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
