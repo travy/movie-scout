@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [UNRELEASED]
+### Changed
+-  Enhanced UI of Movie Detail page
+-  Display language, rating and popularity details
+-  Repaired alignment of posters in movie list
+
 ## [v1.0.0] - 2017-02-19
 ###  Added
 -  Read information from Movie DB API resource
@@ -17,3 +23,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -  Added a Change Log
 
 [v1.0.0]: https://github.com/travy/movie-scout/compare/v0.0.1...v1.0.0
+[UNRELEASED]: https://github.com/travy/movie-scout/compare/v1.0.0...develop

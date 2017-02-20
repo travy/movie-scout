@@ -25,10 +25,24 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MovieInfoActivity extends AppCompatActivity {
+    /*
+     *  Meta data.
+     *
+     */
+    private final static String RELEASE_LABEL = "Released:  ";
+    private final static String RATING_LABEL = "Rating:  ";
+    private final static String POPULARITY_LABEL = "Popularity:  ";
+    private final static String LANGUAGE_LABEL = "Language:  ";
+    private final static String MISSING_MOVIE_MODEL_LOG_STRING = "Activity triggered without a selected movie being specified";
+    private final static String MISSING_MOVIE_MODEL_TOAST = "Unable to acquire Movie data";
+
     private TextView mMovieTitle;
     private ImageView mMoviePoster;
     private TextView mMovieReleaseDate;
     private TextView mMovieOverview;
+    private TextView mMovieRating;
+    private TextView mMovieLanguage;
+    private TextView mMoviePopularity;
 
     /**
      * Loads information regarding the selected video and displays it's meta-data on the screen
@@ -46,6 +60,9 @@ public class MovieInfoActivity extends AppCompatActivity {
         mMoviePoster = (ImageView) findViewById(R.id.movie_poster);
         mMovieReleaseDate = (TextView) findViewById(R.id.movie_release_date);
         mMovieOverview = (TextView) findViewById(R.id.movie_overview);
+        mMovieRating = (TextView) findViewById(R.id.movie_rating);
+        mMovieLanguage = (TextView) findViewById(R.id.movie_language);
+        mMoviePopularity = (TextView) findViewById(R.id.movie_popularity);
 
         //  obtain the selected video and display it's information
         Intent intent = getIntent();
@@ -55,13 +72,16 @@ public class MovieInfoActivity extends AppCompatActivity {
 
             //  display information regarding the video
             mMovieTitle.setText(movie.originalTitle);
-            mMovieReleaseDate.setText(movie.releaseDate);
+            mMovieReleaseDate.setText(RELEASE_LABEL + movie.getCleanDateFormat());
+            mMovieRating.setText(RATING_LABEL + movie.voteAverage);
+            mMoviePopularity.setText(POPULARITY_LABEL + movie.popularity);
+            mMovieLanguage.setText(LANGUAGE_LABEL + movie.originalLanguage);
             mMovieOverview.setText(movie.overview);
             retrievePoster(movie);
         } else {
             //  display an error message when a movie is not defined within the intent.  Should never occur.
-            Log.d(getClass().toString(), "Activity triggered without a selected movie being specified");
-            Toast.makeText(this, "Unable to acquire Movie data", Toast.LENGTH_SHORT).show();
+            Log.d(getClass().toString(), MISSING_MOVIE_MODEL_LOG_STRING);
+            Toast.makeText(this, MISSING_MOVIE_MODEL_TOAST, Toast.LENGTH_SHORT).show();
         }
     }
 
