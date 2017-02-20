@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">MovieScout</string>
+
+    <!--  Error Messages  -->
+    <string name="page_not_found_error_message">The requested page was not found</string>
+    <string name="invalid_api_key_error_message">The provided API Key was rejected by the server.  Please check your res/xml/configurations.xml file settings.</string>
+    <string name="network_failure_error_message">The network connection failed!</string>
+
+    <string name="movie_poster_content_description">Movie Poster</string>
+
+    <string name="popularity_menu_item">Most Popular</string>
+    <string name="rating_menu_item">Highly Rated</string>
 </resources>
