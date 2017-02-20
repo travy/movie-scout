@@ -61,7 +61,7 @@ public class MovieInfoActivity extends AppCompatActivity {
 
             //  display information regarding the video
             mMovieTitle.setText(movie.originalTitle);
-            mMovieReleaseDate.setText(movie.releaseDate);
+            mMovieReleaseDate.setText(movie.getCleanDateFormat());
             mMovieOverview.setText(movie.overview);
             mMovieRating.setText("Rating:  " + movie.voteAverage);
             mMoviePopularity.setText("Popularity:  " + movie.popularity);
