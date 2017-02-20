@@ -14,6 +14,7 @@ import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
 import com.travistorres.moviescout.utils.moviedb.exceptions.NoContextException;
 
 import java.net.URL;
+import java.util.Date;
 
 /**
  * Movie
@@ -58,7 +59,7 @@ public class Movie implements Parcelable {
     public String posterPath;
     public boolean isAdultFilm;
     public String overview;
-    public String releaseDate;  //  TODO:  should be a Date object
+    public String releaseDate;
     public int[] genreIds;
     public int id;
     public String originalTitle;
