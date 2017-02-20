@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 -  Enhanced UI of Movie Detail page
 -  Display language, rating and popularity details
+-  Repaired alignment of posters in movie list
 
 ## [v1.0.0] - 2017-02-19
 ###  Added
