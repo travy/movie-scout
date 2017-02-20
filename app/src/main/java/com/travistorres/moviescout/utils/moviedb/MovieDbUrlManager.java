@@ -61,7 +61,7 @@ public class MovieDbUrlManager {
      * of the movie posters as they appear in the movie list.
      *
      */
-    private final static String DEFAULT_IMAGE_SIZE = W500_IMAGE_SIZE;
+    private final static String DEFAULT_IMAGE_SIZE = W342_IMAGE_SIZE;
 
     /*
      * Specifies values used for determining a users preference on how movies should be sorted

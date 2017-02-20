@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.utils.moviedb.exceptions.NoContextException;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 /**
@@ -21,7 +22,19 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHolder> {
-    private Movie[] movieList;
+    Movie[] movieList;
+
+    final MovieClickedListener clickHandler;
+
+    /**
+     * Allows the MovieClickListener operation to be specified.
+     *
+     * @param onClickListener Listener object which defines the operation to be performed when a
+     * movie has been selected.
+     */
+    public MovieListAdapter(MovieClickedListener onClickListener) {
+        clickHandler = onClickListener;
+    }
 
     /**
      * Constructs a new view for the movie item to be displayed on.
@@ -37,7 +50,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.movie_list_item, parent, false);
 
-        return new MovieListItemViewHolder(view);
+        return new MovieListItemViewHolder(view, this);
     }
 
     /**
@@ -49,7 +62,11 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
     @Override
     public void onBindViewHolder(MovieListItemViewHolder holder, int position) {
         Movie currentMovie = movieList[position];
-        currentMovie.loadPosterIntoImageView(holder.mPosterImageView);
+        try {
+            currentMovie.loadPosterIntoImageView(holder.mPosterImageView);
+        } catch (NoContextException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

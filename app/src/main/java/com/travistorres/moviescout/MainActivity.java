@@ -4,6 +4,8 @@
 
 package com.travistorres.moviescout;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,9 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
 import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
+import com.travistorres.moviescout.utils.moviedb.adapters.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
@@ -41,12 +45,25 @@ import java.net.URL;
  * @version February 12, 2017
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements MovieClickedListener {
+    /*
+     *  Specifies the key used for accessing the selected movie in a requested Activity.
+     *
+     */
+    public final static String SELECTED_MOVIE_EXTRA = "selectedMovie";
+
     /*
      *  Defines the number of columns in the grid layout.
      *
      */
     private final static int GRIDLAYOUT_COLUMN_COUNT = 2;
+
+    /*
+     *  Error message to display when no network could be reached.
+     *
+     */
+    public final static String NO_NETWORK_ERROR_MESSAGE = "Unable to access Network Resource";
 
     /*
      * Specifies what the sort order should default to.
@@ -80,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         mUnauthorizedTextView = (TextView) findViewById(R.id.api_key_unauthorized_error);
 
         //  configures adapter objects
-        mMovieAdapter = new MovieListAdapter();
+        mMovieAdapter = new MovieListAdapter(this);
         mMovieLayoutManager = new GridLayoutManager(this, GRIDLAYOUT_COLUMN_COUNT);
 
         //  configure the recycler view
@@ -138,6 +155,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Opens a new page where users will be able to see information regarding the Movie title that
+     * they selected from the list.
+     *
+     * @param clickedMovie The selected movie
+     */
+    @Override
+    public void onClick(Movie clickedMovie) {
+        Context context = this;
+        Class movieInfoPage = MovieInfoActivity.class;
+        Intent intent = new Intent(context, movieInfoPage);
+        intent.putExtra(SELECTED_MOVIE_EXTRA, clickedMovie);
+
+        startActivity(intent);
     }
 
     /**
@@ -203,7 +236,9 @@ public class MainActivity extends AppCompatActivity {
             Movie[] movieList = null;
             try {
                 String json = NetworkManager.request(url);
-                movieList = MovieDbParser.retrieveMovieList(json, getApplicationContext());
+                if (json != null) {
+                    movieList = MovieDbParser.retrieveMovieList(json, getApplicationContext());
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (HttpConnectionTimeoutException e) {
@@ -234,6 +269,8 @@ public class MainActivity extends AppCompatActivity {
 
             if (list != null) {
                 mMovieAdapter.setMoviesList(list);
+            } else {
+                Toast.makeText(MainActivity.this, NO_NETWORK_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         }
     }

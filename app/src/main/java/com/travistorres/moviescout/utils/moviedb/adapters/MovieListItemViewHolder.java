@@ -5,10 +5,13 @@
 package com.travistorres.moviescout.utils.moviedb.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 /**
  * MovieListItemViewHolder
@@ -19,7 +22,10 @@ import com.travistorres.moviescout.R;
  * @version February 15, 2017
  */
 
-class MovieListItemViewHolder extends RecyclerView.ViewHolder {
+class MovieListItemViewHolder extends RecyclerView.ViewHolder
+        implements OnClickListener {
+    private final MovieListAdapter container;
+
     public final ImageView mPosterImageView;
 
     /**
@@ -27,9 +33,26 @@ class MovieListItemViewHolder extends RecyclerView.ViewHolder {
      *
      * @param view The view for the movie item.
      */
-    public MovieListItemViewHolder(View view) {
+    public MovieListItemViewHolder(View view, MovieListAdapter adapter) {
         super(view);
 
+        container = adapter;
         mPosterImageView = (ImageView) view.findViewById(R.id.movie_poster);
+
+        //  allow the view to act as the listener
+        view.setOnClickListener(this);
+    }
+
+    /**
+     * Triggers the onClick event within the Adapter.
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+        Log.d("clicked", "detected click");
+        int position = getAdapterPosition();
+        Movie clickedMovie = container.movieList[position];
+        container.clickHandler.onClick(clickedMovie);
     }
 }
