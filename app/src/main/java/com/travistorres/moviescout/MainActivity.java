@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
      *  Defines the number of columns in the grid layout.
      *
      */
-    private final static int GRIDLAYOUT_COLUMN_COUNT = 2;
+    private final static int GRIDLAYOUT_COLUMN_COUNT = 3;
 
     /*
      *  Error message to display when no network could be reached.
