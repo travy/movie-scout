@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
 import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
@@ -57,6 +58,12 @@ public class MainActivity extends AppCompatActivity
      *
      */
     private final static int GRIDLAYOUT_COLUMN_COUNT = 2;
+
+    /*
+     *  Error message to display when no network could be reached.
+     *
+     */
+    public final static String NO_NETWORK_ERROR_MESSAGE = "Unable to access Network Resource";
 
     /*
      * Specifies what the sort order should default to.
@@ -229,7 +236,9 @@ public class MainActivity extends AppCompatActivity
             Movie[] movieList = null;
             try {
                 String json = NetworkManager.request(url);
-                movieList = MovieDbParser.retrieveMovieList(json, getApplicationContext());
+                if (json != null) {
+                    movieList = MovieDbParser.retrieveMovieList(json, getApplicationContext());
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (HttpConnectionTimeoutException e) {
@@ -260,6 +269,8 @@ public class MainActivity extends AppCompatActivity
 
             if (list != null) {
                 mMovieAdapter.setMoviesList(list);
+            } else {
+                Toast.makeText(MainActivity.this, NO_NETWORK_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         }
     }
