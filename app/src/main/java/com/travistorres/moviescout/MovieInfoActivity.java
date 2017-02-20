@@ -29,6 +29,9 @@ public class MovieInfoActivity extends AppCompatActivity {
     private ImageView mMoviePoster;
     private TextView mMovieReleaseDate;
     private TextView mMovieOverview;
+    private TextView mMovieRating;
+    private TextView mMovieLanguage;
+    private TextView mMoviePopularity;
 
     /**
      * Loads information regarding the selected video and displays it's meta-data on the screen
@@ -46,6 +49,9 @@ public class MovieInfoActivity extends AppCompatActivity {
         mMoviePoster = (ImageView) findViewById(R.id.movie_poster);
         mMovieReleaseDate = (TextView) findViewById(R.id.movie_release_date);
         mMovieOverview = (TextView) findViewById(R.id.movie_overview);
+        mMovieRating = (TextView) findViewById(R.id.movie_rating);
+        mMovieLanguage = (TextView) findViewById(R.id.movie_language);
+        mMoviePopularity = (TextView) findViewById(R.id.movie_popularity);
 
         //  obtain the selected video and display it's information
         Intent intent = getIntent();
@@ -57,6 +63,9 @@ public class MovieInfoActivity extends AppCompatActivity {
             mMovieTitle.setText(movie.originalTitle);
             mMovieReleaseDate.setText(movie.releaseDate);
             mMovieOverview.setText(movie.overview);
+            mMovieRating.setText("Rating:  " + movie.voteAverage);
+            mMoviePopularity.setText("Popularity:  " + movie.popularity);
+            mMovieLanguage.setText("Language:  " + movie.originalLanguage);
             retrievePoster(movie);
         } else {
             //  display an error message when a movie is not defined within the intent.  Should never occur.
