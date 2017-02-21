@@ -56,7 +56,7 @@ public class MovieDbRequester {
     public MovieDbRequester(Context appContext, MovieDbNetworkingErrorHandler networkHandler, MovieClickedListener clickListener) {
         context = appContext;
         errorHandler = networkHandler;
-        movieAdapter = new MovieListAdapter(clickListener);
+        movieAdapter = new MovieListAdapter(clickListener, this);
         sortType = MovieSortType.MOST_POPULAR;
 
         reset();

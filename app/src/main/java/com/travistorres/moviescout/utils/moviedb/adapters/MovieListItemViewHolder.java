@@ -50,9 +50,8 @@ class MovieListItemViewHolder extends RecyclerView.ViewHolder
      */
     @Override
     public void onClick(View v) {
-        Log.d("clicked", "detected click");
         int position = getAdapterPosition();
-        Movie clickedMovie = container.movieList[position];
+        Movie clickedMovie = container.movieList.get(position);
         container.clickHandler.onClick(clickedMovie);
     }
 }

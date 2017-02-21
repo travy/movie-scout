@@ -11,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
 import com.travistorres.moviescout.utils.moviedb.exceptions.NoContextException;
 import com.travistorres.moviescout.utils.moviedb.listeners.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
+
+import java.util.ArrayList;
 
 /**
  * Maps the results of the provided MovieList data set to the ActivityView in an efficient manner.
@@ -23,9 +26,10 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHolder> {
-    Movie[] movieList;
+    ArrayList<Movie> movieList;
 
     final MovieClickedListener clickHandler;
+    final MovieDbRequester movieRequester;
 
     /**
      * Allows the MovieClickListener operation to be specified.
@@ -33,8 +37,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
      * @param onClickListener Listener object which defines the operation to be performed when a
      * movie has been selected.
      */
-    public MovieListAdapter(MovieClickedListener onClickListener) {
+    public MovieListAdapter(MovieClickedListener onClickListener, MovieDbRequester requester) {
         clickHandler = onClickListener;
+        movieRequester = requester;
     }
 
     /**
@@ -62,11 +67,16 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
      */
     @Override
     public void onBindViewHolder(MovieListItemViewHolder holder, int position) {
-        Movie currentMovie = movieList[position];
+        Movie currentMovie = movieList.get(position);
         try {
             currentMovie.loadPosterIntoImageView(holder.mPosterImageView);
         } catch (NoContextException e) {
             e.printStackTrace();
+        }
+
+        //  acquire more results when nearing the end of the list
+        if (position == getItemCount() - 5) {
+            movieRequester.requestNext();
         }
     }
 
@@ -77,7 +87,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
      */
     @Override
     public int getItemCount() {
-        return movieList == null ? 0 : movieList.length;
+        return movieList == null ? 0 : movieList.size();
     }
 
     /**
@@ -86,7 +96,16 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
      * @param list
      */
     public void setMoviesList(Movie[] list) {
-        movieList = list;
+        //  allocates memory for an ArrayList
+        if (movieList == null) {
+            movieList = new ArrayList<>();
+        }
+
+        //  stores all contents within the list
+        for (Movie movie : list) {
+            movieList.add(movie);
+        }
+
         notifyDataSetChanged();
     }
 
