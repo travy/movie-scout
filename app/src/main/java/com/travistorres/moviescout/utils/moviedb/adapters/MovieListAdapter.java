@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.exceptions.NoContextException;
+import com.travistorres.moviescout.utils.moviedb.listeners.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 /**
@@ -86,6 +87,15 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
      */
     public void setMoviesList(Movie[] list) {
         movieList = list;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Clears out the data stored within the Adapter.
+     *
+     */
+    public void empty() {
+        movieList = null;
         notifyDataSetChanged();
     }
 }
