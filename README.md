@@ -15,6 +15,4 @@ This choice was made after reviewing the [Android Dashboard](https://developer.a
 In order to add your API v3/v4 key for use with the app you will need to open app/src/main/res/xml/configurations.xml and fill out the configurations for apiKeyV3 and apiKeyV4.  Once specified the app will be able to make request to the RESTful server.
 
 ##  Tested VM's
-This section is still under construction.
-
-This will describe the various Android VM's and scenarios that I have tested the app under.
+The applicaton has been tested on Android x86 emulators utilizing Android Lollipop, Marshmellow and Nougat.
