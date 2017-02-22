@@ -5,7 +5,6 @@
 package com.travistorres.moviescout.utils.moviedb.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;

@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:padding="3dp" >
 
-    <!--  TODO:  find out why the movies simply will not generate without this TextView  -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
