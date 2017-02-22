@@ -26,4 +26,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -  Added a Change Log
 
 [v1.0.0]: https://github.com/travy/movie-scout/compare/v0.0.1...v1.0.0
-[UNRELEASED]: https://github.com/travy/movie-scout/compare/v1.0.0...v1.1.0
+[v1.1.0]: https://github.com/travy/movie-scout/compare/v1.0.0...v1.1.0
