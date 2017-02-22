@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASED]
+### Added
+-  Ability to scroll through all Movies under MovieDB API
+
 ### Changed
 -  Enhanced UI of Movie Detail page
 -  Display language, rating and popularity details
