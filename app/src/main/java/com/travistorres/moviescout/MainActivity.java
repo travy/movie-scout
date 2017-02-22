@@ -6,7 +6,6 @@ package com.travistorres.moviescout;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,21 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
-import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
-import com.travistorres.moviescout.utils.moviedb.adapters.MovieClickedListener;
+import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
+import com.travistorres.moviescout.utils.moviedb.MovieSortType;
+import com.travistorres.moviescout.utils.moviedb.listeners.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
+import com.travistorres.moviescout.utils.moviedb.listeners.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
-import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
-import com.travistorres.moviescout.utils.networking.exceptions.HttpPageNotFoundException;
-import com.travistorres.moviescout.utils.networking.exceptions.HttpUnauthorizedException;
-import com.travistorres.moviescout.utils.networking.exceptions.NetworkingException;
-import com.travistorres.moviescout.utils.networking.NetworkManager;
-
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * MainActivity
@@ -46,7 +37,7 @@ import java.net.URL;
  */
 
 public class MainActivity extends AppCompatActivity
-        implements MovieClickedListener {
+        implements MovieClickedListener, MovieDbNetworkingErrorHandler {
     /*
      *  Specifies the key used for accessing the selected movie in a requested Activity.
      *
@@ -59,17 +50,6 @@ public class MainActivity extends AppCompatActivity
      */
     private final static int GRIDLAYOUT_COLUMN_COUNT = 3;
 
-    /*
-     *  Error message to display when no network could be reached.
-     *
-     */
-    public final static String NO_NETWORK_ERROR_MESSAGE = "Unable to access Network Resource";
-
-    /*
-     * Specifies what the sort order should default to.
-     */
-    private final static int DEFAULT_SORT_ORDER = MovieDbUrlManager.SORT_BY_POPULARITY;
-
     private RecyclerView mMovieListView;
     private GridLayoutManager mMovieLayoutManager;
     private MovieListAdapter mMovieAdapter;
@@ -79,6 +59,8 @@ public class MainActivity extends AppCompatActivity
     private TextView mUnauthorizedTextView;
 
     private ProgressBar mLoadingIndicator;
+
+    private MovieDbRequester mMovieRequester;
 
     /**
      * Responsible for loading all resource objects and triggering the events that will allow a
@@ -91,35 +73,26 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //  obtain all error mesage objects
+        //  obtain all error message objects
         mPageNotFoundTextView = (TextView) findViewById(R.id.page_not_found_error);
         mNetworkingErrorTextView = (TextView) findViewById(R.id.network_connection_failed_error);
         mUnauthorizedTextView = (TextView) findViewById(R.id.api_key_unauthorized_error);
 
-        //  configures adapter objects
-        mMovieAdapter = new MovieListAdapter(this);
-        mMovieLayoutManager = new GridLayoutManager(this, GRIDLAYOUT_COLUMN_COUNT);
+        //  acquire the loading indicator
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
 
-        //  configure the recycler view
+        //  sets up the requester object
+        mMovieRequester = new MovieDbRequester(this, this, this);
+        mMovieLayoutManager = new GridLayoutManager(this, GRIDLAYOUT_COLUMN_COUNT);
+        mMovieAdapter = mMovieRequester.getAdapter();
+
+        //  configures the recycler view
         mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
         mMovieListView.setAdapter(mMovieAdapter);
         mMovieListView.setLayoutManager(mMovieLayoutManager);
 
-        //  acquire the loading indicator
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
-
-        requestMovies(DEFAULT_SORT_ORDER);
-    }
-
-    /**
-     * Will startup a sub-process for acquiring a list of movies and displaying them on the app.
-     *
-     */
-    private void requestMovies(int sortOrder) {
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(this);
-        URL popularMoviesUrl = urlManager.getSortedMoveListUrl(sortOrder);
-
-        new NetworkingTask().execute(popularMoviesUrl);
+        //  starts up the requester sequence
+        mMovieRequester.requestNext();
     }
 
     /**
@@ -145,14 +118,19 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //  determine how to sort the system
         switch (item.getItemId()) {
             case R.id.popularity_sort_button:
-                requestMovies(MovieDbUrlManager.SORT_BY_POPULARITY);
+                mMovieRequester.setSortType(MovieSortType.MOST_POPULAR);
                 break;
             case R.id.rating_sort_button:
-                requestMovies(MovieDbUrlManager.SORT_BY_RATING);
+                mMovieRequester.setSortType(MovieSortType.HIGHEST_RATED);
                 break;
         }
+
+        //  resets the results
+        mMovieRequester.reset();
+        mMovieRequester.requestNext();
 
         return super.onOptionsItemSelected(item);
     }
@@ -174,104 +152,47 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Display the page not found error message.
+     * Displays the page not found error whenever a network resources returns a 404 response.
      *
      */
-    public void showPageNotFoundError() {
+    @Override
+    public void onPageNotFound() {
         mPageNotFoundTextView.setVisibility(TextView.VISIBLE);
     }
 
     /**
-     * Displays the error message for when the api key was invalid.
+     * Displays an access denied message whenever the MovieDBAPI rejects access to a request.
      *
      */
-    public void showUnauthorizedError() {
+    @Override
+    public void onUnauthorizedAccess() {
         mUnauthorizedTextView.setVisibility(TextView.VISIBLE);
     }
 
     /**
-     * Displays the networking error message.
+     * Displays a message when a generic networking error occurs.
      *
      */
-    public void showNetworkingError() {
+    @Override
+    public void onGeneralNetworkingError() {
         mNetworkingErrorTextView.setVisibility(TextView.VISIBLE);
     }
 
     /**
-     * NetworkingTask
-     *
-     * A utility class which will run a sub-process that queries a list of movies over the network.
-     * The process runs separately from the MainActivity to keep the app responsive during times of
-     * low/non-existent network connectivity.
+     * Displays the Progress bar whenever a network resource is requested.
      *
      */
+    @Override
+    public void beforeNetworkRequest() {
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
 
-    private class NetworkingTask extends AsyncTask <URL, Void, Movie[]> {
-        /**
-         * Allow users to see the loading indicator wheel.
-         *
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            mLoadingIndicator.setVisibility(View.VISIBLE);
-        }
-
-        /**
-         * Request a list of movies from the network resource.
-         *
-         * @param urls List of urls for acquiring the movies.  We only need one.
-         *
-         * @return List of movies that were queried.
-         */
-        @Override
-        protected Movie[] doInBackground(URL... urls) {
-            if (urls.length <= 0) {
-                return null;
-            }
-
-            URL url = urls[0];
-
-            Movie[] movieList = null;
-            try {
-                String json = NetworkManager.request(url);
-                if (json != null) {
-                    movieList = MovieDbParser.retrieveMovieList(json, getApplicationContext());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (HttpConnectionTimeoutException e) {
-                e.printStackTrace();
-            } catch (HttpPageNotFoundException e) {
-                e.printStackTrace();
-                showPageNotFoundError();
-            } catch (HttpUnauthorizedException e) {
-                e.printStackTrace();
-                showUnauthorizedError();
-            } catch (NetworkingException e) {
-                e.printStackTrace();
-                showNetworkingError();
-            }
-
-            return movieList;
-        }
-
-        /**
-         * Stores the list of movies in the adapter so they can be efficiently rendered onto the
-         * app.
-         *
-         * @param list acquired movies.
-         */
-        @Override
-        protected void onPostExecute(Movie[] list) {
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
-
-            if (list != null) {
-                mMovieAdapter.setMoviesList(list);
-            } else {
-                Toast.makeText(MainActivity.this, NO_NETWORK_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
-            }
-        }
+    /**
+     * Hides the Progress bar after acquiring the system resource.
+     *
+     */
+    @Override
+    public void afterNetworkRequest() {
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 }

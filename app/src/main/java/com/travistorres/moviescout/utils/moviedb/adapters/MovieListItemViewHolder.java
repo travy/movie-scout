@@ -5,7 +5,6 @@
 package com.travistorres.moviescout.utils.moviedb.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -50,9 +49,8 @@ class MovieListItemViewHolder extends RecyclerView.ViewHolder
      */
     @Override
     public void onClick(View v) {
-        Log.d("clicked", "detected click");
         int position = getAdapterPosition();
-        Movie clickedMovie = container.movieList[position];
+        Movie clickedMovie = container.movieList.get(position);
         container.clickHandler.onClick(clickedMovie);
     }
 }
