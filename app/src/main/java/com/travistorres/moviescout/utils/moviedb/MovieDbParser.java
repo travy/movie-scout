@@ -126,8 +126,8 @@ public class MovieDbParser {
         movie.posterPath = json.getString(POSTER_PATH_KEY).replace("/", "");
         movie.isAdultFilm = json.getBoolean(ADULT_KEY);
         movie.overview = json.getString(OVERVIEW_KEY);
-        movie.releaseDate = json.getString(RELEASE_DATE_KEY); //  TODO:  represent as a valid date
-        movie.genreIds = new int[1]; //  TODO:  populate id's correctly
+        movie.releaseDate = json.getString(RELEASE_DATE_KEY);
+        movie.genreIds = new int[1];
         movie.id = json.getInt(ID_KEY);
         movie.originalTitle = json.getString(ORIGINAL_TITLE_KEY);
         movie.originalLanguage = json.getString(ORIGINAL_LANGUAGE_KEY);
