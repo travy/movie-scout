@@ -30,9 +30,9 @@ public class MovieInfoActivity extends AppCompatActivity {
      *
      */
     private final static String RELEASE_LABEL = "Released:  ";
-    private final static String RATING_LABEL = "Rating:  ";
     private final static String POPULARITY_LABEL = "Popularity:  ";
     private final static String LANGUAGE_LABEL = "Language:  ";
+    private final static String VOTE_AVERAGE_LABEL = "Vote Average:  ";
     private final static String MISSING_MOVIE_MODEL_LOG_STRING = "Activity triggered without a selected movie being specified";
     private final static String MISSING_MOVIE_MODEL_TOAST = "Unable to acquire Movie data";
 
@@ -40,9 +40,9 @@ public class MovieInfoActivity extends AppCompatActivity {
     private ImageView mMoviePoster;
     private TextView mMovieReleaseDate;
     private TextView mMovieOverview;
-    private TextView mMovieRating;
     private TextView mMovieLanguage;
     private TextView mMoviePopularity;
+    private TextView mMovieVoteAverage;
 
     /**
      * Loads information regarding the selected video and displays it's meta-data on the screen
@@ -60,9 +60,9 @@ public class MovieInfoActivity extends AppCompatActivity {
         mMoviePoster = (ImageView) findViewById(R.id.movie_poster);
         mMovieReleaseDate = (TextView) findViewById(R.id.movie_release_date);
         mMovieOverview = (TextView) findViewById(R.id.movie_overview);
-        mMovieRating = (TextView) findViewById(R.id.movie_rating);
         mMovieLanguage = (TextView) findViewById(R.id.movie_language);
         mMoviePopularity = (TextView) findViewById(R.id.movie_popularity);
+        mMovieVoteAverage = (TextView) findViewById(R.id.movie_vote_average);
 
         //  obtain the selected video and display it's information
         Intent intent = getIntent();
@@ -73,7 +73,7 @@ public class MovieInfoActivity extends AppCompatActivity {
             //  display information regarding the video
             mMovieTitle.setText(movie.originalTitle);
             mMovieReleaseDate.setText(RELEASE_LABEL + movie.getCleanDateFormat());
-            mMovieRating.setText(RATING_LABEL + movie.voteAverage);
+            mMovieVoteAverage.setText(VOTE_AVERAGE_LABEL + movie.voteAverage);
             mMoviePopularity.setText(POPULARITY_LABEL + movie.popularity);
             mMovieLanguage.setText(LANGUAGE_LABEL + movie.originalLanguage);
             mMovieOverview.setText(movie.overview);
