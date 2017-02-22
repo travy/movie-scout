@@ -35,6 +35,7 @@ public class MovieDbUrlManager {
     private final static String POPULAR_MOVIE_SORT_ACTION = "popular";
     private final static String HIGH_RATING_MOVIE_SORT_ACTION = "top_rated";
     private final static String API_KEY_QUERY_NAME = "api_key";
+    private final static String PAGE_QUERY_NAME = "page";
 
     /**
      * Constants used for acquiring image resources.
@@ -63,14 +64,6 @@ public class MovieDbUrlManager {
      */
     private final static String DEFAULT_IMAGE_SIZE = W342_IMAGE_SIZE;
 
-    /*
-     * Specifies values used for determining a users preference on how movies should be sorted
-     * when requested using the API.
-     *
-     */
-    public final static int SORT_BY_POPULARITY = 0x00;
-    public final static int SORT_BY_RATING = 0x01;
-
     private Context context;
 
     /**
@@ -92,35 +85,15 @@ public class MovieDbUrlManager {
     }
 
     /**
-     * Retrieves the URL for acquiring a list of movies that is sorted by popularity.
+     * Retrieves the URL for requesting a list of movies.
      *
-     * @return URL the URL of the request or null on error
-     */
-    public URL getPopularMoviesUrl() {
-        return getSortedMoveListUrl(SORT_BY_POPULARITY);
-    }
-
-    /**
-     * Retrieves the URL for acquiring a list of movies that is sorted by highest rating.
-     *
-     * @return URL The URL of the request or null on error
-     */
-    public URL getRatingsMoviesUrl() {
-        return getSortedMoveListUrl(SORT_BY_RATING);
-    }
-
-    /**
-     * Retrieves the URL for requesting a list of movies.  The sort order of the movies will be
-     * based off of the value passed to movieSortType which can be set to either of the following:
-     * SORT_BY_POPULARITY, or SORT_BY_RATING.
-     *
-     * @param movieSortType The sort order for the movies
+     * @param sortType The sort order for the movies
      *
      * @return URL The URL of the movie or NULL on failure
      */
-    public URL getSortedMoveListUrl(int movieSortType) {
+    public URL getSortedMoveListUrl(MovieSortType sortType, int pageNumber) {
         //  specify if movies should be sorted by popularity or by rating
-        String sortAction = (movieSortType == SORT_BY_POPULARITY) ?
+        String sortAction = (sortType == MovieSortType.MOST_POPULAR) ?
                 POPULAR_MOVIE_SORT_ACTION : HIGH_RATING_MOVIE_SORT_ACTION;
         String apiKeyV3 = ConfigurationsReader.getApiKey(context);
 
@@ -132,6 +105,7 @@ public class MovieDbUrlManager {
                 .appendPath(MOVIE_REQUEST_ACTION)
                 .appendPath(sortAction)
                 .appendQueryParameter(API_KEY_QUERY_NAME, apiKeyV3)
+                .appendQueryParameter(PAGE_QUERY_NAME, Integer.toString(pageNumber))
                 .build();
 
         return getUrl(uri);

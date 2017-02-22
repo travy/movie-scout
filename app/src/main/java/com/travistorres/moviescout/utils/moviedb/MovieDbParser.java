@@ -40,6 +40,46 @@ public class MovieDbParser {
     private final static String VOTE_AVERAGE_KEY = "vote_average";
 
     /**
+     * Retrieves the total number of movies stored within the Movie API database.
+     *
+     * @param json
+     *
+     * @return Total number of movies
+     */
+    public static int acquireTotalResults(String json) {
+        int totalResults = -1;
+
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            totalResults = jsonObject.getInt("total_results");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return totalResults;
+    }
+
+    /**
+     * Acquires the total number of pages that can be accessed on the resource.
+     *
+     * @param json
+     *
+     * @return Total number of pages that contain valid data
+     */
+    public static int acquireTotalPages(String json) {
+        int totalPages = -1;
+
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            totalPages = jsonObject.getInt("total_pages");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return totalPages;
+    }
+
+    /**
      * Parse the given json string to acquire an array of Movie objects.
      *
      * @param json Response string from the service.
