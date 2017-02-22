@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [UNRELEASED]
+## [v1.1.0] - 2017-02-21
 ### Added
 -  Ability to scroll through all Movies under MovieDB API
 
@@ -26,4 +26,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -  Added a Change Log
 
 [v1.0.0]: https://github.com/travy/movie-scout/compare/v0.0.1...v1.0.0
-[UNRELEASED]: https://github.com/travy/movie-scout/compare/v1.0.0...develop
+[UNRELEASED]: https://github.com/travy/movie-scout/compare/v1.0.0...v1.1.0
