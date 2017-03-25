@@ -4,10 +4,14 @@
 
 package com.travistorres.moviescout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,5 +100,34 @@ public class MovieInfoActivity extends AppCompatActivity {
         } catch (NoContextException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.movie_items_settings, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int selectedItem = item.getItemId();
+
+        switch (selectedItem) {
+            case R.id.settings_menu_button:
+                displaySettings();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void displaySettings() {
+        Context context = this;
+        Class settingsActivityClass = SettingsActivity.class;
+        Intent settingsActivityIntent = new Intent(context, settingsActivityClass);
+
+        startActivity(settingsActivityIntent);
     }
 }
