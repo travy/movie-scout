@@ -38,6 +38,38 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 public class MainActivity extends AppCompatActivity
         implements MovieClickedListener, MovieDbNetworkingErrorHandler {
+    //  TODO-  (1) Construct an Activity named SettingsActivity have the layout file simply read "Are you ready to ROCK!!!"
+
+    //  TODO-  (2) Create a menu item named Settings
+    //  TODO-  (3) When the settings menu item is clicked, create an intent which will load the SettingsActivity
+    //  TODO-  (4) Run the emulator to ensure that the SettingsActivity loads properly and displays the text "Are you ready to Rock!!!"
+
+    //  TODO-  (5) Create a Fragment named SettingsFragment which will only display the text "Hello, World" in it
+    //  TODO-  (6) Update the settings_activity.xml file to load the SettingsFragment
+    //  TODO-  (7) Run the emulator to ensure that the SettingsFragment is properly loaded and displays the text "Hello, World" when the settings menu item clicked
+
+    //  TODO-  (8) Create an XML file named settings.xml
+    //  TODO-  (9) Add preference options for the MovieDB API's v3 and v4 key to be entered
+    //  TODO-  (10) Load the XML file into the SettingsFragment
+    //  TODO-  (11) Get the settings to show as EditText fields in the SettingsFragment
+    //  TODO-  (12) Move all hard-coded data to a strings.xml resource object
+
+    //  TODO-  (13) Configure the app to view the contents of the Settings.xml file and display an error message if the keys do not work
+    //  TODO-  (14) Deprecate everything in the package com.travistorres.moviescout.utils.configs
+    //  TODO-  (15) Refactor the app so that settings are only acquired by the Settings.xml file
+    //  TODO-  (16) Remove the configurations.xml resource file
+
+    //  TODO-  (17) Update the MainActivity so that it will automatically update whenever the Settings are changed
+
+    //  TODO-  (18) Create a menu for the MovieInfoActivity
+    //  TODO-  (19) Add a menu item named settings
+    //  TODO-  (20) When the user clicks the settings menu item an intent should be fired which loads the SettingsActivity
+    //  TODO-  (21) The MovieInfoActivity should automatically update whenever the Settings are changed
+
+    //  TODO-  (22) Add an Up Arrow to the SettingsFragment so that the user can press it to return to the previous page
+
+    //  TODO-  (23) Document all classes and ensure Code is up to date with Udacity standards
+
     /*
      *  Specifies the key used for accessing the selected movie in a requested Activity.
      *
