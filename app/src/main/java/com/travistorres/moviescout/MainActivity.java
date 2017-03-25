@@ -38,11 +38,11 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 public class MainActivity extends AppCompatActivity
         implements MovieClickedListener, MovieDbNetworkingErrorHandler {
-    //  TODO-  (1) Construct an Activity named SettingsActivity have the layout file simply read "Are you ready to ROCK!!!"
+    //  COMPLETED-  (1) Construct an Activity named SettingsActivity have the layout file simply read "Are you ready to ROCK!!!"
 
-    //  TODO-  (2) Create a menu item named Settings
-    //  TODO-  (3) When the settings menu item is clicked, create an intent which will load the SettingsActivity
-    //  TODO-  (4) Run the emulator to ensure that the SettingsActivity loads properly and displays the text "Are you ready to Rock!!!"
+    //  COMPLETED-  (2) Create a menu item named Settings
+    //  COMPLETED-  (3) When the settings menu item is clicked, create an intent which will load the SettingsActivity
+    //  COMPLETED-  (4) Run the emulator to ensure that the SettingsActivity loads properly and displays the text "Are you ready to Rock!!!"
 
     //  TODO-  (5) Create a Fragment named SettingsFragment which will only display the text "Hello, World" in it
     //  TODO-  (6) Update the settings_activity.xml file to load the SettingsFragment
@@ -158,6 +158,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.rating_sort_button:
                 mMovieRequester.setSortType(MovieSortType.HIGHEST_RATED);
                 break;
+            case R.id.settings_menu_button:
+                loadSettingsPage();
+                return true;
         }
 
         //  resets the results
@@ -165,6 +168,17 @@ public class MainActivity extends AppCompatActivity
         mMovieRequester.requestNext();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Request that the Settings page be displayed.
+     *
+     */
+    private void loadSettingsPage() {
+        Context context = this;
+        Class settingsClass = SettingsActivity.class;
+        Intent displaySettingsIntent = new Intent(context, settingsClass);
+        startActivity(displaySettingsIntent);
     }
 
     /**
