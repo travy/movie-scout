@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity
     //  COMPLETED-  (20) When the user clicks the settings menu item an intent should be fired which loads the SettingsActivity
     //  TODO-  (21) The MovieInfoActivity should automatically update whenever the Settings are changed
 
-    //  TODO-  (22) Add an Up Arrow to the SettingsFragment so that the user can press it to return to the previous page
+    //  COMPLETED-  (22) Add an Up Arrow to the SettingsFragment so that the user can press it to return to the previous page
 
     //  TODO-  (23) Document all classes and ensure Code is up to date with Udacity standards
 
