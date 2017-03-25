@@ -48,11 +48,11 @@ public class MainActivity extends AppCompatActivity
     //  COMPLETED-  (6) Update the settings_activity.xml file to load the SettingsFragment
     //  COMPLETED-  (7) Run the emulator to ensure that the SettingsFragment is properly loaded and displays the text "Hello, World" when the settings menu item clicked
 
-    //  TODO-  (8) Create an XML file named settings.xml
-    //  TODO-  (9) Add preference options for the MovieDB API's v3 and v4 key to be entered
-    //  TODO-  (10) Load the XML file into the SettingsFragment
-    //  TODO-  (11) Get the settings to show as EditText fields in the SettingsFragment
-    //  TODO-  (12) Move all hard-coded data to a strings.xml resource object
+    //  COMPLETED-  (8) Create an XML file named settings.xml
+    //  COMPLETED-  (9) Add preference options for the MovieDB API's v3 and v4 key to be entered
+    //  COMPLETED-  (10) Load the XML file into the SettingsFragment
+    //  COMPLETED-  (11) Get the settings to show as EditText fields in the SettingsFragment
+    //  COMPLETED-  (12) Move all hard-coded data to a strings.xml resource object
 
     //  TODO-  (13) Configure the app to view the contents of the Settings.xml file and display an error message if the keys do not work
     //  TODO-  (14) Deprecate everything in the package com.travistorres.moviescout.utils.configs
