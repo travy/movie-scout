@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity
     //  COMPLETED-  (3) When the settings menu item is clicked, create an intent which will load the SettingsActivity
     //  COMPLETED-  (4) Run the emulator to ensure that the SettingsActivity loads properly and displays the text "Are you ready to Rock!!!"
 
-    //  TODO-  (5) Create a Fragment named SettingsFragment which will only display the text "Hello, World" in it
-    //  TODO-  (6) Update the settings_activity.xml file to load the SettingsFragment
-    //  TODO-  (7) Run the emulator to ensure that the SettingsFragment is properly loaded and displays the text "Hello, World" when the settings menu item clicked
+    //  COMPLETED-  (5) Create a Fragment named SettingsFragment which will only display the text "Hello, World" in it
+    //  COMPLETED-  (6) Update the settings_activity.xml file to load the SettingsFragment
+    //  COMPLETED-  (7) Run the emulator to ensure that the SettingsFragment is properly loaded and displays the text "Hello, World" when the settings menu item clicked
 
     //  TODO-  (8) Create an XML file named settings.xml
     //  TODO-  (9) Add preference options for the MovieDB API's v3 and v4 key to be entered
