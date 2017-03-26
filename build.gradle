@@ -13,10 +13,10 @@ buildscript {
 }
 
 allprojects {
-    tasks.withType(JavaCompile) {
+    /*tasks.withType(JavaCompile) {
         options.deprecation = true
         options.compilerArgs += ['-Werror']
-    }
+    }*/
     repositories {
         jcenter()
     }

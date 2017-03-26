@@ -6,15 +6,19 @@ package com.travistorres.moviescout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
 import com.travistorres.moviescout.utils.moviedb.MovieSortType;
@@ -37,7 +41,7 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MainActivity extends AppCompatActivity
-        implements MovieClickedListener, MovieDbNetworkingErrorHandler {
+        implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener {
     //  COMPLETED-  (1) Construct an Activity named SettingsActivity have the layout file simply read "Are you ready to ROCK!!!"
 
     //  COMPLETED-  (2) Create a menu item named Settings
@@ -54,8 +58,8 @@ public class MainActivity extends AppCompatActivity
     //  COMPLETED-  (11) Get the settings to show as EditText fields in the SettingsFragment
     //  COMPLETED-  (12) Move all hard-coded data to a strings.xml resource object
 
-    //  TODO-  (13) Configure the app to view the contents of the Settings.xml file and display an error message if the keys do not work
-    //  TODO-  (14) Deprecate everything in the package com.travistorres.moviescout.utils.configs
+    //  COMPLETED-  (13) Configure the app to view the contents of the Settings.xml file and display an error message if the keys do not work
+    //  COMPLETED-  (14) Deprecate everything in the package com.travistorres.moviescout.utils.configs
     //  TODO-  (15) Refactor the app so that settings are only acquired by the Settings.xml file
     //  TODO-  (16) Remove the configurations.xml resource file
 
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity
     //  COMPLETED-  (22) Add an Up Arrow to the SettingsFragment so that the user can press it to return to the previous page
 
     //  TODO-  (23) Document all classes and ensure Code is up to date with Udacity standards
+    private final String LOG_TAG = getClass().getSimpleName();
 
     /*
      *  Specifies the key used for accessing the selected movie in a requested Activity.
@@ -93,6 +98,9 @@ public class MainActivity extends AppCompatActivity
     private ProgressBar mLoadingIndicator;
 
     private MovieDbRequester mMovieRequester;
+
+    private String movieDbApiThreeKey;
+    private String movieDbApiFourKey;
 
     /**
      * Responsible for loading all resource objects and triggering the events that will allow a
@@ -125,6 +133,82 @@ public class MainActivity extends AppCompatActivity
 
         //  starts up the requester sequence
         mMovieRequester.requestNext();
+    }
+
+    /**
+     * Re-affirms the state of the Activity when it has been unpaused.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //  Checks the applications preferences
+        setupPreferences();
+    }
+
+    /**
+     * Cleans up system resources when the Activity is being destroyed.
+     *
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //  stop listening to changes in preferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    /**
+     * Acquires the settings for the application and stores them so that they are easily
+     * accessible.  Will also redirect the user to the Settings page if they have not yet provided
+     * an API access key.
+     *
+     * TODO-  remove log calls
+     */
+    private void setupPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //  setup the version 3 api key
+        String versionThreeApiSettingsKey = getString(R.string.movie_db_v3_settings_key);
+        movieDbApiThreeKey = sharedPreferences.getString(versionThreeApiSettingsKey, null);
+        Log.d(LOG_TAG, "API Key:  " + movieDbApiThreeKey);
+
+        //  setup the verison four api key
+        String versionFourApiSettingsKey = getString(R.string.movie_db_v4_settings_key);
+        movieDbApiFourKey = sharedPreferences.getString(versionFourApiSettingsKey, null);
+        Log.d(LOG_TAG, "API V4 Key:  " + movieDbApiFourKey);
+
+        //  direct the user to the settings page if the api keys have not been specified
+        if (!wereMovieDbApiKeysSet()) {
+            Toast.makeText(this, "An API key was not provided", Toast.LENGTH_SHORT).show();
+            loadSettingsPage();
+        }
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    /**
+     * Determines if both the Movie DB API v3 and v4 access keys have been provided.
+     *
+     * @return boolean `true` if both keys have a proper value defined as by the
+     * `wasMovieDbApiKeySpecified` method call.
+     */
+    private boolean wereMovieDbApiKeysSet() {
+        return wasMovieDbApiKeySpecified(movieDbApiThreeKey) &&
+                wasMovieDbApiKeySpecified(movieDbApiFourKey);
+    }
+
+    /**
+     * Determines if a specified API access key was provided.  A key is determined to be valid, if
+     * it is not null and is composed of at least one character (excluding white space).
+     *
+     * @param apiKey The API key to check the validity of.
+     *
+     * @return boolean `true` if the key is neither null or an empty string and `false` otherwise.
+     */
+    private boolean wasMovieDbApiKeySpecified(String apiKey) {
+        return apiKey != null && apiKey.trim().length() > 1;
     }
 
     /**
@@ -247,5 +331,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void afterNetworkRequest() {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * Takes the changes made and updates the state of the application based on them.
+     *
+     * TODO- Remove log calls
+     *
+     * @param sharedPreferences shared preference provider
+     * @param s the key of the setting that was changed
+     */
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        if (s == getString(R.string.movie_db_v3_settings_key)) {
+            movieDbApiThreeKey = sharedPreferences.getString(s, null);
+            Log.d(getClass().getSimpleName(), "V3 Key:  " + movieDbApiThreeKey);
+        } else if (s == getString(R.string.movie_db_v4_settings_key)) {
+            movieDbApiFourKey = sharedPreferences.getString(s, null);
+            Log.d(getClass().getSimpleName(), "V4 Key:  " + movieDbApiFourKey);
+        }
     }
 }
