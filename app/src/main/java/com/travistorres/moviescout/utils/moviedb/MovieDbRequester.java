@@ -45,6 +45,8 @@ public class MovieDbRequester {
     private int totalPages;
     private int totalMovies;
     private MovieSortType sortType;
+    private String versionThreeApiKey;
+    private String versionFourApiKey;
 
     /**
      * Constructs a new Request object that will queried.
@@ -69,6 +71,35 @@ public class MovieDbRequester {
      */
     public MovieListAdapter getAdapter() {
         return movieAdapter;
+    }
+
+    /**
+     * Specifies the api keys to use for accessing resources from the Movie DB.
+     *
+     * @param versionThreeKey
+     * @param versionFourKey
+     */
+    public void setApiKeys(String versionThreeKey, String versionFourKey) {
+        setVersionThreeApiKey(versionThreeKey);
+        setVersionFourApiKey(versionFourKey);
+    }
+
+    /**
+     * Specifies the key to use for accessing Version 3 API features.
+     *
+     * @param versionThreeKey
+     */
+    public void setVersionThreeApiKey(String versionThreeKey) {
+        versionThreeApiKey = versionThreeKey;
+    }
+
+    /**
+     * Specifies the key to use for accessing Version 4 API features.
+     *
+     * @param versionFourKey
+     */
+    public void setVersionFourApiKey(String versionFourKey) {
+        versionFourApiKey = versionFourKey;
     }
 
     /**

@@ -130,9 +130,6 @@ public class MainActivity extends AppCompatActivity
         mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
         mMovieListView.setAdapter(mMovieAdapter);
         mMovieListView.setLayoutManager(mMovieLayoutManager);
-
-        //  starts up the requester sequence
-        mMovieRequester.requestNext();
     }
 
     /**
@@ -144,6 +141,10 @@ public class MainActivity extends AppCompatActivity
 
         //  Checks the applications preferences
         setupPreferences();
+
+        //  Starts the movie loads
+        mMovieRequester.setApiKeys(movieDbApiThreeKey, movieDbApiFourKey);
+        mMovieRequester.requestNext();
     }
 
     /**
