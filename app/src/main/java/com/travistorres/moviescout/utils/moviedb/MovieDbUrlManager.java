@@ -4,7 +4,10 @@
 
 package com.travistorres.moviescout.utils.moviedb;
 
+import android.content.Context;
 import android.net.Uri;
+
+import com.travistorres.moviescout.R;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,49 +23,21 @@ import java.net.URL;
  */
 
 public class MovieDbUrlManager {
-    //  TODO- Move all String contants in this file to the Strings.xml file
-    //  TODO- Convert to a singleton
-
     /*
-     * URI construction strings that will be utilized throughout the class for constructing valid
-     * request to the movie db api.
+     *  The context is needed in order to read from the systems Configurations.
      *
      */
-    private final static String URL_SCHEME = "HTTP";
-    private final static String URL_DOMAIN = "api.themoviedb.org";
-    private final static String API_V3_IDENTIFIER = "3";
-    private final static String MOVIE_REQUEST_ACTION = "movie";
-    private final static String POPULAR_MOVIE_SORT_ACTION = "popular";
-    private final static String HIGH_RATING_MOVIE_SORT_ACTION = "top_rated";
-    private final static String API_KEY_QUERY_NAME = "api_key";
-    private final static String PAGE_QUERY_NAME = "page";
+    private Context context;
 
     /**
-     * Constants used for acquiring image resources.
+     * Configures a new URL Manager by providing a context which will provide system
+     * configurations.
      *
+     * @param mContext
      */
-    private final static String IMAGE_HOSTING_DOMAIN = "image.tmdb.org";
-    private final static String IMAGE_HOSTING_PATH_ONE = "t";
-    private final static String IMAGE_HOSTING_PATH_TWO = "p";
-
-    /**
-     * Image Size Constants
-     *
-     */
-    private final static String W92_IMAGE_SIZE = "w92";
-    private final static String W154_IMAGE_SIZE = "w154";
-    private final static String W185_IMAGE_SIZE = "w185";
-    private final static String W342_IMAGE_SIZE = "w342";
-    private final static String W500_IMAGE_SIZE = "w500";
-    private final static String W780_IMAGE_SIZE = "w780";
-    private final static String ORIGINAL_IMAGE_SIZE = "original";
-
-    /**
-     * Default Image Size Constant.  By modifying this constant, you can easily modify the size
-     * of the movie posters as they appear in the movie list.
-     *
-     */
-    private final static String DEFAULT_IMAGE_SIZE = W342_IMAGE_SIZE;
+    public MovieDbUrlManager(Context mContext) {
+        context = mContext;
+    }
 
     /**
      * Retrieves the URL for requesting a list of movies.
@@ -72,19 +47,28 @@ public class MovieDbUrlManager {
      * @return URL The URL of the movie or NULL on failure
      */
     public URL getSortedMoveListUrl(MovieSortType sortType, int pageNumber, String versionThreeApiKey) {
+        //  read request parameters from the strings resource
+        String httpScheme = context.getString(R.string.movie_db_api_uri_scheme);
+        String domainName = context.getString(R.string.movie_db_api_uri_domain);
+        String apiVersion = context.getString(R.string.movie_db_api_v3_identifier);
+        String movieRequest = context.getString(R.string.movie_db_api_movie_request_action);
+        String apiKeyQuery = context.getString(R.string.movie_db_api_key_query_key);
+        String pageQuery = context.getString(R.string.movie_db_api_page_query_key);
+
         //  specify if movies should be sorted by popularity or by rating
         String sortAction = (sortType == MovieSortType.MOST_POPULAR) ?
-                POPULAR_MOVIE_SORT_ACTION : HIGH_RATING_MOVIE_SORT_ACTION;
+                context.getString(R.string.movie_db_api_popular_movie_sort_action) :
+                context.getString(R.string.movie_db_api_top_rating_sort_action);
 
         //  construct the movie db connection uri
         Uri uri = new Uri.Builder()
-                .scheme(URL_SCHEME)
-                .authority(URL_DOMAIN)
-                .appendPath(API_V3_IDENTIFIER)
-                .appendPath(MOVIE_REQUEST_ACTION)
+                .scheme(httpScheme)
+                .authority(domainName)
+                .appendPath(apiVersion)
+                .appendPath(movieRequest)
                 .appendPath(sortAction)
-                .appendQueryParameter(API_KEY_QUERY_NAME, versionThreeApiKey)
-                .appendQueryParameter(PAGE_QUERY_NAME, Integer.toString(pageNumber))
+                .appendQueryParameter(apiKeyQuery, versionThreeApiKey)
+                .appendQueryParameter(pageQuery, Integer.toString(pageNumber))
                 .build();
 
         return getUrl(uri);
@@ -98,7 +82,9 @@ public class MovieDbUrlManager {
      * @return A properly formatted URL for acquiring the movie poster.
      */
     public URL getMoviePosterUrl(String resourceName) {
-        return getMoviePosterUrl(resourceName, DEFAULT_IMAGE_SIZE);
+        String defaultImageSize = context.getString(R.string.tmdb_image_size_default);
+
+        return getMoviePosterUrl(resourceName, defaultImageSize);
     }
 
     /**
@@ -110,11 +96,18 @@ public class MovieDbUrlManager {
      * @return A properly formatted URL for acquiring the movie poster.
      */
     public URL getMoviePosterUrl(String resourceName, String posterSize) {
+        //  request configurations for forming request on the tmdb database
+        String httpScheme = context.getString(R.string.tmdb_uri_scheme);
+        String domainName = context.getString(R.string.tmdb_uri_domain);
+        String pathOne = context.getString(R.string.tmdb_uri_image_host_path_one);
+        String pathTwo = context.getString(R.string.tmdb_uri_image_host_path_two);
+
+        //  construct the uri to make requests on
         Uri uri = new Uri.Builder()
-                .scheme(URL_SCHEME)
-                .authority(IMAGE_HOSTING_DOMAIN)
-                .appendPath(IMAGE_HOSTING_PATH_ONE)
-                .appendPath(IMAGE_HOSTING_PATH_TWO)
+                .scheme(httpScheme)
+                .authority(domainName)
+                .appendPath(pathOne)
+                .appendPath(pathTwo)
                 .appendPath(posterSize)
                 .appendPath(resourceName)
                 .build();
