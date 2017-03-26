@@ -19,7 +19,7 @@
     <string name="movie_db_v3_settings_title">V3 API Key</string>
     <string name="movie_db_v3_settings_summary">Access V3 api resources</string>
 
-    <string name="movie_db_v4_settings_key" translatable="false">movie-db-api-v3-setting-key</string>
+    <string name="movie_db_v4_settings_key" translatable="false">movie-db-api-v4-setting-key</string>
     <string name="movie_db_v4_settings_title">V4 API Key</string>
     <string name="movie_db_v4_settings_summary">Access V4 api resources</string>
 
