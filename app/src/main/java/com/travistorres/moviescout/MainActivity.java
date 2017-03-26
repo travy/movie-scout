@@ -7,6 +7,7 @@ package com.travistorres.moviescout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
@@ -41,18 +42,6 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 public class MainActivity extends AppCompatActivity
         implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener {
-    /*
-     *  Specifies the key used for accessing the selected movie in a requested Activity.
-     *
-     */
-    public final static String SELECTED_MOVIE_EXTRA = "selectedMovie";
-
-    /*
-     *  Defines the number of columns in the grid layout.
-     *
-     */
-    private final static int GRIDLAYOUT_COLUMN_COUNT = 3;
-
     private RecyclerView mMovieListView;
     private GridLayoutManager mMovieLayoutManager;
     private MovieListAdapter mMovieAdapter;
@@ -88,8 +77,10 @@ public class MainActivity extends AppCompatActivity
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
 
         //  sets up the requester object
+        Resources resources = getResources();
+        int gridLayoutColumnCount = resources.getInteger(R.integer.movie_grid_layout_manager_column_count);
         mMovieRequester = new MovieDbRequester(this, this, this);
-        mMovieLayoutManager = new GridLayoutManager(this, GRIDLAYOUT_COLUMN_COUNT);
+        mMovieLayoutManager = new GridLayoutManager(this, gridLayoutColumnCount);
         mMovieAdapter = mMovieRequester.getAdapter();
 
         //  configures the recycler view
@@ -250,8 +241,9 @@ public class MainActivity extends AppCompatActivity
     public void onClick(Movie clickedMovie) {
         Context context = this;
         Class movieInfoPage = MovieInfoActivity.class;
+        String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
         Intent intent = new Intent(context, movieInfoPage);
-        intent.putExtra(SELECTED_MOVIE_EXTRA, clickedMovie);
+        intent.putExtra(selectedMovieExtraKey, clickedMovie);
 
         startActivity(intent);
     }

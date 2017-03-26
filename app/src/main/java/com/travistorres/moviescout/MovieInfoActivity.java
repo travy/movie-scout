@@ -56,10 +56,13 @@ public class MovieInfoActivity extends AppCompatActivity {
         mMoviePopularity = (TextView) findViewById(R.id.movie_popularity);
         mMovieVoteAverage = (TextView) findViewById(R.id.movie_vote_average);
 
+        //  retrieves the key for identifying the selected movie
+        String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
+
         //  obtain the selected video and display it's information
         Intent intent = getIntent();
-        if (intent.hasExtra(MainActivity.SELECTED_MOVIE_EXTRA)) {
-            Movie movie = (Movie) intent.getParcelableExtra(MainActivity.SELECTED_MOVIE_EXTRA);
+        if (intent.hasExtra(selectedMovieExtraKey)) {
+            Movie movie = (Movie) intent.getParcelableExtra(selectedMovieExtraKey);
             movie.setContext(this);
 
             //  get the label strings from the resource files

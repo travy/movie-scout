@@ -16,6 +16,9 @@
 
     <string name="missing_movie_model_error_message">Unable to acquire Movie data</string>
 
+    <!--  Movie Transport Information  -->
+    <string name="selected_movie_extra_key">selected-movie</string>
+
     <!--  Movie Information  -->
     <string name="movie_release_date_label">Release:  </string>
     <string name="movie_popularity_rating_label">Popularity:  </string>
