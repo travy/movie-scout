@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity
      * accessible.  Will also redirect the user to the Settings page if they have not yet provided
      * an API access key.
      *
-     * TODO-  remove log calls
      */
     private void setupPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -173,17 +172,16 @@ public class MainActivity extends AppCompatActivity
         String versionThreeApiSettingsKey = getString(R.string.movie_db_v3_settings_key);
         String versionThreeApiSettingsDefault = getString(R.string.movie_db_v3_settings_default);
         movieDbApiThreeKey = sharedPreferences.getString(versionThreeApiSettingsKey, versionThreeApiSettingsDefault);
-        Log.d(LOG_TAG, "API Key:  " + movieDbApiThreeKey);
 
-        //  setup the verison four api key
+        //  setup the version four api key
         String versionFourApiSettingsKey = getString(R.string.movie_db_v4_settings_key);
         String versionFourApiSettingsDefault = getString(R.string.movie_db_v4_settings_default);
         movieDbApiFourKey = sharedPreferences.getString(versionFourApiSettingsKey, versionFourApiSettingsDefault);
-        Log.d(LOG_TAG, "API V4 Key:  " + movieDbApiFourKey);
 
         //  direct the user to the settings page if the api keys have not been specified
         if (!wereMovieDbApiKeysSet()) {
-            Toast.makeText(this, "An API key was not provided", Toast.LENGTH_SHORT).show();
+            String missingKeyMessage = getString(R.string.missing_api_keys);
+            Toast.makeText(this, missingKeyMessage, Toast.LENGTH_SHORT).show();
             loadSettingsPage();
         }
 
@@ -338,8 +336,6 @@ public class MainActivity extends AppCompatActivity
     /**
      * Takes the changes made and updates the state of the application based on them.
      *
-     * TODO- Remove log calls
-     *
      * @param sharedPreferences shared preference provider
      * @param s the key of the setting that was changed
      */
@@ -348,11 +344,9 @@ public class MainActivity extends AppCompatActivity
         if (s == getString(R.string.movie_db_v3_settings_key)) {
             String defaultValue = getString(R.string.movie_db_v3_settings_default);
             movieDbApiThreeKey = sharedPreferences.getString(s, defaultValue);
-            Log.d(getClass().getSimpleName(), "V3 Key:  " + movieDbApiThreeKey);
         } else if (s == getString(R.string.movie_db_v4_settings_key)) {
             String defaultValue = getString(R.string.movie_db_v4_settings_default);
             movieDbApiFourKey = sharedPreferences.getString(s, defaultValue);
-            Log.d(getClass().getSimpleName(), "V4 Key:  " + movieDbApiFourKey);
         }
     }
 }
