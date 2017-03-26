@@ -4,14 +4,10 @@
 
 package com.travistorres.moviescout;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +21,7 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  * Responsible for displaying information regarding a specific Movie object.
  *
  * @author Travis Anthony Torres
- * @version February 19, 2017
+ * @version v1.2.0 (March 26, 2017)
  */
 
 public class MovieInfoActivity extends AppCompatActivity {

@@ -19,7 +19,7 @@ import java.net.URL;
  * URI objects generated from this class will ensure that URL's are always well formed.
  *
  * @author Travis Anthony Torres
- * @version February 11, 2017
+ * @version v1.2.0 (March 26, 2017)
  */
 
 public class MovieDbUrlManager {

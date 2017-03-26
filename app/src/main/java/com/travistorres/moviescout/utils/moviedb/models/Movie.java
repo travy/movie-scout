@@ -21,7 +21,7 @@ import java.net.URL;
  * Contains the information regarding a Movie item.
  *
  * @author Travis Anthony Torres
- * @version February 15, 2017
+ * @version v1.1.1 (February 15, 2017)
  */
 
 public class Movie implements Parcelable {

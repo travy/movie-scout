@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,44 +36,11 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  * Each movie shown can then be pressed to reveal information regarding the selected title.
  *
  * @author Travis Anthony Torres
- * @version February 12, 2017
+ * @version v1.2.0 (March 26, 2017)
  */
 
 public class MainActivity extends AppCompatActivity
         implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener {
-    //  COMPLETED-  (1) Construct an Activity named SettingsActivity have the layout file simply read "Are you ready to ROCK!!!"
-
-    //  COMPLETED-  (2) Create a menu item named Settings
-    //  COMPLETED-  (3) When the settings menu item is clicked, create an intent which will load the SettingsActivity
-    //  COMPLETED-  (4) Run the emulator to ensure that the SettingsActivity loads properly and displays the text "Are you ready to Rock!!!"
-
-    //  COMPLETED-  (5) Create a Fragment named SettingsFragment which will only display the text "Hello, World" in it
-    //  COMPLETED-  (6) Update the settings_activity.xml file to load the SettingsFragment
-    //  COMPLETED-  (7) Run the emulator to ensure that the SettingsFragment is properly loaded and displays the text "Hello, World" when the settings menu item clicked
-
-    //  COMPLETED-  (8) Create an XML file named settings.xml
-    //  COMPLETED-  (9) Add preference options for the MovieDB API's v3 and v4 key to be entered
-    //  COMPLETED-  (10) Load the XML file into the SettingsFragment
-    //  COMPLETED-  (11) Get the settings to show as EditText fields in the SettingsFragment
-    //  COMPLETED-  (12) Move all hard-coded data to a strings.xml resource object
-
-    //  COMPLETED-  (13) Configure the app to view the contents of the Settings.xml file and display an error message if the keys do not work
-    //  COMPLETED-  (14) Deprecate everything in the package com.travistorres.moviescout.utils.configs
-    //  COMPLETED-  (15) Refactor the app so that settings are only acquired by the Settings.xml file
-    //  COMPLETED-  (16) Remove the configurations.xml resource file
-
-    //  COMPLETED-  (17) Update the MainActivity so that it will automatically update whenever the Settings are changed
-
-    //  COMPLETED-  (18) Create a menu for the MovieInfoActivity
-    //  COMPLETED-  (19) Add a menu item named settings
-    //  COMPLETED-  (20) When the user clicks the settings menu item an intent should be fired which loads the SettingsActivity
-    //  COMPLETED-  (21) The MovieInfoActivity should automatically update whenever the Settings are changed
-
-    //  COMPLETED-  (22) Add an Up Arrow to the SettingsFragment so that the user can press it to return to the previous page
-
-    //  TODO-  (23) Document all classes and ensure Code is up to date with Udacity standards
-    private final String LOG_TAG = getClass().getSimpleName();
-
     /*
      *  Specifies the key used for accessing the selected movie in a requested Activity.
      *
