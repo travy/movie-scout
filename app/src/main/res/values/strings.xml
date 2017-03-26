@@ -1,7 +1,10 @@
 <resources>
+
     <string name="app_name">MovieScout</string>
 
     <!--  Error Messages  -->
+    <string name="missing_api_keys">An API key was not provided</string>
+
     <string name="page_not_found_error_message">The requested page was not found</string>
     <string name="invalid_api_key_error_message">The provided API Key was rejected by the server.  Please check your res/xml/configurations.xml file settings.</string>
     <string name="network_failure_error_message">The network connection failed!</string>
@@ -10,4 +13,56 @@
 
     <string name="popularity_menu_item">Most Popular</string>
     <string name="rating_menu_item">Highly Rated</string>
+
+    <string name="missing_movie_model_error_message">Unable to acquire Movie data</string>
+
+    <!--  Movie Transport Information  -->
+    <string name="selected_movie_extra_key">selected-movie</string>
+
+    <!--  Movie Information  -->
+    <string name="movie_release_date_label">Release</string>
+    <string name="movie_popularity_rating_label">Popularity</string>
+    <string name="movie_language_label">Language</string>
+    <string name="movie_vote_average_label">Vote Average</string>
+
+    <!--  MovieDB API Url Configurations  -->
+    <string name="movie_db_api_uri_scheme">HTTP</string>
+    <string name="movie_db_api_uri_domain">api.themoviedb.org</string>
+    <string name="movie_db_api_v3_identifier">3</string>
+    <string name="movie_db_api_v4_identifier">4</string>
+    <string name="movie_db_api_movie_request_action">movie</string>
+    <string name="movie_db_api_popular_movie_sort_action">popular</string>
+    <string name="movie_db_api_top_rating_sort_action">top_rated</string>
+    <string name="movie_db_api_key_query_key">api_key</string>
+    <string name="movie_db_api_page_query_key">page</string>
+
+    <!--  TMDB Image Resource Configurations  -->
+    <string name="tmdb_uri_scheme">HTTP</string>
+    <string name="tmdb_uri_domain">image.tmdb.org</string>
+    <string name="tmdb_uri_image_host_path_one">t</string>
+    <string name="tmdb_uri_image_host_path_two">p</string>
+
+    <!--  TMDB Image Resolution Sizes  -->
+    <string name="tmdb_image_size_original">original</string>
+    <string name="tmdb_image_size_92">w92</string>
+    <string name="tmdb_image_size_154">w154</string>
+    <string name="tmdb_image_size_185">w185</string>
+    <string name="tmdb_image_size_342">w342</string>
+    <string name="tmdb_image_size_500">w500</string>
+    <string name="tmdb_image_size_780">w780</string>
+    <string name="tmdb_image_size_default">@string/tmdb_image_size_342</string>
+
+    <!--  Settings Textual Information -->
+    <string name="movie_db_api_settings_category">Movie DB API Settings</string>
+
+    <string name="movie_db_v3_settings_default" translatable="false"></string>
+    <string name="movie_db_v3_settings_key" translatable="false">movie-db-api-v3-setting-key</string>
+    <string name="movie_db_v3_settings_title">V3 API Key</string>
+    <string name="movie_db_v3_settings_summary">Access V3 api resources</string>
+
+    <string name="movie_db_v4_settings_default" translatable="false"></string>
+    <string name="movie_db_v4_settings_key" translatable="false">movie-db-api-v4-setting-key</string>
+    <string name="movie_db_v4_settings_title">V4 API Key</string>
+    <string name="movie_db_v4_settings_summary">Access V4 api resources</string>
+
 </resources>

@@ -21,7 +21,7 @@ import java.net.URL;
  * Contains the information regarding a Movie item.
  *
  * @author Travis Anthony Torres
- * @version February 15, 2017
+ * @version v1.1.1 (February 15, 2017)
  */
 
 public class Movie implements Parcelable {
@@ -194,7 +194,7 @@ public class Movie implements Parcelable {
      * @param mContext
      */
     public Movie(Context mContext) {
-        context = mContext;
+        setContext(mContext);
     }
 
     /**
@@ -205,8 +205,7 @@ public class Movie implements Parcelable {
      * @throws NoContextException When the context has not been defined.
      */
     public URL getPosterUrl() {
-        Context mContext = getContext();
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(mContext);
+        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
         URL posterUrl = urlManager.getMoviePosterUrl(posterPath);
 
         return posterUrl;

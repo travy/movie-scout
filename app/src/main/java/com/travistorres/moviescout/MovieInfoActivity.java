@@ -21,20 +21,15 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  * Responsible for displaying information regarding a specific Movie object.
  *
  * @author Travis Anthony Torres
- * @version February 19, 2017
+ * @version v1.2.0 (March 26, 2017)
  */
 
 public class MovieInfoActivity extends AppCompatActivity {
-    /*
-     *  Meta data.
-     *
-     */
-    private final static String RELEASE_LABEL = "Released:  ";
-    private final static String POPULARITY_LABEL = "Popularity:  ";
-    private final static String LANGUAGE_LABEL = "Language:  ";
-    private final static String VOTE_AVERAGE_LABEL = "Vote Average:  ";
+    private final String LOG_TAG = getClass().getSimpleName();
     private final static String MISSING_MOVIE_MODEL_LOG_STRING = "Activity triggered without a selected movie being specified";
-    private final static String MISSING_MOVIE_MODEL_TOAST = "Unable to acquire Movie data";
+
+    //  used for separating labels from their data
+    private final static String LABEL_SEPERATOR = ":  ";
 
     private TextView mMovieTitle;
     private ImageView mMoviePoster;
@@ -64,24 +59,34 @@ public class MovieInfoActivity extends AppCompatActivity {
         mMoviePopularity = (TextView) findViewById(R.id.movie_popularity);
         mMovieVoteAverage = (TextView) findViewById(R.id.movie_vote_average);
 
+        //  retrieves the key for identifying the selected movie
+        String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
+
         //  obtain the selected video and display it's information
         Intent intent = getIntent();
-        if (intent.hasExtra(MainActivity.SELECTED_MOVIE_EXTRA)) {
-            Movie movie = (Movie) intent.getParcelableExtra(MainActivity.SELECTED_MOVIE_EXTRA);
+        if (intent.hasExtra(selectedMovieExtraKey)) {
+            Movie movie = (Movie) intent.getParcelableExtra(selectedMovieExtraKey);
             movie.setContext(this);
+
+            //  get the label strings from the resource files
+            String releaseDateLabel = getString(R.string.movie_release_date_label);
+            String voteAverageLabel = getString(R.string.movie_vote_average_label);
+            String popularityLabel = getString(R.string.movie_popularity_rating_label);
+            String languageLabel = getString(R.string.movie_language_label);
 
             //  display information regarding the video
             mMovieTitle.setText(movie.originalTitle);
-            mMovieReleaseDate.setText(RELEASE_LABEL + movie.getCleanDateFormat());
-            mMovieVoteAverage.setText(VOTE_AVERAGE_LABEL + movie.voteAverage);
-            mMoviePopularity.setText(POPULARITY_LABEL + movie.popularity);
-            mMovieLanguage.setText(LANGUAGE_LABEL + movie.originalLanguage);
+            mMovieReleaseDate.setText(releaseDateLabel + LABEL_SEPERATOR + movie.getCleanDateFormat());
+            mMovieVoteAverage.setText(voteAverageLabel + LABEL_SEPERATOR + movie.voteAverage);
+            mMoviePopularity.setText(popularityLabel + LABEL_SEPERATOR + movie.popularity);
+            mMovieLanguage.setText(languageLabel + LABEL_SEPERATOR + movie.originalLanguage);
             mMovieOverview.setText(movie.overview);
             retrievePoster(movie);
         } else {
             //  display an error message when a movie is not defined within the intent.  Should never occur.
-            Log.d(getClass().toString(), MISSING_MOVIE_MODEL_LOG_STRING);
-            Toast.makeText(this, MISSING_MOVIE_MODEL_TOAST, Toast.LENGTH_SHORT).show();
+            Log.d(LOG_TAG, MISSING_MOVIE_MODEL_LOG_STRING);
+            String missingMovieMessage = getString(R.string.missing_movie_model_error_message);
+            Toast.makeText(this, missingMovieMessage, Toast.LENGTH_SHORT).show();
         }
     }
 

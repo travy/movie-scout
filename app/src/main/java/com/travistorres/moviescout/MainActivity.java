@@ -6,8 +6,11 @@ package com.travistorres.moviescout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -15,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
 import com.travistorres.moviescout.utils.moviedb.MovieSortType;
@@ -33,23 +37,11 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  * Each movie shown can then be pressed to reveal information regarding the selected title.
  *
  * @author Travis Anthony Torres
- * @version February 12, 2017
+ * @version v1.2.0 (March 26, 2017)
  */
 
 public class MainActivity extends AppCompatActivity
-        implements MovieClickedListener, MovieDbNetworkingErrorHandler {
-    /*
-     *  Specifies the key used for accessing the selected movie in a requested Activity.
-     *
-     */
-    public final static String SELECTED_MOVIE_EXTRA = "selectedMovie";
-
-    /*
-     *  Defines the number of columns in the grid layout.
-     *
-     */
-    private final static int GRIDLAYOUT_COLUMN_COUNT = 3;
-
+        implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener {
     private RecyclerView mMovieListView;
     private GridLayoutManager mMovieLayoutManager;
     private MovieListAdapter mMovieAdapter;
@@ -61,6 +53,9 @@ public class MainActivity extends AppCompatActivity
     private ProgressBar mLoadingIndicator;
 
     private MovieDbRequester mMovieRequester;
+
+    private String movieDbApiThreeKey;
+    private String movieDbApiFourKey;
 
     /**
      * Responsible for loading all resource objects and triggering the events that will allow a
@@ -82,17 +77,97 @@ public class MainActivity extends AppCompatActivity
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
 
         //  sets up the requester object
+        Resources resources = getResources();
+        int gridLayoutColumnCount = resources.getInteger(R.integer.movie_grid_layout_manager_column_count);
         mMovieRequester = new MovieDbRequester(this, this, this);
-        mMovieLayoutManager = new GridLayoutManager(this, GRIDLAYOUT_COLUMN_COUNT);
+        mMovieLayoutManager = new GridLayoutManager(this, gridLayoutColumnCount);
         mMovieAdapter = mMovieRequester.getAdapter();
 
         //  configures the recycler view
         mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
         mMovieListView.setAdapter(mMovieAdapter);
         mMovieListView.setLayoutManager(mMovieLayoutManager);
+    }
 
-        //  starts up the requester sequence
+    /**
+     * Re-affirms the state of the Activity when it has been unpaused.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //  Checks the applications preferences
+        setupPreferences();
+
+        //  Starts the movie loads
+        mUnauthorizedTextView.setVisibility(TextView.INVISIBLE);
+        mMovieRequester.setApiKeys(movieDbApiThreeKey, movieDbApiFourKey);
         mMovieRequester.requestNext();
+    }
+
+    /**
+     * Cleans up system resources when the Activity is being destroyed.
+     *
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //  stop listening to changes in preferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    /**
+     * Acquires the settings for the application and stores them so that they are easily
+     * accessible.  Will also redirect the user to the Settings page if they have not yet provided
+     * an API access key.
+     *
+     */
+    private void setupPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //  setup the version 3 api key
+        String versionThreeApiSettingsKey = getString(R.string.movie_db_v3_settings_key);
+        String versionThreeApiSettingsDefault = getString(R.string.movie_db_v3_settings_default);
+        movieDbApiThreeKey = sharedPreferences.getString(versionThreeApiSettingsKey, versionThreeApiSettingsDefault);
+
+        //  setup the version four api key
+        String versionFourApiSettingsKey = getString(R.string.movie_db_v4_settings_key);
+        String versionFourApiSettingsDefault = getString(R.string.movie_db_v4_settings_default);
+        movieDbApiFourKey = sharedPreferences.getString(versionFourApiSettingsKey, versionFourApiSettingsDefault);
+
+        //  direct the user to the settings page if the api keys have not been specified
+        if (!wereMovieDbApiKeysSet()) {
+            String missingKeyMessage = getString(R.string.missing_api_keys);
+            Toast.makeText(this, missingKeyMessage, Toast.LENGTH_SHORT).show();
+            loadSettingsPage();
+        }
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    /**
+     * Determines if both the Movie DB API v3 and v4 access keys have been provided.
+     *
+     * @return boolean `true` if both keys have a proper value defined as by the
+     * `wasMovieDbApiKeySpecified` method call.
+     */
+    private boolean wereMovieDbApiKeysSet() {
+        return wasMovieDbApiKeySpecified(movieDbApiThreeKey) &&
+                wasMovieDbApiKeySpecified(movieDbApiFourKey);
+    }
+
+    /**
+     * Determines if a specified API access key was provided.  A key is determined to be valid, if
+     * it is not null and is composed of at least one character (excluding white space).
+     *
+     * @param apiKey The API key to check the validity of.
+     *
+     * @return boolean `true` if the key is neither null or an empty string and `false` otherwise.
+     */
+    private boolean wasMovieDbApiKeySpecified(String apiKey) {
+        return apiKey != null && apiKey.trim().length() > 1;
     }
 
     /**
@@ -121,18 +196,39 @@ public class MainActivity extends AppCompatActivity
         //  determine how to sort the system
         switch (item.getItemId()) {
             case R.id.popularity_sort_button:
-                mMovieRequester.setSortType(MovieSortType.MOST_POPULAR);
+                sortMovies(MovieSortType.MOST_POPULAR);
                 break;
             case R.id.rating_sort_button:
-                mMovieRequester.setSortType(MovieSortType.HIGHEST_RATED);
+                sortMovies(MovieSortType.HIGHEST_RATED);
                 break;
+            case R.id.settings_menu_button:
+                loadSettingsPage();
+                return true;
         }
 
-        //  resets the results
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Sorts movies and updates the list.
+     *
+     * @param sortType
+     */
+    private void sortMovies(MovieSortType sortType) {
+        mMovieRequester.setSortType(sortType);
         mMovieRequester.reset();
         mMovieRequester.requestNext();
+    }
 
-        return super.onOptionsItemSelected(item);
+    /**
+     * Request that the Settings page be displayed.
+     *
+     */
+    private void loadSettingsPage() {
+        Context context = this;
+        Class settingsClass = SettingsActivity.class;
+        Intent displaySettingsIntent = new Intent(context, settingsClass);
+        startActivity(displaySettingsIntent);
     }
 
     /**
@@ -145,8 +241,9 @@ public class MainActivity extends AppCompatActivity
     public void onClick(Movie clickedMovie) {
         Context context = this;
         Class movieInfoPage = MovieInfoActivity.class;
+        String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
         Intent intent = new Intent(context, movieInfoPage);
-        intent.putExtra(SELECTED_MOVIE_EXTRA, clickedMovie);
+        intent.putExtra(selectedMovieExtraKey, clickedMovie);
 
         startActivity(intent);
     }
@@ -194,5 +291,22 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void afterNetworkRequest() {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * Takes the changes made and updates the state of the application based on them.
+     *
+     * @param sharedPreferences shared preference provider
+     * @param s the key of the setting that was changed
+     */
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        if (s == getString(R.string.movie_db_v3_settings_key)) {
+            String defaultValue = getString(R.string.movie_db_v3_settings_default);
+            movieDbApiThreeKey = sharedPreferences.getString(s, defaultValue);
+        } else if (s == getString(R.string.movie_db_v4_settings_key)) {
+            String defaultValue = getString(R.string.movie_db_v4_settings_default);
+            movieDbApiFourKey = sharedPreferences.getString(s, defaultValue);
+        }
     }
 }
