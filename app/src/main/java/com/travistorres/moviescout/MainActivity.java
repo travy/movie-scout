@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity
     //  COMPLETED-  (15) Refactor the app so that settings are only acquired by the Settings.xml file
     //  COMPLETED-  (16) Remove the configurations.xml resource file
 
-    //  TODO-  (17) Update the MainActivity so that it will automatically update whenever the Settings are changed
+    //  COMPLETED-  (17) Update the MainActivity so that it will automatically update whenever the Settings are changed
 
     //  COMPLETED-  (18) Create a menu for the MovieInfoActivity
     //  COMPLETED-  (19) Add a menu item named settings
     //  COMPLETED-  (20) When the user clicks the settings menu item an intent should be fired which loads the SettingsActivity
-    //  TODO-  (21) The MovieInfoActivity should automatically update whenever the Settings are changed
+    //  COMPLETED-  (21) The MovieInfoActivity should automatically update whenever the Settings are changed
 
     //  COMPLETED-  (22) Add an Up Arrow to the SettingsFragment so that the user can press it to return to the previous page
 
