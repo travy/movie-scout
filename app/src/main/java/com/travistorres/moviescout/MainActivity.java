@@ -171,12 +171,14 @@ public class MainActivity extends AppCompatActivity
 
         //  setup the version 3 api key
         String versionThreeApiSettingsKey = getString(R.string.movie_db_v3_settings_key);
-        movieDbApiThreeKey = sharedPreferences.getString(versionThreeApiSettingsKey, null);
+        String versionThreeApiSettingsDefault = getString(R.string.movie_db_v3_settings_default);
+        movieDbApiThreeKey = sharedPreferences.getString(versionThreeApiSettingsKey, versionThreeApiSettingsDefault);
         Log.d(LOG_TAG, "API Key:  " + movieDbApiThreeKey);
 
         //  setup the verison four api key
         String versionFourApiSettingsKey = getString(R.string.movie_db_v4_settings_key);
-        movieDbApiFourKey = sharedPreferences.getString(versionFourApiSettingsKey, null);
+        String versionFourApiSettingsDefault = getString(R.string.movie_db_v4_settings_default);
+        movieDbApiFourKey = sharedPreferences.getString(versionFourApiSettingsKey, versionFourApiSettingsDefault);
         Log.d(LOG_TAG, "API V4 Key:  " + movieDbApiFourKey);
 
         //  direct the user to the settings page if the api keys have not been specified
@@ -344,10 +346,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         if (s == getString(R.string.movie_db_v3_settings_key)) {
-            movieDbApiThreeKey = sharedPreferences.getString(s, null);
+            String defaultValue = getString(R.string.movie_db_v3_settings_default);
+            movieDbApiThreeKey = sharedPreferences.getString(s, defaultValue);
             Log.d(getClass().getSimpleName(), "V3 Key:  " + movieDbApiThreeKey);
         } else if (s == getString(R.string.movie_db_v4_settings_key)) {
-            movieDbApiFourKey = sharedPreferences.getString(s, null);
+            String defaultValue = getString(R.string.movie_db_v4_settings_default);
+            movieDbApiFourKey = sharedPreferences.getString(s, defaultValue);
             Log.d(getClass().getSimpleName(), "V4 Key:  " + movieDbApiFourKey);
         }
     }
