@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity
 
     //  COMPLETED-  (13) Configure the app to view the contents of the Settings.xml file and display an error message if the keys do not work
     //  COMPLETED-  (14) Deprecate everything in the package com.travistorres.moviescout.utils.configs
-    //  TODO-  (15) Refactor the app so that settings are only acquired by the Settings.xml file
-    //  TODO-  (16) Remove the configurations.xml resource file
+    //  COMPLETED-  (15) Refactor the app so that settings are only acquired by the Settings.xml file
+    //  COMPLETED-  (16) Remove the configurations.xml resource file
 
     //  TODO-  (17) Update the MainActivity so that it will automatically update whenever the Settings are changed
 

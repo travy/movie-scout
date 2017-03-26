@@ -140,8 +140,8 @@ public class MovieDbRequester {
      * @return The URL to acquire the next set of results.
      */
     public URL getCurrentRequestUrl() {
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
-        URL url = urlManager.getSortedMoveListUrl(sortType, currentPage);
+        MovieDbUrlManager urlManager = new MovieDbUrlManager();
+        URL url = urlManager.getSortedMoveListUrl(sortType, currentPage, versionThreeApiKey);
 
         return url;
     }

@@ -194,7 +194,7 @@ public class Movie implements Parcelable {
      * @param mContext
      */
     public Movie(Context mContext) {
-        context = mContext;
+        setContext(mContext);
     }
 
     /**
@@ -205,8 +205,7 @@ public class Movie implements Parcelable {
      * @throws NoContextException When the context has not been defined.
      */
     public URL getPosterUrl() {
-        Context mContext = getContext();
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(mContext);
+        MovieDbUrlManager urlManager = new MovieDbUrlManager();
         URL posterUrl = urlManager.getMoviePosterUrl(posterPath);
 
         return posterUrl;

@@ -4,10 +4,7 @@
 
 package com.travistorres.moviescout.utils.moviedb;
 
-import android.content.Context;
 import android.net.Uri;
-
-import com.travistorres.moviescout.utils.configs.ConfigurationsReader;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,6 +20,9 @@ import java.net.URL;
  */
 
 public class MovieDbUrlManager {
+    //  TODO- Move all String contants in this file to the Strings.xml file
+    //  TODO- Convert to a singleton
+
     /*
      * URI construction strings that will be utilized throughout the class for constructing valid
      * request to the movie db api.
@@ -64,26 +64,6 @@ public class MovieDbUrlManager {
      */
     private final static String DEFAULT_IMAGE_SIZE = W342_IMAGE_SIZE;
 
-    private Context context;
-
-    /**
-     * Allocates memory for the builder and provides a system resource manager.
-     *
-     * @param context System context
-     */
-    public MovieDbUrlManager(Context context) {
-        setContext(context);
-    }
-
-    /**
-     * Specify the resources object.
-     *
-     * @param mContext The context of the request
-     */
-    public void setContext(Context mContext) {
-        context = mContext;
-    }
-
     /**
      * Retrieves the URL for requesting a list of movies.
      *
@@ -91,11 +71,10 @@ public class MovieDbUrlManager {
      *
      * @return URL The URL of the movie or NULL on failure
      */
-    public URL getSortedMoveListUrl(MovieSortType sortType, int pageNumber) {
+    public URL getSortedMoveListUrl(MovieSortType sortType, int pageNumber, String versionThreeApiKey) {
         //  specify if movies should be sorted by popularity or by rating
         String sortAction = (sortType == MovieSortType.MOST_POPULAR) ?
                 POPULAR_MOVIE_SORT_ACTION : HIGH_RATING_MOVIE_SORT_ACTION;
-        String apiKeyV3 = ConfigurationsReader.getApiKey(context);
 
         //  construct the movie db connection uri
         Uri uri = new Uri.Builder()
@@ -104,7 +83,7 @@ public class MovieDbUrlManager {
                 .appendPath(API_V3_IDENTIFIER)
                 .appendPath(MOVIE_REQUEST_ACTION)
                 .appendPath(sortAction)
-                .appendQueryParameter(API_KEY_QUERY_NAME, apiKeyV3)
+                .appendQueryParameter(API_KEY_QUERY_NAME, versionThreeApiKey)
                 .appendQueryParameter(PAGE_QUERY_NAME, Integer.toString(pageNumber))
                 .build();
 
