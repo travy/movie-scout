@@ -21,6 +21,8 @@ import java.io.IOException;
  *
  * @author Travis Anthony Torres
  * @version February 12, 2017
+ *
+ * @deprecated
  */
 
 public final class ConfigurationsReader {

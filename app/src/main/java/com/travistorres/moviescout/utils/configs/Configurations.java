@@ -22,6 +22,8 @@ import java.util.Hashtable;
  *
  * @author Travis Anthony Torres
  * @version February 12, 2017
+ *
+ * @deprecated
  */
 
 class Configurations extends Hashtable<String, String> {
