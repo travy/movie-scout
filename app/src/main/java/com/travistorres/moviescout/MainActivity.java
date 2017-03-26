@@ -153,21 +153,28 @@ public class MainActivity extends AppCompatActivity
         //  determine how to sort the system
         switch (item.getItemId()) {
             case R.id.popularity_sort_button:
-                mMovieRequester.setSortType(MovieSortType.MOST_POPULAR);
+                sortMovies(MovieSortType.MOST_POPULAR);
                 break;
             case R.id.rating_sort_button:
-                mMovieRequester.setSortType(MovieSortType.HIGHEST_RATED);
+                sortMovies(MovieSortType.HIGHEST_RATED);
                 break;
             case R.id.settings_menu_button:
                 loadSettingsPage();
                 return true;
         }
 
-        //  resets the results
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Sorts movies and updates the list.
+     *
+     * @param sortType
+     */
+    private void sortMovies(MovieSortType sortType) {
+        mMovieRequester.setSortType(sortType);
         mMovieRequester.reset();
         mMovieRequester.requestNext();
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
