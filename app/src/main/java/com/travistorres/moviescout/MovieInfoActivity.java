@@ -28,6 +28,9 @@ public class MovieInfoActivity extends AppCompatActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     private final static String MISSING_MOVIE_MODEL_LOG_STRING = "Activity triggered without a selected movie being specified";
 
+    //  used for separating labels from their data
+    private final static String LABEL_SEPERATOR = ":  ";
+
     private TextView mMovieTitle;
     private ImageView mMoviePoster;
     private TextView mMovieReleaseDate;
@@ -73,10 +76,10 @@ public class MovieInfoActivity extends AppCompatActivity {
 
             //  display information regarding the video
             mMovieTitle.setText(movie.originalTitle);
-            mMovieReleaseDate.setText(releaseDateLabel + movie.getCleanDateFormat());
-            mMovieVoteAverage.setText(voteAverageLabel + movie.voteAverage);
-            mMoviePopularity.setText(popularityLabel + movie.popularity);
-            mMovieLanguage.setText(languageLabel + movie.originalLanguage);
+            mMovieReleaseDate.setText(releaseDateLabel + LABEL_SEPERATOR + movie.getCleanDateFormat());
+            mMovieVoteAverage.setText(voteAverageLabel + LABEL_SEPERATOR + movie.voteAverage);
+            mMoviePopularity.setText(popularityLabel + LABEL_SEPERATOR + movie.popularity);
+            mMovieLanguage.setText(languageLabel + LABEL_SEPERATOR + movie.originalLanguage);
             mMovieOverview.setText(movie.overview);
             retrievePoster(movie);
         } else {
