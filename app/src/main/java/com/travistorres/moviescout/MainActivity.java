@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity
         setupPreferences();
 
         //  Starts the movie loads
+        mUnauthorizedTextView.setVisibility(TextView.INVISIBLE);
         mMovieRequester.setApiKeys(movieDbApiThreeKey, movieDbApiFourKey);
         mMovieRequester.requestNext();
     }
