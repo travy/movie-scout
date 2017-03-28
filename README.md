@@ -8,7 +8,9 @@ Android application which provides users a way to search through movies and view
 
 ###  Movie DB API Keys
 
-Movie Scout will automatically prompt you for the api key when you start the application if it has not yet been provided.  To perform a simple copy and paste on the computer, open the file `strings.xml` and specify the api key for the string keys `movie_db_v3_settings_default` and `movie_db_v4_settings_default`.  This will use the key you copy and pasted as the default value.  If you run the app before doing this, you will need to uninstall the app on the device to clear out the configuration file; otherwise, you can just type the keys into the app.
+Movie Scout will allow the api key, for accessing movie db requests, to be specified within a Settings file.  The easiest way to enter the key is by opening the `strings.xml` file and copying the v3 and v4 api key into the variables:  `movie_db_v3_settings_key` and `movie_db_v4_settings_key` respectively.
+
+Alternatively, you can also specify the api key at runtime, by entering them into the settings in their respective places.
 
 ##  Tested VM's
 
