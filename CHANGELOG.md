@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -  Removed the configurations reader package.
 -  Users can now enter movie db api key on the app itself through the
 settings page
+-  AsyncTask has been replaced by a LoadManager.
 
 ## [v1.1.1] - 2017-02-21
 ###  Changed
