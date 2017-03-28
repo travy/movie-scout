@@ -255,12 +255,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
+     * Changes the visibility of the views modified by the networking thread.
+     *
+     * @param view The view to be modified
+     * @param visibility The level of visibility
+     */
+    private void networkErrorHandlerUiViewVisibility(final View view, final int visibility) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                view.setVisibility(visibility);
+            }
+        });
+    }
+
+    /**
      * Displays the page not found error whenever a network resources returns a 404 response.
      *
      */
     @Override
     public void onPageNotFound() {
-        mPageNotFoundTextView.setVisibility(TextView.VISIBLE);
+        networkErrorHandlerUiViewVisibility(mPageNotFoundTextView, View.VISIBLE);
     }
 
     /**
@@ -269,7 +284,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onUnauthorizedAccess() {
-        mUnauthorizedTextView.setVisibility(TextView.VISIBLE);
+        networkErrorHandlerUiViewVisibility(mUnauthorizedTextView, View.VISIBLE);
     }
 
     /**
@@ -278,7 +293,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onGeneralNetworkingError() {
-        mNetworkingErrorTextView.setVisibility(TextView.VISIBLE);
+        networkErrorHandlerUiViewVisibility(mNetworkingErrorTextView, View.VISIBLE);
     }
 
     /**
@@ -287,7 +302,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void beforeNetworkRequest() {
-        mLoadingIndicator.setVisibility(View.VISIBLE);
+        networkErrorHandlerUiViewVisibility(mLoadingIndicator, View.VISIBLE);
     }
 
     /**
@@ -296,7 +311,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void afterNetworkRequest() {
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        networkErrorHandlerUiViewVisibility(mLoadingIndicator, View.INVISIBLE);
     }
 
     /**
