@@ -87,20 +87,26 @@ public class MainActivity extends AppCompatActivity
         mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
         mMovieListView.setAdapter(mMovieAdapter);
         mMovieListView.setLayoutManager(mMovieLayoutManager);
+
+        //  starts requesting movies
+        updateMovieApiKey();
+        mMovieRequester.requestNext();
     }
 
     /**
-     * Re-affirms the state of the Activity when it has been unpaused.
+     * Clears any cached results from previous network requests and then performs a new requests
+     * with any new values passed for the API keys.
+     *
      */
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        //  Checks the applications preferences
-        setupPreferences();
-
-        //  Starts the movie loads
+    private void updateMovieApiKey() {
+        //  hides the unauthorized message
         mUnauthorizedTextView.setVisibility(TextView.INVISIBLE);
+
+        //  updates the api keys based on the settings
+        setupApiPreferences();
+
+        //  clears any cached results and requests the next page
+        mMovieRequester.reset();
         mMovieRequester.setApiKeys(movieDbApiThreeKey, movieDbApiFourKey);
         mMovieRequester.requestNext();
     }
@@ -124,7 +130,7 @@ public class MainActivity extends AppCompatActivity
      * an API access key.
      *
      */
-    private void setupPreferences() {
+    private void setupApiPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         //  setup the version 3 api key
@@ -249,12 +255,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
+     * Changes the visibility of the views modified by the networking thread.
+     *
+     * @param view The view to be modified
+     * @param visibility The level of visibility
+     */
+    private void networkErrorHandlerUiViewVisibility(final View view, final int visibility) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                view.setVisibility(visibility);
+            }
+        });
+    }
+
+    /**
      * Displays the page not found error whenever a network resources returns a 404 response.
      *
      */
     @Override
     public void onPageNotFound() {
-        mPageNotFoundTextView.setVisibility(TextView.VISIBLE);
+        networkErrorHandlerUiViewVisibility(mPageNotFoundTextView, View.VISIBLE);
     }
 
     /**
@@ -263,7 +284,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onUnauthorizedAccess() {
-        mUnauthorizedTextView.setVisibility(TextView.VISIBLE);
+        networkErrorHandlerUiViewVisibility(mUnauthorizedTextView, View.VISIBLE);
     }
 
     /**
@@ -272,7 +293,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onGeneralNetworkingError() {
-        mNetworkingErrorTextView.setVisibility(TextView.VISIBLE);
+        networkErrorHandlerUiViewVisibility(mNetworkingErrorTextView, View.VISIBLE);
     }
 
     /**
@@ -281,7 +302,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void beforeNetworkRequest() {
-        mLoadingIndicator.setVisibility(View.VISIBLE);
+        networkErrorHandlerUiViewVisibility(mLoadingIndicator, View.VISIBLE);
     }
 
     /**
@@ -290,7 +311,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void afterNetworkRequest() {
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        networkErrorHandlerUiViewVisibility(mLoadingIndicator, View.INVISIBLE);
     }
 
     /**
@@ -301,12 +322,9 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s == getString(R.string.movie_db_v3_settings_key)) {
-            String defaultValue = getString(R.string.movie_db_v3_settings_default);
-            movieDbApiThreeKey = sharedPreferences.getString(s, defaultValue);
-        } else if (s == getString(R.string.movie_db_v4_settings_key)) {
-            String defaultValue = getString(R.string.movie_db_v4_settings_default);
-            movieDbApiFourKey = sharedPreferences.getString(s, defaultValue);
+        if (s == getString(R.string.movie_db_v3_settings_key) ||
+                s == getString(R.string.movie_db_v4_settings_key)) {
+            updateMovieApiKey();
         }
     }
 }
