@@ -9,7 +9,7 @@
     <string name="missing_api_keys">An API key was not provided</string>
 
     <string name="page_not_found_error_message">The requested page was not found</string>
-    <string name="invalid_api_key_error_message">The provided API Key was rejected by the server.  Please check your res/xml/configurations.xml file settings.</string>
+    <string name="invalid_api_key_error_message">The provided API Key was rejected by the server.  Please check that you\'ve entered the correct api key in the settings.</string>
     <string name="network_failure_error_message">The network connection failed!</string>
 
     <string name="movie_poster_content_description">Movie Poster</string>
@@ -58,12 +58,12 @@
     <!--  Settings Textual Information -->
     <string name="movie_db_api_settings_category">Movie DB API Settings</string>
 
-    <string name="movie_db_v3_settings_default" translatable="false"></string>
+    <string name="movie_db_v3_settings_default" translatable="false">not specified</string>
     <string name="movie_db_v3_settings_key" translatable="false">movie-db-api-v3-setting-key</string>
     <string name="movie_db_v3_settings_title">V3 API Key</string>
     <string name="movie_db_v3_settings_summary">Access V3 api resources</string>
 
-    <string name="movie_db_v4_settings_default" translatable="false"></string>
+    <string name="movie_db_v4_settings_default" translatable="false">not specified</string>
     <string name="movie_db_v4_settings_key" translatable="false">movie-db-api-v4-setting-key</string>
     <string name="movie_db_v4_settings_title">V4 API Key</string>
     <string name="movie_db_v4_settings_summary">Access V4 api resources</string>
