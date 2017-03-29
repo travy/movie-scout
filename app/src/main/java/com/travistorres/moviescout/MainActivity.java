@@ -37,7 +37,7 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  * Each movie shown can then be pressed to reveal information regarding the selected title.
  *
  * @author Travis Anthony Torres
- * @version v1.2.0 (March 26, 2017)
+ * @version v1.2.0 (March 28, 2017)
  */
 
 public class MainActivity extends AppCompatActivity
@@ -76,10 +76,29 @@ public class MainActivity extends AppCompatActivity
         //  acquire the loading indicator
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
 
+        //  determine if the screen needs to be constructed or if a previous state exists
+        String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);
+        if (savedInstanceState != null && savedInstanceState.containsKey(mainActivityStateExtra)) {
+            //  load the previously loaded movies and display the results
+            mMovieRequester = savedInstanceState.getParcelable(mainActivityStateExtra);
+            setupMovieView();
+        } else {
+            //  create a movie request object and display the interface
+            mMovieRequester = new MovieDbRequester(this, this, this);
+            setupMovieView();
+            updateMovieApiKey();
+            mMovieRequester.requestNext();
+        }
+    }
+
+    /**
+     * Configures the ListView to display movie results.
+     *
+     */
+    private void setupMovieView() {
         //  sets up the requester object
         Resources resources = getResources();
         int gridLayoutColumnCount = resources.getInteger(R.integer.movie_grid_layout_manager_column_count);
-        mMovieRequester = new MovieDbRequester(this, this, this);
         mMovieLayoutManager = new GridLayoutManager(this, gridLayoutColumnCount);
         mMovieAdapter = mMovieRequester.getAdapter();
 
@@ -87,10 +106,6 @@ public class MainActivity extends AppCompatActivity
         mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
         mMovieListView.setAdapter(mMovieAdapter);
         mMovieListView.setLayoutManager(mMovieLayoutManager);
-
-        //  starts requesting movies
-        updateMovieApiKey();
-        mMovieRequester.requestNext();
     }
 
     /**
@@ -109,6 +124,19 @@ public class MainActivity extends AppCompatActivity
         mMovieRequester.reset();
         mMovieRequester.setApiKeys(movieDbApiThreeKey, movieDbApiFourKey);
         mMovieRequester.requestNext();
+    }
+
+    /**
+     * Save the movie results.
+     *
+     * @param outState
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);
+        outState.putParcelable(mainActivityStateExtra, mMovieRequester);
     }
 
     /**

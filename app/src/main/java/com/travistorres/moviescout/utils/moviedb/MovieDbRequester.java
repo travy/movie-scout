@@ -6,6 +6,8 @@ package com.travistorres.moviescout.utils.moviedb;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -34,11 +36,11 @@ import java.net.URL;
  * Movie DB API.
  *
  * @author Travis Anthony Torres
- * @version v1.2.0 (March 27, 2017)
+ * @version v1.2.0 (March 28, 2017)
  */
 
 public class MovieDbRequester
-        implements LoaderManager.LoaderCallbacks<Movie[]> {
+        implements LoaderManager.LoaderCallbacks<Movie[]>, Parcelable {
     /*
      *  Error message to display when no network could be reached.
      *
@@ -57,6 +59,37 @@ public class MovieDbRequester
     private String versionFourApiKey;
 
     /**
+     * Specifies how to re-construct a new instance of the Movie Requester if the resource has been
+     * loaded from a Parcel.
+     *
+     */
+    public static final Parcelable.Creator<MovieDbRequester> CREATOR = new Parcelable.Creator<MovieDbRequester>() {
+        /**
+         * Constructs a new object using data loaded from within a parcel.
+         *
+         * @param parcel
+         *
+         * @return Unpacked version of the MovieDbRequester
+         */
+        @Override
+        public MovieDbRequester createFromParcel(Parcel parcel) {
+            return new MovieDbRequester(parcel);
+        }
+
+        /**
+         * Acquires an instance of the Requester from an array.
+         *
+         * @param i
+         *
+         * @return first instance
+         */
+        @Override
+        public MovieDbRequester[] newArray(int i) {
+            return new MovieDbRequester[0];
+        }
+    };
+
+    /**
      * Constructs a new Request object that will queried.
      *
      * @param parent
@@ -73,6 +106,28 @@ public class MovieDbRequester
         MOVIE_REQUEST_URL_EXTRA = parentActivity.getString(R.string.movie_request_url_extra);
 
         reset();
+    }
+
+    /**
+     * Unpacks a MovieDbRequester from a parcel so that it seems like the same old data.
+     *
+     * @param parcel
+     */
+    private MovieDbRequester(Parcel parcel) {
+        ClassLoader classLoader = getClass().getClassLoader();
+        MovieDbRequester requester =  (MovieDbRequester) parcel.readValue(classLoader);
+
+        MOVIE_REQUEST_URL_EXTRA = requester.MOVIE_REQUEST_URL_EXTRA;
+
+        errorHandler = requester.errorHandler;
+        parentActivity = requester.parentActivity;
+        movieAdapter = requester.movieAdapter;
+        currentPage = requester.currentPage;
+        totalPages = requester.totalPages;
+        totalMovies = requester.totalMovies;
+        sortType = requester.sortType;
+        versionThreeApiKey = requester.versionThreeApiKey;
+        versionFourApiKey = requester.versionFourApiKey;
     }
 
     /**
@@ -282,5 +337,26 @@ public class MovieDbRequester
     @Override
     public void onLoaderReset(Loader<Movie[]> loader) {
         //  Intentionally left blank
+    }
+
+    /**
+     * Identifier to describe the contents of the Parcel.
+     *
+     * @return Zero since this does not have any effect.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Stores the object as an Object within the Parcel.
+     *
+     * @param parcel
+     * @param i
+     */
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeValue(this);
     }
 }
