@@ -4,6 +4,7 @@
 
 package com.travistorres.moviescout.utils.moviedb;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -232,7 +233,7 @@ public class MovieDbRequester
                     URL url = new URL(urlString);
                     String json = NetworkManager.request(url);
                     if (json != null) {
-                        movieList = MovieDbParser.retrieveMovieList(json, parentActivity);
+                        movieList = MovieDbParser.retrieveMovieList(json);
                         totalMovies = MovieDbParser.acquireTotalResults(json);
                         totalPages = MovieDbParser.acquireTotalPages(json);
                     }
@@ -294,5 +295,14 @@ public class MovieDbRequester
 
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
+    }
+
+    /**
+     * Retrieves the context which the Requester is acting on.
+     *
+     * @return calling context
+     */
+    public Context getContext() {
+        return parentActivity;
     }
 }
