@@ -51,9 +51,11 @@
     <string name="tmdb_image_size_92">w92</string>
     <string name="tmdb_image_size_154">w154</string>
     <string name="tmdb_image_size_185">w185</string>
+    <string name="tmdb_image_size_300">w300</string>
     <string name="tmdb_image_size_342">w342</string>
     <string name="tmdb_image_size_500">w500</string>
     <string name="tmdb_image_size_780">w780</string>
+    <string name="tmdb_image_size_1280">w1280</string>
     <string name="tmdb_image_size_default">@string/tmdb_image_size_342</string>
 
     <!--  Settings Textual Information -->

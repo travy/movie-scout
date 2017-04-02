@@ -160,6 +160,19 @@ public class Movie implements Parcelable {
     }
 
     /**
+     * Stores the backdrop image into a given ImageView.
+     *
+     * @param context
+     * @param imageView
+     */
+    public void loadBackdropIntoImageView(Context context, ImageView imageView) {
+        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
+        URL backdropUrl = urlManager.getMovieBackdropUrl(backdropPath);
+
+        loadImageFromUrlIntoImageView(context, backdropUrl, imageView);
+    }
+
+    /**
      * Stores the poster for the movie into a given ImageView resource.
      *
      * @param context
@@ -168,9 +181,20 @@ public class Movie implements Parcelable {
     public void loadPosterIntoImageView(Context context, ImageView imageView) {
         MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
         URL posterUrl = urlManager.getMoviePosterUrl(posterPath);
-        String posterUrlString = posterUrl.toString();
 
-        Picasso.with(context).load(posterUrlString).into(imageView);
+        loadImageFromUrlIntoImageView(context, posterUrl, imageView);
+    }
+
+    /**
+     * Displays the image that is provided from a URL resource into a given ImageView.
+     *
+     * @param context
+     * @param imageUrl
+     * @param imageView
+     */
+    private void loadImageFromUrlIntoImageView(Context context, URL imageUrl, ImageView imageView) {
+        String imageUrlString = imageUrl.toString();
+        Picasso.with(context).load(imageUrlString).into(imageView);
     }
 
     /**

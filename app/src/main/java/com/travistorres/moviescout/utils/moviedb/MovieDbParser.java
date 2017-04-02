@@ -128,7 +128,7 @@ public class MovieDbParser {
         movie.originalTitle = json.getString(ORIGINAL_TITLE_KEY);
         movie.originalLanguage = json.getString(ORIGINAL_LANGUAGE_KEY);
         movie.title = json.getString(TITLE_KEY);
-        movie.backdropPath = json.getString(BACKDROP_PATH_KEY);
+        movie.backdropPath = json.getString(BACKDROP_PATH_KEY).replace("/", "");
         movie.popularity = json.getDouble(POPULARITY_KEY);
         movie.voteCount = json.getInt(VOTE_COUNT_KEY);
         movie.hasVideo = json.getBoolean(VIDEO_KEY);
