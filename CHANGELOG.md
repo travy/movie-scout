@@ -20,6 +20,7 @@ settings page
 -  AsyncTask has been replaced by a LoadManager.
 -  The state of the application will be saved and restored as the lifecycle for the app changes.
 -  Movie no longer requires a context to be provided as an instance field
+-  Gridlayout column count differs between portrait and landscape views
 
 ## [v1.1.1] - 2017-02-21
 
