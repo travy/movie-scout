@@ -47,7 +47,7 @@ public class MovieDbRequester
     public final static String NO_NETWORK_ERROR_MESSAGE = "Unable to access Network Resource";
     public final String MOVIE_REQUEST_URL_EXTRA;
 
-    private MovieDbNetworkingErrorHandler errorHandler;
+    MovieDbNetworkingErrorHandler errorHandler;
     private FragmentActivity parentActivity;
     private MovieListAdapter movieAdapter;
     private int currentPage;
@@ -187,74 +187,7 @@ public class MovieDbRequester
      */
     @Override
     public Loader<Movie[]> onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<Movie[]>(parentActivity) {
-            /**
-             * Displays the loading wheel so that users are made aware that a requests is occurring
-             * in the background.
-             *
-             */
-            @Override
-            protected void onStartLoading() {
-                super.onStartLoading();
-
-                if (args == null) {
-                    return;
-                }
-
-                //  displays the loading wheel
-                errorHandler.beforeNetworkRequest();
-
-                //  forces content to display
-                forceLoad();
-            }
-
-            /**
-             * Issues a network request for all movie information from MovieDbApi.com.
-             *
-             * @return List of movies obtained from the server.
-             */
-            @Override
-            public Movie[] loadInBackground() {
-                String urlString = null;
-                Movie[] movieList = null;
-
-                //  acquire the string value of the URL if one has been set
-                if (args.containsKey(MOVIE_REQUEST_URL_EXTRA)) {
-                    urlString = args.getString(MOVIE_REQUEST_URL_EXTRA);
-                    if (urlString == null || TextUtils.isEmpty(urlString)) {
-                        return null;
-                    }
-                } else {
-                    return null;
-                }
-
-                //  attempt to acquire the resource
-                try {
-                    URL url = new URL(urlString);
-                    String json = NetworkManager.request(url);
-                    if (json != null) {
-                        movieList = MovieDbParser.retrieveMovieList(json);
-                        totalMovies = MovieDbParser.acquireTotalResults(json);
-                        totalPages = MovieDbParser.acquireTotalPages(json);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (HttpConnectionTimeoutException e) {
-                    e.printStackTrace();
-                } catch (HttpPageNotFoundException e) {
-                    e.printStackTrace();
-                    errorHandler.onPageNotFound();
-                } catch (HttpUnauthorizedException e) {
-                    e.printStackTrace();
-                    errorHandler.onUnauthorizedAccess();
-                } catch (NetworkingException e) {
-                    e.printStackTrace();
-                    errorHandler.onGeneralNetworkingError();
-                }
-
-                return movieList;
-            }
-        };
+        return new MovieListLoader(this, args);
     }
 
     /**
@@ -304,5 +237,13 @@ public class MovieDbRequester
      */
     public Context getContext() {
         return parentActivity;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public void setTotalMovies(int totalMovies) {
+        this.totalMovies = totalMovies;
     }
 }
