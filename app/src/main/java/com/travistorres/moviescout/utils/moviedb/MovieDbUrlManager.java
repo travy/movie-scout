@@ -88,6 +88,19 @@ public class MovieDbUrlManager {
     }
 
     /**
+     * Constructs a URL that will acquire the Backdrop image for the Movie.
+     *
+     * @param resourceName
+     *
+     * @return A properly formatted URL for acquiring the movies backdrop
+     */
+    public URL getMovieBackdropUrl(String resourceName) {
+        String defaultImageSize = context.getString(R.string.tmdb_image_size_1280);
+
+        return getMoviePosterUrl(resourceName, defaultImageSize);
+    }
+
+    /**
      * Retrieves the URL for acquiring a Movie Poster
      *
      * @param resourceName The resource name of the image on the server.
