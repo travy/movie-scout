@@ -26,6 +26,7 @@ settings page
 ###  Changed
 
 -  Renamed the Rating tag to Vote Average to make it's information more clear.
+-  Cleaned up the interface for movie lists
 
 ## [v1.1.0] - 2017-02-21
 
