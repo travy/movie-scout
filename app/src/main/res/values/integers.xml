@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="movie_grid_layout_manager_column_count">3</integer>
+    <integer name="movie_grid_layout_manager_portrait_column_count">3</integer>
+    <integer name="movie_grid_layout_manager_landscape_column_count">5</integer>
 
     <!--  Loader Manager Keys  -->
     <integer name="movie_db_requester_loader_manager_id">33554432</integer><!--  2^25 (My age as of now) -->

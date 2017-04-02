@@ -5,8 +5,10 @@
 package com.travistorres.moviescout;
 
 import android.content.Intent;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +39,7 @@ public class MovieInfoActivity extends AppCompatActivity {
     private TextView mMovieLanguage;
     private TextView mMoviePopularity;
     private TextView mMovieVoteAverage;
+    private ImageView mBackdropImage;
 
     /**
      * Loads information regarding the selected video and displays it's meta-data on the screen
@@ -49,6 +52,11 @@ public class MovieInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_info);
 
+        //  use a custom app bar
+        Toolbar actionBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(actionBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //  load page views
         mMovieTitle = (TextView) findViewById(R.id.movie_title);
         mMoviePoster = (ImageView) findViewById(R.id.movie_poster);
@@ -57,6 +65,7 @@ public class MovieInfoActivity extends AppCompatActivity {
         mMovieLanguage = (TextView) findViewById(R.id.movie_language);
         mMoviePopularity = (TextView) findViewById(R.id.movie_popularity);
         mMovieVoteAverage = (TextView) findViewById(R.id.movie_vote_average);
+        mBackdropImage = (ImageView) findViewById(R.id.movie_backdrop_image_view);
 
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
@@ -66,6 +75,11 @@ public class MovieInfoActivity extends AppCompatActivity {
         if (intent.hasExtra(selectedMovieExtraKey)) {
             Movie movie = (Movie) intent.getParcelableExtra(selectedMovieExtraKey);
 
+            //  show the title in the app bar
+            CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+            layout.setExpandedTitleColor(getResources().getColor(android.R.color.white, getResources().newTheme()));
+            layout.setTitle(movie.title);
+
             //  get the label strings from the resource files
             String releaseDateLabel = getString(R.string.movie_release_date_label);
             String voteAverageLabel = getString(R.string.movie_vote_average_label);
@@ -73,6 +87,7 @@ public class MovieInfoActivity extends AppCompatActivity {
             String languageLabel = getString(R.string.movie_language_label);
 
             //  display information regarding the video
+            retrieveBackdrop(movie);
             mMovieTitle.setText(movie.originalTitle);
             mMovieReleaseDate.setText(releaseDateLabel + LABEL_SEPERATOR + movie.getCleanDateFormat());
             mMovieVoteAverage.setText(voteAverageLabel + LABEL_SEPERATOR + movie.voteAverage);
@@ -86,6 +101,15 @@ public class MovieInfoActivity extends AppCompatActivity {
             String missingMovieMessage = getString(R.string.missing_movie_model_error_message);
             Toast.makeText(this, missingMovieMessage, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Displays the backdrop of the movie in the app bar.
+     *
+     * @param movie
+     */
+    private void retrieveBackdrop(Movie movie) {
+        movie.loadBackdropIntoImageView(this, mBackdropImage);
     }
 
     /**
