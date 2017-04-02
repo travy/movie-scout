@@ -6,4 +6,6 @@
 
     <bool name="activity_movie_info_content_clip_to_padding">false</bool>
 
+    <bool name="movie_grid_poster_adjust_view_bounds">true</bool>
+
 </resources>

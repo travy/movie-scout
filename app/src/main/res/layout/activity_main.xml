@@ -12,7 +12,6 @@
         android:id="@+id/movie_list_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/container_view_padding"
         tools:listitem="@android:layout/activity_list_item"/>
 
     <!--  Loading Icon -->
