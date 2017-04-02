@@ -7,6 +7,7 @@ package com.travistorres.moviescout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -111,7 +112,13 @@ public class MainActivity extends AppCompatActivity
     private void setupMovieView(@Nullable  Movie[] movieList) {
         //  sets up the requester object
         Resources resources = getResources();
-        int gridLayoutColumnCount = resources.getInteger(R.integer.movie_grid_layout_manager_column_count);
+        Configuration configuration = resources.getConfiguration();
+        int deviceOrientaton = configuration.orientation;
+        int gridLayoutColumnCount = deviceOrientaton == Configuration.ORIENTATION_PORTRAIT ?
+                resources.getInteger(R.integer.movie_grid_layout_manager_portrait_column_count) :
+                resources.getInteger(R.integer.movie_grid_layout_manager_landscape_column_count);
+
+        //  sets the number of columns in the grid layout
         mMovieLayoutManager = new GridLayoutManager(this, gridLayoutColumnCount);
         mMovieAdapter = mMovieRequester.getAdapter();
         if (movieList != null) {
