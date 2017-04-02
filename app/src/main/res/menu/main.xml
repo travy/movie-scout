@@ -15,4 +15,10 @@
         android:orderInCategory="2"
         android:title="@string/rating_menu_item" />
 
+    <item
+        app:showAsAction="never"
+        android:id="@+id/settings_menu_button"
+        android:orderInCategory="100"
+        android:title="Settings" />
+
 </menu>

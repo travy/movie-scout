@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
-import com.travistorres.moviescout.utils.moviedb.exceptions.NoContextException;
 
 import java.net.URL;
 
@@ -21,7 +20,7 @@ import java.net.URL;
  * Contains the information regarding a Movie item.
  *
  * @author Travis Anthony Torres
- * @version February 15, 2017
+ * @version v1.1.1 (February 15, 2017)
  */
 
 public class Movie implements Parcelable {
@@ -33,12 +32,6 @@ public class Movie implements Parcelable {
     private final static int DATE_FORMAT_YEAR_INDEX = 0;
     private final static int DATE_FORMAT_MONTH_INDEX = 1;
     private final static int DATE_FORMAT_DAY_INDEX = 2;
-
-    /*
-     *  Error message to display when the developer forgot to set a context.
-     *
-     */
-    private final static String CONTEXT_NOT_DEFINED_MESSAGE = "Please set the context before requesting a resource";
 
     /*
      *  Specifies the indexes each attribute will be assigned to when streamed.
@@ -79,7 +72,13 @@ public class Movie implements Parcelable {
     public boolean hasVideo;
     public double voteAverage;
 
-    private Context context;
+    /**
+     * Constructs a movie object.
+     *
+     */
+    public Movie() {
+        //  intentionally left blank
+    }
 
     /**
      * Constructs a new Movie instance after retreival from some data stream.
@@ -91,7 +90,7 @@ public class Movie implements Parcelable {
          *
          * @param in Parcel containing the compressed data object.
          *
-         * @return Newly constructed Movie object without a Context set.
+         * @return Newly constructed Movie object.
          */
         public Movie createFromParcel(Parcel in) {
             return new Movie(in);
@@ -161,9 +160,21 @@ public class Movie implements Parcelable {
     }
 
     /**
-     * Maps the contents of the streamed parcel onto the Movie object.  This does not set the
-     * Context field since it may have changed after the stream.  Remember to always call
-     * setContext(...) after recovering a Movie from a Parcel.
+     * Stores the poster for the movie into a given ImageView resource.
+     *
+     * @param context
+     * @param imageView
+     */
+    public void loadPosterIntoImageView(Context context, ImageView imageView) {
+        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
+        URL posterUrl = urlManager.getMoviePosterUrl(posterPath);
+        String posterUrlString = posterUrl.toString();
+
+        Picasso.with(context).load(posterUrlString).into(imageView);
+    }
+
+    /**
+     * Maps the contents of the streamed parcel onto the Movie object.
      *
      * @param parcel
      */
@@ -189,69 +200,6 @@ public class Movie implements Parcelable {
     }
 
     /**
-     * Constructs a new Movie object.
-     *
-     * @param mContext
-     */
-    public Movie(Context mContext) {
-        context = mContext;
-    }
-
-    /**
-     * Retrieves the URL to acquire the poster for the Movie.
-     *
-     * @return Movie poster url
-     *
-     * @throws NoContextException When the context has not been defined.
-     */
-    public URL getPosterUrl() {
-        Context mContext = getContext();
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(mContext);
-        URL posterUrl = urlManager.getMoviePosterUrl(posterPath);
-
-        return posterUrl;
-    }
-
-    /**
-     * Specifies the context that the Movie should work on.
-     *
-     * @param mContext
-     */
-    public void setContext(Context mContext) {
-        context = mContext;
-    }
-
-    /**
-     * Retrieves a String representation of the URL used to acquire the poster image for the given
-     * Movie.
-     *
-     * @return movie poster url string or null on error.
-     */
-    public String getPosterPathUrlString() {
-        String posterUrlString = null;
-        try {
-            URL posterUrl = getPosterUrl();
-            posterUrlString = posterUrl.toString();
-        } catch (NoContextException e) {
-            e.printStackTrace();
-        }
-
-        return posterUrlString;
-    }
-
-    /**
-     * Stores the poster for the movie into a given ImageView resource.
-     *
-     * @param imageView The ImageView that the poster should be stored into.
-     *
-     * @throws NoContextException
-     */
-    public void loadPosterIntoImageView(ImageView imageView) throws NoContextException {
-        Context mContext = getContext();
-        Picasso.with(mContext).load(getPosterPathUrlString()).into(imageView);
-    }
-
-    /**
      * Describes the type of data stored within the Parcelable.  Since we only work with Movie
      * instances, we can just return 0
      *
@@ -260,24 +208,6 @@ public class Movie implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    /**
-     * Retrieves the context for the Movie.
-     *
-     * This method is preferable over calling context directly since it will force the throwing of
-     * a NoContextException if context is null.
-     *
-     * @return The defined context.
-     *
-     * @throws NoContextException When no context has been defined.
-     */
-    protected Context getContext() throws NoContextException {
-        if (context == null) {
-            throw new NoContextException(CONTEXT_NOT_DEFINED_MESSAGE);
-        }
-
-        return context;
     }
 
     /**

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/movie_db_api_settings_category">
+
+        <EditTextPreference
+            android:id="@+id/movie_db_api_v3_setting"
+            android:defaultValue="@string/movie_db_v3_settings_default"
+            android:key="@string/movie_db_v3_settings_key"
+            android:title="@string/movie_db_v3_settings_title"
+            android:summary="@string/movie_db_v3_settings_summary" />
+
+        <EditTextPreference
+            android:id="@+id/movie_db_api_v4_setting"
+            android:defaultValue="@string/movie_db_v4_settings_default"
+            android:key="@string/movie_db_v4_settings_key"
+            android:title="@string/movie_db_v4_settings_title"
+            android:summary="@string/movie_db_v4_settings_summary" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

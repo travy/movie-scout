@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.2.0] - 2017-04-01
+###  Changed
+-  Removed the configurations reader package.
+-  Users can now enter movie db api key on the app itself through the
+settings page
+-  AsyncTask has been replaced by a LoadManager.
+-  The state of the application will be saved and restored as the lifecycle for the app changes.
+-  Movie no longer requires a context to be provided as an instance field
+
 ## [v1.1.1] - 2017-02-21
 ###  Changed
 -  Renamed the Rating tag to Vote Average to make it's information more clear.
@@ -32,4 +41,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [v1.0.0]: https://github.com/travy/movie-scout/compare/v0.0.1...v1.0.0
 [v1.1.0]: https://github.com/travy/movie-scout/compare/v1.0.0...v1.1.0
 [v1.1.1]: https://github.com/travy/movie-scout/compare/v1.1.0...v1.1.1
-
+[v1.2.0]: https://github.com/travy/movie-scout/compare/v1.1.1...v1.2.0
