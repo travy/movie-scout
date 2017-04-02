@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -  Users can now enter movie db api key on the app itself through the
 settings page
 -  AsyncTask has been replaced by a LoadManager.
+-  The state of the application will be saved and restored as the lifecycle for the app changes.
 
 ## [v1.1.1] - 2017-02-21
 ###  Changed

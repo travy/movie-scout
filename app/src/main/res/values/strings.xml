@@ -3,7 +3,8 @@
     <string name="app_name">MovieScout</string>
 
     <!--  Bundle Extras Keys  -->
-    <string name="movie_request_url_extra">movie_request_extra</string>
+    <string name="movie_request_url_extra">movie-request-extra</string>
+    <string name="main_activity_state_bundle">main-activity-state-bundle-extra</string>
 
     <!--  Error Messages  -->
     <string name="missing_api_keys">An API key was not provided</string>

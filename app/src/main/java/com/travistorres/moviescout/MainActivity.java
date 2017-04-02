@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
@@ -37,7 +38,7 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  * Each movie shown can then be pressed to reveal information regarding the selected title.
  *
  * @author Travis Anthony Torres
- * @version v1.2.0 (March 26, 2017)
+ * @version v1.2.0 (March 28, 2017)
  */
 
 public class MainActivity extends AppCompatActivity
@@ -76,39 +77,119 @@ public class MainActivity extends AppCompatActivity
         //  acquire the loading indicator
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
 
+        //  determine if the screen needs to be constructed or if a previous state exists
+        String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);
+        if (savedInstanceState != null && savedInstanceState.containsKey(mainActivityStateExtra)) {
+            //  load the previously loaded movies and display the results
+            MainActivityParcelable parcelable = savedInstanceState.getParcelable(mainActivityStateExtra);
+            int currentPage = parcelable.currentPage;
+            MovieSortType sortType = parcelable.sortType;
+            Movie[] movieList = parcelable.movieList;
+            //  TODO-  refactor Movie so that it will not need a context to be defined
+            for (int i = 0; i < movieList.length; ++i) {
+                movieList[i].setContext(this);
+            }
+
+            mMovieRequester = new MovieDbRequester(this, this, this);
+            mMovieRequester.setCurrentPage(currentPage);
+            mMovieRequester.setSortType(sortType);
+
+            setupMovieView(movieList);
+            updateMovieApiKey(false, true);
+        } else {
+            //  create a movie request object and display the interface
+            mMovieRequester = new MovieDbRequester(this, this, this);
+            setupMovieView();
+            updateMovieApiKey();
+            mMovieRequester.requestNext();
+        }
+    }
+
+    /**
+     * Configures the ListView to display movie results.
+     *
+     * @param movieList Contains an array of Movies that were previously loaded in the GridLayout.
+     *                  This field should be left as null if there are no movies that have been
+     *                  previously loaded.
+     */
+    private void setupMovieView(@Nullable  Movie[] movieList) {
         //  sets up the requester object
         Resources resources = getResources();
         int gridLayoutColumnCount = resources.getInteger(R.integer.movie_grid_layout_manager_column_count);
-        mMovieRequester = new MovieDbRequester(this, this, this);
         mMovieLayoutManager = new GridLayoutManager(this, gridLayoutColumnCount);
         mMovieAdapter = mMovieRequester.getAdapter();
+        if (movieList != null) {
+            mMovieAdapter.setMoviesList(movieList);
+        }
 
         //  configures the recycler view
         mMovieListView = (RecyclerView) findViewById(R.id.movie_list_rv);
         mMovieListView.setAdapter(mMovieAdapter);
         mMovieListView.setLayoutManager(mMovieLayoutManager);
+    }
 
-        //  starts requesting movies
-        updateMovieApiKey();
-        mMovieRequester.requestNext();
+    /**
+     * Configures the ListView to display the movie Results.  The list with default to being empty.
+     *
+     */
+    private void setupMovieView() {
+        setupMovieView(null);
     }
 
     /**
      * Clears any cached results from previous network requests and then performs a new requests
      * with any new values passed for the API keys.
      *
+     * @param shouldReset Specifies if the movie requester instance should be reset or not.
+     * @param shouldRequest Specifies if a new page should be requested.  This is generally useful
+     *                      if the current page is 1.
      */
-    private void updateMovieApiKey() {
+    private void updateMovieApiKey(boolean shouldReset, boolean shouldRequest) {
         //  hides the unauthorized message
         mUnauthorizedTextView.setVisibility(TextView.INVISIBLE);
 
         //  updates the api keys based on the settings
         setupApiPreferences();
 
-        //  clears any cached results and requests the next page
-        mMovieRequester.reset();
+        //  resets the counter fields in the request object if requested
+        if (shouldReset) {
+            mMovieRequester.reset();
+        }
+
+        //  specifies the api keys in the requester
         mMovieRequester.setApiKeys(movieDbApiThreeKey, movieDbApiFourKey);
-        mMovieRequester.requestNext();
+
+        //  request the next page if necessary
+        if (shouldRequest) {
+            mMovieRequester.requestNext();
+        }
+    }
+
+    /**
+     * Updates the movie api key and forces both the requester to reset and a new page be requested
+     * from the server.
+     *
+     */
+    private void updateMovieApiKey() {
+        updateMovieApiKey(true, true);
+    }
+
+    /**
+     * Save the movie results.
+     *
+     * @param outState
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);
+        MainActivityParcelable parcelable = new MainActivityParcelable();
+        parcelable.sortType = mMovieRequester.getSortType();
+        parcelable.currentPage = mMovieRequester.getCurrentPage();
+        parcelable.movieList = mMovieAdapter.getMovies();
+
+        outState.putParcelable(mainActivityStateExtra, parcelable);
     }
 
     /**

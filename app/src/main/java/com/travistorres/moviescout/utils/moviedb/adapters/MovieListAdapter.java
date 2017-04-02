@@ -91,6 +91,21 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
     }
 
     /**
+     * Retrieves an array of Movies that have been defined within the Adapter.
+     *
+     * @return Movie[] An array of previously loaded movies.
+     */
+    public Movie[] getMovies() {
+        if (movieList == null) {
+            return null;
+        }
+
+        int movieCount = movieList.size();
+
+        return movieList.toArray(new Movie[movieCount]);
+    }
+
+    /**
      * Updates the movie data set.
      *
      * @param list

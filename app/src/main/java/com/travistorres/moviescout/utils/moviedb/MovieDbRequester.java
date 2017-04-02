@@ -34,7 +34,7 @@ import java.net.URL;
  * Movie DB API.
  *
  * @author Travis Anthony Torres
- * @version v1.2.0 (March 27, 2017)
+ * @version v1.2.0 (March 28, 2017)
  */
 
 public class MovieDbRequester
@@ -282,5 +282,17 @@ public class MovieDbRequester
     @Override
     public void onLoaderReset(Loader<Movie[]> loader) {
         //  Intentionally left blank
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public MovieSortType getSortType() {
+        return sortType;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
     }
 }
