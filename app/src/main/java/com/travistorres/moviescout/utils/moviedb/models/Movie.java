@@ -33,7 +33,6 @@ public class Movie implements Parcelable {
     private final static int DATE_FORMAT_MONTH_INDEX = 1;
     private final static int DATE_FORMAT_DAY_INDEX = 2;
 
-    //  TODO-  attempt saving the parcelable with this and the writeValue object
     /*
      *  Specifies the indexes each attribute will be assigned to when streamed.
      *
