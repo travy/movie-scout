@@ -12,14 +12,15 @@
         android:id="@+id/movie_list_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp" />
+        android:padding="@dimen/container_view_padding"
+        tools:listitem="@android:layout/activity_list_item"/>
 
     <!--  Loading Icon -->
     <ProgressBar
         android:id="@+id/loading_indicator_pb"
         android:layout_gravity="center"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+        android:layout_width="@dimen/progress_bar_width"
+        android:layout_height="@dimen/progress_bar_height"
         android:visibility="invisible" />
 
     <!--  Error Messages  -->
@@ -28,9 +29,9 @@
         android:fontFamily="monospace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="@dimen/text_view_padding"
         android:text="@string/page_not_found_error_message"
-        android:textSize="12sp"
+        android:textSize="@dimen/generic_text_size"
         android:textStyle="bold"
         android:visibility="invisible" />
 
@@ -39,9 +40,9 @@
         android:fontFamily="monospace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="@dimen/text_view_padding"
         android:text="@string/invalid_api_key_error_message"
-        android:textSize="12sp"
+        android:textSize="@dimen/generic_text_size"
         android:textStyle="bold"
         android:visibility="invisible" />
 
@@ -50,9 +51,9 @@
         android:fontFamily="monospace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="@dimen/text_view_padding"
         android:text="@string/network_failure_error_message"
-        android:textSize="12sp"
+        android:textSize="@dimen/generic_text_size"
         android:textStyle="bold"
         android:visibility="invisible" />
 

@@ -2,5 +2,8 @@
 <resources>
 
     <bool name="movie_poster_center_vertical">true</bool>
+    <bool name="app_bar_fits_system_window">true</bool>
+
+    <bool name="activity_movie_info_content_clip_to_padding">false</bool>
 
 </resources>
