@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
-import com.travistorres.moviescout.utils.moviedb.exceptions.NoContextException;
 import com.travistorres.moviescout.utils.moviedb.listeners.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
@@ -26,6 +25,8 @@ import java.util.ArrayList;
  */
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHolder> {
+    private static final int REMAINING_ITEMS_REFRESH_LIMIT = 5;
+
     ArrayList<Movie> movieList;
 
     final MovieClickedListener clickHandler;
@@ -67,15 +68,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
      */
     @Override
     public void onBindViewHolder(MovieListItemViewHolder holder, int position) {
+        Context context = movieRequester.getContext();
         Movie currentMovie = movieList.get(position);
-        try {
-            currentMovie.loadPosterIntoImageView(holder.mPosterImageView);
-        } catch (NoContextException e) {
-            e.printStackTrace();
-        }
+        currentMovie.loadPosterIntoImageView(context, holder.mPosterImageView);
 
         //  acquire more results when nearing the end of the list
-        if (position == getItemCount() - 5) {
+        if (position == getItemCount() - REMAINING_ITEMS_REFRESH_LIMIT) {
             movieRequester.requestNext();
         }
     }

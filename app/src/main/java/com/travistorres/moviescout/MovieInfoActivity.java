@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.travistorres.moviescout.utils.moviedb.exceptions.NoContextException;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 /**
@@ -66,7 +65,6 @@ public class MovieInfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra(selectedMovieExtraKey)) {
             Movie movie = (Movie) intent.getParcelableExtra(selectedMovieExtraKey);
-            movie.setContext(this);
 
             //  get the label strings from the resource files
             String releaseDateLabel = getString(R.string.movie_release_date_label);
@@ -96,10 +94,6 @@ public class MovieInfoActivity extends AppCompatActivity {
      * @param movie
      */
     private void retrievePoster(Movie movie) {
-        try {
-            movie.loadPosterIntoImageView(mMoviePoster);
-        } catch (NoContextException e) {
-            e.printStackTrace();
-        }
+        movie.loadPosterIntoImageView(this, mMoviePoster);
     }
 }

@@ -85,10 +85,6 @@ public class MainActivity extends AppCompatActivity
             int currentPage = parcelable.currentPage;
             MovieSortType sortType = parcelable.sortType;
             Movie[] movieList = parcelable.movieList;
-            //  TODO-  refactor Movie so that it will not need a context to be defined
-            for (int i = 0; i < movieList.length; ++i) {
-                movieList[i].setContext(this);
-            }
 
             mMovieRequester = new MovieDbRequester(this, this, this);
             mMovieRequester.setCurrentPage(currentPage);

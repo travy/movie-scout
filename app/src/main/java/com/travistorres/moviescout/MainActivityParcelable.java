@@ -21,6 +21,10 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MainActivityParcelable implements Parcelable {
+    private static final int CURRENT_PAGE_INDEX = 0;
+    private static final int SORT_TYPE_INDEX = 1;
+    private static final int MOVIE_LIST_INDEX = 2;
+
     public int currentPage;
     public MovieSortType sortType;
     public Movie[] movieList;
@@ -57,11 +61,10 @@ public class MainActivityParcelable implements Parcelable {
     protected MainActivityParcelable(Parcel in) {
         Object[] stream = in.readArray(getClass().getClassLoader());
 
-        currentPage = (int) stream[0];
-        sortType = (MovieSortType) stream[1];
-
-        //  TODO- figure out why I can't just cast the movie list to an Movie[] without the compiler getting confused
-        Object[] blah = (Object[]) stream[2];
+        currentPage = (int) stream[CURRENT_PAGE_INDEX];
+        sortType = (MovieSortType) stream[SORT_TYPE_INDEX];
+        //  needs to iterate over the list based on how Java Grammars work with interfaces read http://stackoverflow.com/questions/8745893/i-dont-get-why-this-classcastexception-occurs
+        Object[] blah = (Object[]) stream[MOVIE_LIST_INDEX];
         movieList = new Movie[blah.length];
         for (int i = 0; i < blah.length; i++) {
             Movie m = (Movie) blah[i];
@@ -83,14 +86,14 @@ public class MainActivityParcelable implements Parcelable {
      * Writes the contents of the class into a parcel.
      *
      * @param parcel
-     * @param i
+     * @param flags
      */
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel parcel, int flags) {
         Object[] stream = new Object[3];
-        stream[0] = currentPage;
-        stream[1] = sortType;
-        stream[2] = movieList;
+        stream[CURRENT_PAGE_INDEX] = currentPage;
+        stream[SORT_TYPE_INDEX] = sortType;
+        stream[MOVIE_LIST_INDEX] = movieList;
 
         parcel.writeArray(stream);
     }
