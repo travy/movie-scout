@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.2.0] - UNRELEASED
+## [v1.2.0] - 2017-04-01
 ###  Changed
 -  Removed the configurations reader package.
 -  Users can now enter movie db api key on the app itself through the
