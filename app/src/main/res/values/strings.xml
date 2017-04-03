@@ -3,8 +3,8 @@
     <string name="app_name">MovieScout</string>
 
     <!--  Bundle Extras Keys  -->
-    <string name="movie_request_url_extra">movie-request-extra</string>
-    <string name="main_activity_state_bundle">main-activity-state-bundle-extra</string>
+    <string name="movie_request_url_extra" translatable="false">movie-request-extra</string>
+    <string name="main_activity_state_bundle" translatable="false">main-activity-state-bundle-extra</string>
 
     <!--  Error Messages  -->
     <string name="missing_api_keys">An API key was not provided</string>
@@ -21,7 +21,7 @@
     <string name="missing_movie_model_error_message">Unable to acquire Movie data</string>
 
     <!--  Movie Transport Information  -->
-    <string name="selected_movie_extra_key">selected-movie</string>
+    <string name="selected_movie_extra_key" translatable="false">selected-movie</string>
 
     <!--  Movie Information  -->
     <string name="movie_release_date_label">Release</string>
@@ -30,33 +30,34 @@
     <string name="movie_vote_average_label">Vote Average</string>
 
     <!--  MovieDB API Url Configurations  -->
-    <string name="movie_db_api_uri_scheme">HTTP</string>
-    <string name="movie_db_api_uri_domain">api.themoviedb.org</string>
-    <string name="movie_db_api_v3_identifier">3</string>
-    <string name="movie_db_api_v4_identifier">4</string>
-    <string name="movie_db_api_movie_request_action">movie</string>
-    <string name="movie_db_api_popular_movie_sort_action">popular</string>
-    <string name="movie_db_api_top_rating_sort_action">top_rated</string>
-    <string name="movie_db_api_key_query_key">api_key</string>
-    <string name="movie_db_api_page_query_key">page</string>
+    <string name="movie_db_api_uri_scheme" translatable="false">HTTP</string>
+    <string name="movie_db_api_uri_domain" translatable="false">api.themoviedb.org</string>
+    <string name="movie_db_api_v3_identifier" translatable="false">3</string>
+    <string name="movie_db_api_v4_identifier" translatable="false">4</string>
+    <string name="movie_db_api_movie_request_action" translatable="false">movie</string>
+    <string name="movie_db_api_popular_movie_sort_action" translatable="false">popular</string>
+    <string name="movie_db_api_top_rating_sort_action" translatable="false">top_rated</string>
+    <string name="movie_db_api_key_query_key" translatable="false">api_key</string>
+    <string name="movie_db_api_page_query_key" translatable="false">page</string>
+    <string name="movie_db_api_trailer_action" translatable="false">videos</string>
 
     <!--  TMDB Image Resource Configurations  -->
-    <string name="tmdb_uri_scheme">HTTP</string>
-    <string name="tmdb_uri_domain">image.tmdb.org</string>
-    <string name="tmdb_uri_image_host_path_one">t</string>
-    <string name="tmdb_uri_image_host_path_two">p</string>
+    <string name="tmdb_uri_scheme" translatable="false">HTTP</string>
+    <string name="tmdb_uri_domain" translatable="false">image.tmdb.org</string>
+    <string name="tmdb_uri_image_host_path_one" translatable="false">t</string>
+    <string name="tmdb_uri_image_host_path_two" translatable="false">p</string>
 
     <!--  TMDB Image Resolution Sizes  -->
-    <string name="tmdb_image_size_original">original</string>
-    <string name="tmdb_image_size_92">w92</string>
-    <string name="tmdb_image_size_154">w154</string>
-    <string name="tmdb_image_size_185">w185</string>
-    <string name="tmdb_image_size_300">w300</string>
-    <string name="tmdb_image_size_342">w342</string>
-    <string name="tmdb_image_size_500">w500</string>
-    <string name="tmdb_image_size_780">w780</string>
-    <string name="tmdb_image_size_1280">w1280</string>
-    <string name="tmdb_image_size_default">@string/tmdb_image_size_342</string>
+    <string name="tmdb_image_size_original" translatable="false">original</string>
+    <string name="tmdb_image_size_92" translatable="false">w92</string>
+    <string name="tmdb_image_size_154" translatable="false">w154</string>
+    <string name="tmdb_image_size_185" translatable="false">w185</string>
+    <string name="tmdb_image_size_300" translatable="false">w300</string>
+    <string name="tmdb_image_size_342" translatable="false">w342</string>
+    <string name="tmdb_image_size_500" translatable="false">w500</string>
+    <string name="tmdb_image_size_780" translatable="false">w780</string>
+    <string name="tmdb_image_size_1280" translatable="false">w1280</string>
+    <string name="tmdb_image_size_default" translatable="false">@string/tmdb_image_size_342</string>
 
     <!--  Settings Textual Information -->
     <string name="movie_db_api_settings_category">Movie DB API Settings</string>

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -98,6 +99,38 @@ public class MovieDbUrlManager {
         String defaultImageSize = context.getString(R.string.tmdb_image_size_1280);
 
         return getMoviePosterUrl(resourceName, defaultImageSize);
+    }
+
+    /**
+     * Constructs a URL for obtaining a list of trailers for a movie.
+     *
+     * @param movie
+     * @param versionThreeApiKey
+     *
+     * @return URL to request trailers for a specific movie
+     */
+    public URL getTrailersUrl(Movie movie, String versionThreeApiKey) {
+        //  read request parameters from the strings resource
+        String httpScheme = context.getString(R.string.movie_db_api_uri_scheme);
+        String domainName = context.getString(R.string.movie_db_api_uri_domain);
+        String apiVersion = context.getString(R.string.movie_db_api_v3_identifier);
+        String movieRequest = context.getString(R.string.movie_db_api_movie_request_action);
+        String movieId = Integer.toString(movie.id);
+        String trailerRequest = context.getString(R.string.movie_db_api_trailer_action);
+        String apiKeyQuery = context.getString(R.string.movie_db_api_key_query_key);
+
+        //  construct the movie db connection uri
+        Uri uri = new Uri.Builder()
+                .scheme(httpScheme)
+                .authority(domainName)
+                .appendPath(apiVersion)
+                .appendPath(movieRequest)
+                .appendPath(movieId)
+                .appendPath(trailerRequest)
+                .appendQueryParameter(apiKeyQuery, versionThreeApiKey)
+                .build();
+
+        return getUrl(uri);
     }
 
     /**
