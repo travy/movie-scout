@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.utils.moviedb.interfaces.TrailerClickedListener;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 import java.util.ArrayList;
@@ -26,7 +27,19 @@ import java.util.ArrayList;
  */
 
 public class TrailerListAdapter extends RecyclerView.Adapter<TrailerItemViewHolder> {
-    private ArrayList<Trailer> trailerList;
+    ArrayList<Trailer> trailerList;
+
+    final TrailerClickedListener clickListener;
+
+    /**
+     * Specifies the TrailerClickedListener that will determine the operation to perform when
+     * a Trailer is clicked.
+     *
+     * @param trailerClickListener
+     */
+    public TrailerListAdapter(TrailerClickedListener trailerClickListener) {
+        clickListener = trailerClickListener;
+    }
 
     /**
      * Instantiates a new TrailerItemViewHolder for use by a supplied Trailer object.
@@ -42,7 +55,7 @@ public class TrailerListAdapter extends RecyclerView.Adapter<TrailerItemViewHold
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View trailerView = layoutInflater.inflate(R.layout.movie_trailer_item, parent, false);
 
-        return new TrailerItemViewHolder(trailerView);
+        return new TrailerItemViewHolder(trailerView, this);
     }
 
     /**

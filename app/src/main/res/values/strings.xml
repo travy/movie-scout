@@ -70,6 +70,12 @@
     <string name="movie_trailer_json_size" translatable="false">size</string>
     <string name="movie_trailer_json_type" translatable="false">type</string>
 
+    <!--  Youtube Video Url  -->
+    <string name="youtube_scheme" translatable="false">https</string>
+    <string name="youtube_domain" translatable="false">www.youtube.com</string>
+    <string name="youtube_video_param" translatable="false">watch</string>
+    <string name="youtube_video_identifier_query" translatable="false">v</string>
+
     <!--  Settings Textual Information -->
     <string name="movie_db_api_settings_category">Movie DB API Settings</string>
 

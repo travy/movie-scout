@@ -9,6 +9,7 @@ import android.net.Uri;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
+import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -178,5 +179,30 @@ public class MovieDbUrlManager {
         }
 
         return url;
+    }
+
+    /**
+     * Constructs a URL where the specified Trailer can be viewed.
+     *
+     * @param trailer
+     *
+     * @return URL where the trailer can be viewed
+     */
+    public URL getVideoTrailerUrl(Trailer trailer) {
+        String httpScheme = context.getString(R.string.youtube_scheme);
+        String domainName = context.getString(R.string.youtube_domain);
+        String videoParam = context.getString(R.string.youtube_video_param);
+        String videoQuery = context.getString(R.string.youtube_video_identifier_query);
+        String videoIdentifier = trailer.key;
+
+        //  construct the uri to make requests on
+        Uri uri = new Uri.Builder()
+                .scheme(httpScheme)
+                .authority(domainName)
+                .appendPath(videoParam)
+                .appendQueryParameter(videoQuery, videoIdentifier)
+                .build();
+
+        return getUrl(uri);
     }
 }

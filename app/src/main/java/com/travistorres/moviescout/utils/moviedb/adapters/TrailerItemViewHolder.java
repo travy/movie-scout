@@ -6,9 +6,11 @@ package com.travistorres.moviescout.utils.moviedb.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 /**
  * TrailerItemViewHolder
@@ -19,7 +21,10 @@ import com.travistorres.moviescout.R;
  * @version April 3, 2017
  */
 
-class TrailerItemViewHolder extends RecyclerView.ViewHolder {
+class TrailerItemViewHolder extends RecyclerView.ViewHolder
+        implements OnClickListener {
+    private final TrailerListAdapter adapter;
+
     public final TextView mTitleTextView;
     public final TextView mTypeTextView;
     public final TextView mVideoLanguage;
@@ -30,12 +35,28 @@ class TrailerItemViewHolder extends RecyclerView.ViewHolder {
      *
      * @param view
      */
-    public TrailerItemViewHolder(View view) {
+    public TrailerItemViewHolder(View view, TrailerListAdapter trailerAdapter) {
         super(view);
+
+        adapter = trailerAdapter;
 
         //  acquire a reference to each of the views
         mTitleTextView = (TextView) view.findViewById(R.id.video_title);
         mTypeTextView = (TextView) view.findViewById(R.id.video_type);
         mVideoLanguage = (TextView) view.findViewById(R.id.video_language);
+
+        view.setOnClickListener(this);
+    }
+
+    /**
+     * Trigger the click event on the Info Activity.
+     *
+     * @param view
+     */
+    @Override
+    public void onClick(View view) {
+        int position = getAdapterPosition();
+        Trailer trailer = adapter.trailerList.get(position);
+        adapter.clickListener.onClick(trailer);
     }
 }

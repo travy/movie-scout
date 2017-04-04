@@ -7,6 +7,7 @@ package com.travistorres.moviescout;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -23,9 +24,12 @@ import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
+import com.travistorres.moviescout.utils.moviedb.interfaces.TrailerClickedListener;
 import com.travistorres.moviescout.utils.moviedb.loaders.TrailerLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
+
+import java.net.URL;
 
 /**
  * MovieInfoActivity
@@ -37,7 +41,7 @@ import com.travistorres.moviescout.utils.moviedb.models.Trailer;
  */
 
 public class MovieInfoActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Trailer[]>, MovieDbNetworkingErrorHandler {
+        implements LoaderManager.LoaderCallbacks<Trailer[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener{
     private final String LOG_TAG = getClass().getSimpleName();
     private final static String MISSING_MOVIE_MODEL_LOG_STRING = "Activity triggered without a selected movie being specified";
 
@@ -125,9 +129,13 @@ public class MovieInfoActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Sets up the RecyclerView so that it will display the contents of the Adapter.
+     *
+     */
     private void setupRecyclerView() {
         LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        RecyclerView.Adapter adapter = new TrailerListAdapter();
+        RecyclerView.Adapter adapter = new TrailerListAdapter(this);
         mTrailerListRecyclerView.setAdapter(adapter);
         mTrailerListRecyclerView.setLayoutManager(linearLayout);
     }
@@ -241,5 +249,20 @@ public class MovieInfoActivity extends AppCompatActivity
     @Override
     public void afterNetworkRequest() {
 
+    }
+
+    /**
+     * Creates an Intent which will show the trailer in Youtube.
+     *
+     * @param trailer
+     */
+    @Override
+    public void onClick(Trailer trailer) {
+        URL trailerUrl = trailer.getVideoUrl(this);
+        String trailerUrlString = trailerUrl.toString();
+        Uri trailerUri = Uri.parse(trailerUrlString);
+
+        Intent playTrailerIntent = new Intent(Intent.ACTION_VIEW, trailerUri);
+        startActivity(playTrailerIntent);
     }
 }

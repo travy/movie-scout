@@ -4,6 +4,12 @@
 
 package com.travistorres.moviescout.utils.moviedb.models;
 
+import android.content.Context;
+
+import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
+
+import java.net.URL;
+
 /**
  * Trailer
  *
@@ -23,8 +29,17 @@ public class Trailer {
     public String size;
     public String type;
 
-    @Override
-    public String toString() {
-        return name;
+    /**
+     * Retrieves the youtube URL that will allow for viewing of the trailer.
+     *
+     * @param context
+     *
+     * @return URL where the trailer can be watched.
+     */
+    public URL getVideoUrl(Context context) {
+        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
+        URL videoUrl = urlManager.getVideoTrailerUrl(this);
+
+        return videoUrl;
     }
 }
