@@ -59,6 +59,17 @@
     <string name="tmdb_image_size_1280" translatable="false">w1280</string>
     <string name="tmdb_image_size_default" translatable="false">@string/tmdb_image_size_342</string>
 
+    <!--  TMDB Trailer Json Parsers  -->
+    <string name="movie_trailer_json_results" translatable="false">results</string>
+    <string name="movie_trailer_json_id" translatable="false">id</string>
+    <string name="movie_trailer_json_iso_639_1" translatable="false">iso_639_1</string>
+    <string name="movie_trailer_json_iso_3166_1" translatable="false">iso_3166_1</string>
+    <string name="movie_trailer_json_key" translatable="false">key</string>
+    <string name="movie_trailer_json_name" translatable="false">name</string>
+    <string name="movie_trailer_json_site" translatable="false">site</string>
+    <string name="movie_trailer_json_size" translatable="false">size</string>
+    <string name="movie_trailer_json_type" translatable="false">type</string>
+
     <!--  Settings Textual Information -->
     <string name="movie_db_api_settings_category">Movie DB API Settings</string>
 
