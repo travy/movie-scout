@@ -12,7 +12,7 @@
         android:id="@+id/movie_list_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@android:layout/activity_list_item"/>
+        tools:listitem="@layout/movie_list_item"/>
 
     <!--  Loading Icon -->
     <ProgressBar

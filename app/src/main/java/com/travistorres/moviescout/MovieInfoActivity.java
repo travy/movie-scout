@@ -13,12 +13,15 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
 import com.travistorres.moviescout.utils.moviedb.listeners.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.loaders.TrailerLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
@@ -49,6 +52,7 @@ public class MovieInfoActivity extends AppCompatActivity
     private TextView mMoviePopularity;
     private TextView mMovieVoteAverage;
     private ImageView mBackdropImage;
+    private RecyclerView mTrailerListRecyclerView;
 
     private String movieDbApiThreeKey;
 
@@ -79,6 +83,7 @@ public class MovieInfoActivity extends AppCompatActivity
         mMoviePopularity = (TextView) findViewById(R.id.movie_popularity);
         mMovieVoteAverage = (TextView) findViewById(R.id.movie_vote_average);
         mBackdropImage = (ImageView) findViewById(R.id.movie_backdrop_image_view);
+        mTrailerListRecyclerView = (RecyclerView) findViewById(R.id.movie_trailers_list);
 
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
@@ -110,6 +115,7 @@ public class MovieInfoActivity extends AppCompatActivity
             retrievePoster(movie);
 
             //  load the selected movies trailers
+            setupRecyclerView();
             loadMovieTrailers(selectedMovieExtraKey, movie);
         } else {
             //  display an error message when a movie is not defined within the intent.  Should never occur.
@@ -117,6 +123,13 @@ public class MovieInfoActivity extends AppCompatActivity
             String missingMovieMessage = getString(R.string.missing_movie_model_error_message);
             Toast.makeText(this, missingMovieMessage, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setupRecyclerView() {
+        LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.Adapter adapter = new TrailerListAdapter();
+        mTrailerListRecyclerView.setAdapter(adapter);
+        mTrailerListRecyclerView.setLayoutManager(linearLayout);
     }
 
     /**
@@ -193,9 +206,8 @@ public class MovieInfoActivity extends AppCompatActivity
         afterNetworkRequest();
 
         if (trailers != null) {
-            for (Trailer trailer : trailers) {
-                Log.d(LOG_TAG, trailer.toString());
-            }
+            TrailerListAdapter adapter = (TrailerListAdapter) mTrailerListRecyclerView.getAdapter();
+            adapter.setTrailers(trailers);
         } else {
             Toast.makeText(this, "No trailers were found", Toast.LENGTH_SHORT).show();
         }
