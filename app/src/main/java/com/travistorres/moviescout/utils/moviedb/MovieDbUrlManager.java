@@ -8,6 +8,8 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.utils.moviedb.models.Movie;
+import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -101,6 +103,38 @@ public class MovieDbUrlManager {
     }
 
     /**
+     * Constructs a URL for obtaining a list of trailers for a movie.
+     *
+     * @param movie
+     * @param versionThreeApiKey
+     *
+     * @return URL to request trailers for a specific movie
+     */
+    public URL getTrailersUrl(Movie movie, String versionThreeApiKey) {
+        //  read request parameters from the strings resource
+        String httpScheme = context.getString(R.string.movie_db_api_uri_scheme);
+        String domainName = context.getString(R.string.movie_db_api_uri_domain);
+        String apiVersion = context.getString(R.string.movie_db_api_v3_identifier);
+        String movieRequest = context.getString(R.string.movie_db_api_movie_request_action);
+        String movieId = Integer.toString(movie.id);
+        String trailerRequest = context.getString(R.string.movie_db_api_trailer_action);
+        String apiKeyQuery = context.getString(R.string.movie_db_api_key_query_key);
+
+        //  construct the movie db connection uri
+        Uri uri = new Uri.Builder()
+                .scheme(httpScheme)
+                .authority(domainName)
+                .appendPath(apiVersion)
+                .appendPath(movieRequest)
+                .appendPath(movieId)
+                .appendPath(trailerRequest)
+                .appendQueryParameter(apiKeyQuery, versionThreeApiKey)
+                .build();
+
+        return getUrl(uri);
+    }
+
+    /**
      * Retrieves the URL for acquiring a Movie Poster
      *
      * @param resourceName The resource name of the image on the server.
@@ -145,5 +179,30 @@ public class MovieDbUrlManager {
         }
 
         return url;
+    }
+
+    /**
+     * Constructs a URL where the specified Trailer can be viewed.
+     *
+     * @param trailer
+     *
+     * @return URL where the trailer can be viewed
+     */
+    public URL getVideoTrailerUrl(Trailer trailer) {
+        String httpScheme = context.getString(R.string.youtube_scheme);
+        String domainName = context.getString(R.string.youtube_domain);
+        String videoParam = context.getString(R.string.youtube_video_param);
+        String videoQuery = context.getString(R.string.youtube_video_identifier_query);
+        String videoIdentifier = trailer.key;
+
+        //  construct the uri to make requests on
+        Uri uri = new Uri.Builder()
+                .scheme(httpScheme)
+                .authority(domainName)
+                .appendPath(videoParam)
+                .appendQueryParameter(videoQuery, videoIdentifier)
+                .build();
+
+        return getUrl(uri);
     }
 }

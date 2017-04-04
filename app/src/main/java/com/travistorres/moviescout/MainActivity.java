@@ -24,9 +24,9 @@ import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
 import com.travistorres.moviescout.utils.moviedb.MovieSortType;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieClickedListener;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieDbNetworkingErrorHandler;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 /**
