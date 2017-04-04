@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.builders.TrailerBuilder;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieDbNetworkingErrorHandler;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 

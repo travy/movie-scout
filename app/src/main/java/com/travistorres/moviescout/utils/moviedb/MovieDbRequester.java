@@ -9,23 +9,15 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.travistorres.moviescout.R;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieClickedListener;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieDbNetworkingErrorHandler;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieClickedListener;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
-import com.travistorres.moviescout.utils.networking.NetworkManager;
-import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
-import com.travistorres.moviescout.utils.networking.exceptions.HttpPageNotFoundException;
-import com.travistorres.moviescout.utils.networking.exceptions.HttpUnauthorizedException;
-import com.travistorres.moviescout.utils.networking.exceptions.NetworkingException;
 
-import java.io.IOException;
 import java.net.URL;
 
 /**

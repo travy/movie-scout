@@ -8,7 +8,7 @@ import android.content.Context;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieDbNetworkingErrorHandler;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 import com.travistorres.moviescout.utils.networking.NetworkManager;

@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieDbNetworkingErrorHandler;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.loaders.TrailerLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
