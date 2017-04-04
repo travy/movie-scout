@@ -70,6 +70,9 @@
     <string name="movie_trailer_json_size" translatable="false">size</string>
     <string name="movie_trailer_json_type" translatable="false">type</string>
 
+    <string name="no_movie_trailer_found">No trailers were found</string>
+    <string name="movie_info_activity_missing_movie_message">Activity triggered without a selected movie being specified</string>
+
     <!--  Youtube Video Url  -->
     <string name="youtube_scheme" translatable="false">https</string>
     <string name="youtube_domain" translatable="false">www.youtube.com</string>

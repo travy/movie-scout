@@ -43,7 +43,6 @@ import java.net.URL;
 public class MovieInfoActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Trailer[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener{
     private final String LOG_TAG = getClass().getSimpleName();
-    private final static String MISSING_MOVIE_MODEL_LOG_STRING = "Activity triggered without a selected movie being specified";
 
     //  used for separating labels from their data
     private final static String LABEL_SEPERATOR = ":  ";
@@ -123,7 +122,7 @@ public class MovieInfoActivity extends AppCompatActivity
             loadMovieTrailers(selectedMovieExtraKey, movie);
         } else {
             //  display an error message when a movie is not defined within the intent.  Should never occur.
-            Log.d(LOG_TAG, MISSING_MOVIE_MODEL_LOG_STRING);
+            Log.e(LOG_TAG, getString(R.string.movie_info_activity_missing_movie_message));
             String missingMovieMessage = getString(R.string.missing_movie_model_error_message);
             Toast.makeText(this, missingMovieMessage, Toast.LENGTH_SHORT).show();
         }
@@ -217,7 +216,7 @@ public class MovieInfoActivity extends AppCompatActivity
             TrailerListAdapter adapter = (TrailerListAdapter) mTrailerListRecyclerView.getAdapter();
             adapter.setTrailers(trailers);
         } else {
-            Toast.makeText(this, "No trailers were found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_movie_trailer_found), Toast.LENGTH_SHORT).show();
         }
     }
 
