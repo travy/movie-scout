@@ -13,7 +13,7 @@ import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 /**
- * TrailerItemViewHolder
+ * TrailerListItemViewHolder
  *
  * Creates a package level interface for determining how to interact with a trailer.
  *
@@ -21,7 +21,7 @@ import com.travistorres.moviescout.utils.moviedb.models.Trailer;
  * @version April 3, 2017
  */
 
-class TrailerItemViewHolder extends RecyclerView.ViewHolder
+class TrailerListItemViewHolder extends RecyclerView.ViewHolder
         implements OnClickListener {
     private final TrailerListAdapter adapter;
 
@@ -35,7 +35,7 @@ class TrailerItemViewHolder extends RecyclerView.ViewHolder
      *
      * @param view
      */
-    public TrailerItemViewHolder(View view, TrailerListAdapter trailerAdapter) {
+    public TrailerListItemViewHolder(View view, TrailerListAdapter trailerAdapter) {
         super(view);
 
         adapter = trailerAdapter;

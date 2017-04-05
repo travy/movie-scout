@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * @version April 3, 2017
  */
 
-public class TrailerListAdapter extends RecyclerView.Adapter<TrailerItemViewHolder> {
+public class TrailerListAdapter extends RecyclerView.Adapter<TrailerListItemViewHolder> {
     ArrayList<Trailer> trailerList;
 
     final TrailerClickedListener clickListener;
@@ -42,30 +42,30 @@ public class TrailerListAdapter extends RecyclerView.Adapter<TrailerItemViewHold
     }
 
     /**
-     * Instantiates a new TrailerItemViewHolder for use by a supplied Trailer object.
+     * Instantiates a new TrailerListItemViewHolder for use by a supplied Trailer object.
      *
      * @param parent
      * @param viewType
      *
-     * @return TrailerItemViewHolder
+     * @return TrailerListItemViewHolder
      */
     @Override
-    public TrailerItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TrailerListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View trailerView = layoutInflater.inflate(R.layout.movie_trailer_item, parent, false);
 
-        return new TrailerItemViewHolder(trailerView, this);
+        return new TrailerListItemViewHolder(trailerView, this);
     }
 
     /**
-     * Displays the contents of a Trailer object onto the specified TrailerItemViewHolder.
+     * Displays the contents of a Trailer object onto the specified TrailerListItemViewHolder.
      *
      * @param trailerView
      * @param position
      */
     @Override
-    public void onBindViewHolder(TrailerItemViewHolder trailerView, int position) {
+    public void onBindViewHolder(TrailerListItemViewHolder trailerView, int position) {
         Trailer trailer = trailerList.get(position);
         trailerView.mTitleTextView.setText(trailer.name);
         trailerView.mTypeTextView.setText(trailer.type);
