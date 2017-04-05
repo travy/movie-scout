@@ -7,6 +7,7 @@ package com.travistorres.moviescout;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.travistorres.moviescout.utils.db.MoviesDatabase;
 import com.travistorres.moviescout.utils.moviedb.adapters.ReviewListAdapter;
 import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
@@ -61,6 +63,8 @@ public class MovieInfoActivity extends AppCompatActivity
     private RecyclerView mTrailerListRecyclerView;
     private RecyclerView mReviewListRecyclerView;
 
+    private SQLiteDatabase mDatabase;
+
     private String movieDbApiThreeKey;
 
     /**
@@ -80,6 +84,7 @@ public class MovieInfoActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setupApiPreferences();
+        mDatabase = new MoviesDatabase(this).getWritableDatabase();
 
         //  load page views
         mMovieTitle = (TextView) findViewById(R.id.movie_title);
