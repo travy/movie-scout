@@ -4,9 +4,11 @@
 
 package com.travistorres.moviescout.utils.moviedb.loaders;
 
-import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v7.app.AppCompatActivity;
 
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 
 /**
@@ -19,13 +21,38 @@ import com.travistorres.moviescout.utils.moviedb.models.Review;
  */
 
 public class ReviewLoaderTask extends AsyncTaskLoader<Review[]> {
+    private AppCompatActivity parent;
+    private Bundle bundle;
+    private MovieDbNetworkingErrorHandler errorHandler;
+    private String apiKey;
+
     /**
      * Constructs the Loader instance.
      *
-     * @param context
+     * @param activity
+     * @param movieBundle
+     * @param networkingErrorHandler
+     * @param movieDbApiKey
      */
-    public ReviewLoaderTask(Context context) {
-        super(context);
+    public ReviewLoaderTask(AppCompatActivity activity, Bundle movieBundle, MovieDbNetworkingErrorHandler networkingErrorHandler, String movieDbApiKey) {
+        super(activity);
+
+        parent = activity;
+        bundle = movieBundle;
+        errorHandler = networkingErrorHandler;
+        apiKey = movieDbApiKey;
+    }
+
+    /**
+     * Specify what to do before loading.
+     *
+     */
+    @Override
+    protected void onStartLoading() {
+        super.onStartLoading();
+
+        errorHandler.beforeNetworkRequest();
+        forceLoad();
     }
 
     /**

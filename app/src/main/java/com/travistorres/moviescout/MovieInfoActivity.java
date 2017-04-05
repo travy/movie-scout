@@ -25,8 +25,10 @@ import android.widget.Toast;
 import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.interfaces.TrailerClickedListener;
+import com.travistorres.moviescout.utils.moviedb.loaders.ReviewLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.loaders.TrailerLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
+import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 import java.net.URL;
@@ -41,7 +43,7 @@ import java.net.URL;
  */
 
 public class MovieInfoActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Trailer[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener{
+        implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener{
     private final String LOG_TAG = getClass().getSimpleName();
 
     //  used for separating labels from their data
@@ -120,6 +122,7 @@ public class MovieInfoActivity extends AppCompatActivity
             //  load the selected movies trailers
             setupRecyclerView();
             loadMovieTrailers(selectedMovieExtraKey, movie);
+            loadMovieReviews(selectedMovieExtraKey, movie);
         } else {
             //  display an error message when a movie is not defined within the intent.  Should never occur.
             Log.e(LOG_TAG, getString(R.string.movie_info_activity_missing_movie_message));
@@ -186,7 +189,7 @@ public class MovieInfoActivity extends AppCompatActivity
         int loaderKey = resources.getInteger(loaderManagerResourceId);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<Trailer[]> loader = loaderManager.getLoader(loaderKey);
+        Loader loader = loaderManager.getLoader(loaderKey);
         loaderManager.restartLoader(loaderKey, movieBundle, this);
     }
 
@@ -258,8 +261,13 @@ public class MovieInfoActivity extends AppCompatActivity
      * @return The Loader for acquiring trailers
      */
     @Override
-    public Loader<Trailer[]> onCreateLoader(int id, final Bundle args) {
-        return new TrailerLoaderTask(this, args, this, movieDbApiThreeKey);
+    public Loader onCreateLoader(int id, final Bundle args) {
+        Resources resources = getResources();
+        Loader loader = (id == resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id)) ?
+                new TrailerLoaderTask(this, args, this, movieDbApiThreeKey) :
+                new ReviewLoaderTask(this, args, this, movieDbApiThreeKey);
+
+        return loader;
     }
 
     /**
@@ -267,12 +275,25 @@ public class MovieInfoActivity extends AppCompatActivity
      * could be found.
      *
      * @param loader
-     * @param trailers
+     * @param array
      */
     @Override
-    public void onLoadFinished(Loader<Trailer[]> loader, Trailer[] trailers) {
+    public void onLoadFinished(Loader loader, Object[] array) {
         afterNetworkRequest();
 
+        if (loader instanceof TrailerLoaderTask) {
+            finishLoadingTrailers((Trailer[]) array);
+        } else {
+            finishLoadingReviews((Review[]) array);
+        }
+    }
+
+    /**
+     * Specifies the operation to be performed after trailers have been loaded.
+     *
+     * @param trailers
+     */
+    private void finishLoadingTrailers(Trailer[] trailers) {
         if (trailers != null) {
             TrailerListAdapter adapter = (TrailerListAdapter) mTrailerListRecyclerView.getAdapter();
             adapter.setTrailers(trailers);
@@ -281,8 +302,18 @@ public class MovieInfoActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Specifies the operation to be performed after reviews have been loaded.
+     *
+     * @param reviews
+     */
+    private void finishLoadingReviews(Review[] reviews) {
+        //  TODO-  display the reviews
+        Log.d(getClass().getSimpleName(), "Reviews loaded but feature not implemented!");
+    }
+
     @Override
-    public void onLoaderReset(Loader<Trailer[]> loader) {
+    public void onLoaderReset(Loader<Object[]> loader) {
         //  intentionally left blank
     }
 
