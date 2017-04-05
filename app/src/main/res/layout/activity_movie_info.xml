@@ -109,17 +109,28 @@
 
             </LinearLayout>
 
+            <!--  Movie Plot  -->
             <TextView
                 android:id="@+id/movie_overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/generic_text_size" />
 
+            <!--  Trailers  -->
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/movie_trailers_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/movie_trailer_item"/>
+                android:padding="@dimen/container_view_padding"
+                tools:listitem="@layout/movie_trailer_item" />
+
+            <!--  Reviews  -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/movie_review_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/container_view_padding"
+                tools:listitem="@layout/movie_review_item" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
