@@ -2,12 +2,13 @@
  * Copyright (C) 2017 Travis Anthony Torres
  */
 
-package com.travistorres.moviescout.utils.moviedb;
+package com.travistorres.moviescout.utils.networking;
 
 import android.content.Context;
 import android.net.Uri;
 
 import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.utils.moviedb.MovieSortType;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
@@ -15,7 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * MovieDbUrlManager
+ * UrlManager
  *
  * Provides URL's that are capable of safely retrieving content from the Movie DB API.  Using the
  * URI objects generated from this class will ensure that URL's are always well formed.
@@ -24,7 +25,7 @@ import java.net.URL;
  * @version v1.2.0 (March 26, 2017)
  */
 
-public class MovieDbUrlManager {
+public class UrlManager {
     /*
      *  The context is needed in order to read from the systems Configurations.
      *
@@ -37,7 +38,7 @@ public class MovieDbUrlManager {
      *
      * @param mContext
      */
-    public MovieDbUrlManager(Context mContext) {
+    public UrlManager(Context mContext) {
         context = mContext;
     }
 

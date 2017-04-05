@@ -18,6 +18,7 @@ import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErr
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
 import com.travistorres.moviescout.utils.moviedb.loaders.MovieListLoader;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
+import com.travistorres.moviescout.utils.networking.UrlManager;
 
 import java.net.URL;
 
@@ -155,7 +156,7 @@ public class MovieDbRequester
      * @return The URL to acquire the next set of results.
      */
     public URL getCurrentRequestUrl() {
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(parentActivity);
+        UrlManager urlManager = new UrlManager(parentActivity);
         URL url = urlManager.getSortedMoveListUrl(sortType, currentPage, versionThreeApiKey);
 
         return url;

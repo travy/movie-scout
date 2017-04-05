@@ -10,7 +10,7 @@ import android.os.Parcelable;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
+import com.travistorres.moviescout.utils.networking.UrlManager;
 
 import java.net.URL;
 
@@ -166,7 +166,7 @@ public class Movie implements Parcelable {
      * @param imageView
      */
     public void loadBackdropIntoImageView(Context context, ImageView imageView) {
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
+        UrlManager urlManager = new UrlManager(context);
         URL backdropUrl = urlManager.getMovieBackdropUrl(backdropPath);
 
         loadImageFromUrlIntoImageView(context, backdropUrl, imageView);
@@ -179,7 +179,7 @@ public class Movie implements Parcelable {
      * @param imageView
      */
     public void loadPosterIntoImageView(Context context, ImageView imageView) {
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
+        UrlManager urlManager = new UrlManager(context);
         URL posterUrl = urlManager.getMoviePosterUrl(posterPath);
 
         loadImageFromUrlIntoImageView(context, posterUrl, imageView);
