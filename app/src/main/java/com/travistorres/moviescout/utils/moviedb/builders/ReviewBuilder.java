@@ -6,6 +6,7 @@ package com.travistorres.moviescout.utils.moviedb.builders;
 
 import android.content.Context;
 
+import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
@@ -84,7 +85,7 @@ public class ReviewBuilder {
     public static final Review[] createReviewsArrayFromJson(Context context, JSONObject jsonObject)
             throws JSONException {
 
-        JSONArray jsonArray = jsonObject.getJSONArray("results");
+        JSONArray jsonArray = jsonObject.getJSONArray(context.getString(R.string.movie_review_json_results));
         Review[] reviews = constructReviews(context, jsonArray);
 
         return reviews;
@@ -129,11 +130,11 @@ public class ReviewBuilder {
     private static Review constructReview(Context context, JSONObject reviewData)
             throws JSONException {
         Review review = new Review();
-        review.url = reviewData.getString("url");
+        review.url = reviewData.getString(context.getString(R.string.movie_review_json_url));
         review.movieId = null;
-        review.id = reviewData.getString("id");
-        review.content = reviewData.getString("content");
-        review.author = reviewData.getString("author");
+        review.id = reviewData.getString(context.getString(R.string.movie_review_json_id));
+        review.content = reviewData.getString(context.getString(R.string.movie_review_json_content));
+        review.author = reviewData.getString(context.getString(R.string.movie_review_json_author));
 
         return review;
     }

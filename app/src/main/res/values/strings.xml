@@ -71,6 +71,13 @@
     <string name="movie_trailer_json_size" translatable="false">size</string>
     <string name="movie_trailer_json_type" translatable="false">type</string>
 
+    <!--  TMDB Review Json Parsers -->
+    <string name="movie_review_json_results" translatable="false">results</string>
+    <string name="movie_review_json_url" translatable="false">url</string>
+    <string name="movie_review_json_id" translatable="false">id</string>
+    <string name="movie_review_json_content" translatable="false">content</string>
+    <string name="movie_review_json_author" translatable="false">author</string>
+
     <string name="no_movie_trailer_found">No trailers were found</string>
     <string name="movie_info_activity_missing_movie_message">Activity triggered without a selected movie being specified</string>
 
