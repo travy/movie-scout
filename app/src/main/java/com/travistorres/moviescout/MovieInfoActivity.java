@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.travistorres.moviescout.utils.moviedb.adapters.ReviewListAdapter;
 import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.interfaces.TrailerClickedListener;
@@ -58,6 +59,7 @@ public class MovieInfoActivity extends AppCompatActivity
     private TextView mMovieVoteAverage;
     private ImageView mBackdropImage;
     private RecyclerView mTrailerListRecyclerView;
+    private RecyclerView mReviewListRecyclerView;
 
     private String movieDbApiThreeKey;
 
@@ -89,6 +91,7 @@ public class MovieInfoActivity extends AppCompatActivity
         mMovieVoteAverage = (TextView) findViewById(R.id.movie_vote_average);
         mBackdropImage = (ImageView) findViewById(R.id.movie_backdrop_image_view);
         mTrailerListRecyclerView = (RecyclerView) findViewById(R.id.movie_trailers_list);
+        mReviewListRecyclerView = (RecyclerView) findViewById(R.id.movie_review_list);
 
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
@@ -120,8 +123,9 @@ public class MovieInfoActivity extends AppCompatActivity
             retrievePoster(movie);
 
             //  load the selected movies trailers
-            setupRecyclerView();
+            setupTrailerRecyclerView();
             loadMovieTrailers(selectedMovieExtraKey, movie);
+            setupReviewRecyclerView();
             loadMovieReviews(selectedMovieExtraKey, movie);
         } else {
             //  display an error message when a movie is not defined within the intent.  Should never occur.
@@ -144,10 +148,21 @@ public class MovieInfoActivity extends AppCompatActivity
     }
 
     /**
+     * Sets up the recycler view for displaying Reviews.
+     *
+     */
+    private void setupReviewRecyclerView() {
+        LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.Adapter adapter = new ReviewListAdapter();
+        mReviewListRecyclerView.setAdapter(adapter);
+        mReviewListRecyclerView.setLayoutManager(linearLayout);
+    }
+
+    /**
      * Sets up the RecyclerView so that it will display the contents of the Adapter.
      *
      */
-    private void setupRecyclerView() {
+    private void setupTrailerRecyclerView() {
         LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         RecyclerView.Adapter adapter = new TrailerListAdapter(this);
         mTrailerListRecyclerView.setAdapter(adapter);
@@ -311,9 +326,10 @@ public class MovieInfoActivity extends AppCompatActivity
         //  TODO-  display the reviews
         Log.d(getClass().getSimpleName(), "Reviews loaded but feature not implemented!");
         if (reviews != null) {
-            for (int i = 0; i < reviews.length; ++i) {
-                Log.d(getClass().getSimpleName(), "Review:  " + reviews[i].content);
-            }
+            ReviewListAdapter adapter = (ReviewListAdapter) mReviewListRecyclerView.getAdapter();
+            adapter.setReviews(reviews);
+        } else {
+            Toast.makeText(this, "No Reviews were found", Toast.LENGTH_SHORT).show();
         }
     }
 
