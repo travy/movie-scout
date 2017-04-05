@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v7.app.AppCompatActivity;
 
+import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.utils.moviedb.builders.ReviewBuilder;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
+import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 
 /**
@@ -62,6 +65,13 @@ public class ReviewLoaderTask extends AsyncTaskLoader<Review[]> {
      */
     @Override
     public Review[] loadInBackground() {
-        return new Review[0];
+        Review[] reviews = null;
+        String selectedMovieKey = parent.getResources().getString(R.string.selected_movie_extra_key);
+        if (bundle.containsKey(selectedMovieKey)) {
+            Movie movie = bundle.getParcelable(selectedMovieKey);
+            reviews = ReviewBuilder.createReviewsForMovie(parent, errorHandler, movie, apiKey);
+        }
+
+        return reviews;
     }
 }

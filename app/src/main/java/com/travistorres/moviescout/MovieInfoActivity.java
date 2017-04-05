@@ -310,6 +310,11 @@ public class MovieInfoActivity extends AppCompatActivity
     private void finishLoadingReviews(Review[] reviews) {
         //  TODO-  display the reviews
         Log.d(getClass().getSimpleName(), "Reviews loaded but feature not implemented!");
+        if (reviews != null) {
+            for (int i = 0; i < reviews.length; ++i) {
+                Log.d(getClass().getSimpleName(), "Review:  " + reviews[i].content);
+            }
+        }
     }
 
     @Override
