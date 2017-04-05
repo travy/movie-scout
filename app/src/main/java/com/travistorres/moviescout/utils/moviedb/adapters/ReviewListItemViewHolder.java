@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.travistorres.moviescout.R;
 
 /**
- * ReviewItemViewHolder
+ * ReviewListItemViewHolder
  *
  * Displays the contents of a Review object on the user interface.
  *
@@ -19,7 +19,7 @@ import com.travistorres.moviescout.R;
  * @version April 5, 2017
  */
 
-public class ReviewItemViewHolder extends RecyclerView.ViewHolder {
+class ReviewListItemViewHolder extends RecyclerView.ViewHolder {
     public TextView mAuthorTextView;
     public TextView mContentTextView;
 
@@ -28,7 +28,7 @@ public class ReviewItemViewHolder extends RecyclerView.ViewHolder {
      *
      * @param view
      */
-    public ReviewItemViewHolder(View view) {
+    public ReviewListItemViewHolder(View view) {
         super(view);
 
         mAuthorTextView = (TextView) view.findViewById(R.id.review_author);

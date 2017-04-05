@@ -7,7 +7,7 @@ package com.travistorres.moviescout.utils.moviedb.builders;
 import android.content.Context;
 
 import com.travistorres.moviescout.R;
-import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
+import com.travistorres.moviescout.utils.networking.UrlManager;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
@@ -45,7 +45,7 @@ public class ReviewBuilder {
      */
     public static final Review[] createReviewsForMovie(Context context, MovieDbNetworkingErrorHandler errorHandler, Movie movie, String apiKey) {
         Review[] reviews = null;
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
+        UrlManager urlManager = new UrlManager(context);
         URL reviewsUrl = urlManager.getMovieReviewsUrl(movie, apiKey);
 
         try {

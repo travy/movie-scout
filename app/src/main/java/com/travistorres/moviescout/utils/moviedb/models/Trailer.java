@@ -6,7 +6,7 @@ package com.travistorres.moviescout.utils.moviedb.models;
 
 import android.content.Context;
 
-import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
+import com.travistorres.moviescout.utils.networking.UrlManager;
 
 import java.net.URL;
 
@@ -37,7 +37,7 @@ public class Trailer {
      * @return URL where the trailer can be watched.
      */
     public URL getVideoUrl(Context context) {
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
+        UrlManager urlManager = new UrlManager(context);
         URL videoUrl = urlManager.getVideoTrailerUrl(this);
 
         return videoUrl;

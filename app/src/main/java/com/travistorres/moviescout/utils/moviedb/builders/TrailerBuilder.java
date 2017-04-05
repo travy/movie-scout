@@ -7,7 +7,7 @@ package com.travistorres.moviescout.utils.moviedb.builders;
 import android.content.Context;
 
 import com.travistorres.moviescout.R;
-import com.travistorres.moviescout.utils.moviedb.MovieDbUrlManager;
+import com.travistorres.moviescout.utils.networking.UrlManager;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
@@ -46,7 +46,7 @@ public class TrailerBuilder {
      * associated with the Movie.
      */
     public static Trailer[] createTrailersArray(Context context, Movie movie, MovieDbNetworkingErrorHandler errorHandler, String versionThreeApiKey) {
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(context);
+        UrlManager urlManager = new UrlManager(context);
         URL trailerRequestUrl = urlManager.getTrailersUrl(movie, versionThreeApiKey);
         Trailer[] trailers = null;
 
