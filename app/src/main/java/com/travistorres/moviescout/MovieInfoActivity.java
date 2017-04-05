@@ -129,6 +129,17 @@ public class MovieInfoActivity extends AppCompatActivity
     }
 
     /**
+     * Specifies the operations to perform as the Activity is shutting down.
+     *
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        destroyMovieTrailerLoader();
+    }
+
+    /**
      * Sets up the RecyclerView so that it will display the contents of the Adapter.
      *
      */
@@ -155,6 +166,17 @@ public class MovieInfoActivity extends AppCompatActivity
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<Trailer[]> loader = loaderManager.getLoader(loaderKey);
         loaderManager.restartLoader(loaderKey, movieBundle, this);
+    }
+
+    /**
+     * Destroys any threads that are being used to load Movie Trailers.
+     *
+     */
+    private void destroyMovieTrailerLoader() {
+        Resources resources = getResources();
+        int trailerLoaderManagerId = resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id);
+        LoaderManager loaderManager = getSupportLoaderManager();
+        loaderManager.destroyLoader(trailerLoaderManagerId);
     }
 
     /**
