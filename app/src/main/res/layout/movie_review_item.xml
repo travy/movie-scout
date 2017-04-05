@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/container_view_padding">
+
+    <TextView
+        android:id="@+id/review_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/container_view_padding"
+        android:textStyle="italic"
+        android:textSize="@dimen/generic_text_size"
+        tools:text="Emma Watson is more beautiful than ever!! She can cast a spell on me any day ;)" />
+
+    <TextView
+        android:id="@+id/review_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/container_view_padding"
+        android:textStyle="bold"
+        android:textSize="@dimen/generic_text_size"
+        android:gravity="right"
+        tools:text="Travis Anthony Torres" />
+
+</LinearLayout>

@@ -40,6 +40,7 @@
     <string name="movie_db_api_key_query_key" translatable="false">api_key</string>
     <string name="movie_db_api_page_query_key" translatable="false">page</string>
     <string name="movie_db_api_trailer_action" translatable="false">videos</string>
+    <string name="movie_db_api_reviews_action" translatable="false">reviews</string>
 
     <!--  TMDB Image Resource Configurations  -->
     <string name="tmdb_uri_scheme" translatable="false">HTTP</string>
@@ -69,6 +70,13 @@
     <string name="movie_trailer_json_site" translatable="false">site</string>
     <string name="movie_trailer_json_size" translatable="false">size</string>
     <string name="movie_trailer_json_type" translatable="false">type</string>
+
+    <!--  TMDB Review Json Parsers -->
+    <string name="movie_review_json_results" translatable="false">results</string>
+    <string name="movie_review_json_url" translatable="false">url</string>
+    <string name="movie_review_json_id" translatable="false">id</string>
+    <string name="movie_review_json_content" translatable="false">content</string>
+    <string name="movie_review_json_author" translatable="false">author</string>
 
     <string name="no_movie_trailer_found">No trailers were found</string>
     <string name="movie_info_activity_missing_movie_message">Activity triggered without a selected movie being specified</string>

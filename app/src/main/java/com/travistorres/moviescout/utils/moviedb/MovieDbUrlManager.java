@@ -205,4 +205,35 @@ public class MovieDbUrlManager {
 
         return getUrl(uri);
     }
+
+    /**
+     * Retrieves the URL for acquiring the movies Reviews.
+     *
+     * @param movie
+     * @param versionThreeApiKey
+     *
+     * @return URL used to request reviews
+     */
+    public URL getMovieReviewsUrl(Movie movie, String versionThreeApiKey) {
+        //  read request parameters from the strings resource
+        String httpScheme = context.getString(R.string.movie_db_api_uri_scheme);
+        String domainName = context.getString(R.string.movie_db_api_uri_domain);
+        String apiVersion = context.getString(R.string.movie_db_api_v3_identifier);
+        String movieRequest = context.getString(R.string.movie_db_api_movie_request_action);
+        String movieId = Integer.toString(movie.id);
+        String reviewRequest = context.getString(R.string.movie_db_api_reviews_action);
+        String apiKeyQuery = context.getString(R.string.movie_db_api_key_query_key);
+
+        Uri uri = new Uri.Builder()
+                .scheme(httpScheme)
+                .authority(domainName)
+                .appendPath(apiVersion)
+                .appendPath(movieRequest)
+                .appendPath(movieId)
+                .appendPath(reviewRequest)
+                .appendQueryParameter(apiKeyQuery, versionThreeApiKey)
+                .build();
+
+        return getUrl(uri);
+    }
 }

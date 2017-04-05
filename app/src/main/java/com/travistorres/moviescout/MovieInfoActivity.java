@@ -22,11 +22,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.travistorres.moviescout.utils.moviedb.adapters.ReviewListAdapter;
 import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.interfaces.TrailerClickedListener;
+import com.travistorres.moviescout.utils.moviedb.loaders.ReviewLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.loaders.TrailerLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
+import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 import java.net.URL;
@@ -41,7 +44,7 @@ import java.net.URL;
  */
 
 public class MovieInfoActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Trailer[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener{
+        implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener{
     private final String LOG_TAG = getClass().getSimpleName();
 
     //  used for separating labels from their data
@@ -56,6 +59,7 @@ public class MovieInfoActivity extends AppCompatActivity
     private TextView mMovieVoteAverage;
     private ImageView mBackdropImage;
     private RecyclerView mTrailerListRecyclerView;
+    private RecyclerView mReviewListRecyclerView;
 
     private String movieDbApiThreeKey;
 
@@ -87,6 +91,7 @@ public class MovieInfoActivity extends AppCompatActivity
         mMovieVoteAverage = (TextView) findViewById(R.id.movie_vote_average);
         mBackdropImage = (ImageView) findViewById(R.id.movie_backdrop_image_view);
         mTrailerListRecyclerView = (RecyclerView) findViewById(R.id.movie_trailers_list);
+        mReviewListRecyclerView = (RecyclerView) findViewById(R.id.movie_review_list);
 
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
@@ -118,8 +123,10 @@ public class MovieInfoActivity extends AppCompatActivity
             retrievePoster(movie);
 
             //  load the selected movies trailers
-            setupRecyclerView();
+            setupTrailerRecyclerView();
             loadMovieTrailers(selectedMovieExtraKey, movie);
+            setupReviewRecyclerView();
+            loadMovieReviews(selectedMovieExtraKey, movie);
         } else {
             //  display an error message when a movie is not defined within the intent.  Should never occur.
             Log.e(LOG_TAG, getString(R.string.movie_info_activity_missing_movie_message));
@@ -137,17 +144,39 @@ public class MovieInfoActivity extends AppCompatActivity
         super.onDestroy();
 
         destroyMovieTrailerLoader();
+        destroyReviewLoader();
+    }
+
+    /**
+     * Sets up the recycler view for displaying Reviews.
+     *
+     */
+    private void setupReviewRecyclerView() {
+        LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.Adapter adapter = new ReviewListAdapter();
+        mReviewListRecyclerView.setAdapter(adapter);
+        mReviewListRecyclerView.setLayoutManager(linearLayout);
     }
 
     /**
      * Sets up the RecyclerView so that it will display the contents of the Adapter.
      *
      */
-    private void setupRecyclerView() {
+    private void setupTrailerRecyclerView() {
         LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         RecyclerView.Adapter adapter = new TrailerListAdapter(this);
         mTrailerListRecyclerView.setAdapter(adapter);
         mTrailerListRecyclerView.setLayoutManager(linearLayout);
+    }
+
+    /**
+     * Request that reviews be loaded for the movie.
+     *
+     * @param movieBundleExtraKey
+     * @param movie
+     */
+    private void loadMovieReviews(String movieBundleExtraKey, Movie movie) {
+        configureLoader(movieBundleExtraKey, movie, R.integer.movie_review_requester_loader_manager_id);
     }
 
     /**
@@ -157,14 +186,25 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param movie
      */
     private void loadMovieTrailers(String movieBundleExtraKey, Movie movie) {
+        configureLoader(movieBundleExtraKey, movie, R.integer.movie_trailer_requester_loader_manager_id);
+    }
+
+    /**
+     * Loads a specified LoaderManager into its own execution thread.
+     *
+     * @param movieBundleExtraKey
+     * @param movie
+     * @param loaderManagerResourceId
+     */
+    private void configureLoader(String movieBundleExtraKey, Movie movie, int loaderManagerResourceId) {
         Bundle movieBundle = new Bundle();
         movieBundle.putParcelable(movieBundleExtraKey, movie);
 
         Resources resources = getResources();
-        int loaderKey = resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id);
+        int loaderKey = resources.getInteger(loaderManagerResourceId);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<Trailer[]> loader = loaderManager.getLoader(loaderKey);
+        Loader loader = loaderManager.getLoader(loaderKey);
         loaderManager.restartLoader(loaderKey, movieBundle, this);
     }
 
@@ -173,10 +213,27 @@ public class MovieInfoActivity extends AppCompatActivity
      *
      */
     private void destroyMovieTrailerLoader() {
+        destroyLoader(R.integer.movie_trailer_requester_loader_manager_id);
+    }
+
+    /**
+     * Destroys any threads used for loading of reviews.
+     *
+     */
+    private void destroyReviewLoader() {
+        destroyLoader(R.integer.movie_review_requester_loader_manager_id);
+    }
+
+    /**
+     * Instructs to destroy a specified LoaderManager instance.
+     *
+     * @param loaderManagerResourceId
+     */
+    private void destroyLoader(int loaderManagerResourceId) {
         Resources resources = getResources();
-        int trailerLoaderManagerId = resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id);
+        int loaderManagerId = resources.getInteger(loaderManagerResourceId);
         LoaderManager loaderManager = getSupportLoaderManager();
-        loaderManager.destroyLoader(trailerLoaderManagerId);
+        loaderManager.destroyLoader(loaderManagerId);
     }
 
     /**
@@ -219,8 +276,13 @@ public class MovieInfoActivity extends AppCompatActivity
      * @return The Loader for acquiring trailers
      */
     @Override
-    public Loader<Trailer[]> onCreateLoader(int id, final Bundle args) {
-        return new TrailerLoaderTask(this, args, this, movieDbApiThreeKey);
+    public Loader onCreateLoader(int id, final Bundle args) {
+        Resources resources = getResources();
+        Loader loader = (id == resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id)) ?
+                new TrailerLoaderTask(this, args, this, movieDbApiThreeKey) :
+                new ReviewLoaderTask(this, args, this, movieDbApiThreeKey);
+
+        return loader;
     }
 
     /**
@@ -228,12 +290,25 @@ public class MovieInfoActivity extends AppCompatActivity
      * could be found.
      *
      * @param loader
-     * @param trailers
+     * @param array
      */
     @Override
-    public void onLoadFinished(Loader<Trailer[]> loader, Trailer[] trailers) {
+    public void onLoadFinished(Loader loader, Object[] array) {
         afterNetworkRequest();
 
+        if (loader instanceof TrailerLoaderTask) {
+            finishLoadingTrailers((Trailer[]) array);
+        } else {
+            finishLoadingReviews((Review[]) array);
+        }
+    }
+
+    /**
+     * Specifies the operation to be performed after trailers have been loaded.
+     *
+     * @param trailers
+     */
+    private void finishLoadingTrailers(Trailer[] trailers) {
         if (trailers != null) {
             TrailerListAdapter adapter = (TrailerListAdapter) mTrailerListRecyclerView.getAdapter();
             adapter.setTrailers(trailers);
@@ -242,8 +317,24 @@ public class MovieInfoActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Specifies the operation to be performed after reviews have been loaded.
+     *
+     * @param reviews
+     */
+    private void finishLoadingReviews(Review[] reviews) {
+        //  TODO-  display the reviews
+        Log.d(getClass().getSimpleName(), "Reviews loaded but feature not implemented!");
+        if (reviews != null) {
+            ReviewListAdapter adapter = (ReviewListAdapter) mReviewListRecyclerView.getAdapter();
+            adapter.setReviews(reviews);
+        } else {
+            Toast.makeText(this, "No Reviews were found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
-    public void onLoaderReset(Loader<Trailer[]> loader) {
+    public void onLoaderReset(Loader<Object[]> loader) {
         //  intentionally left blank
     }
 

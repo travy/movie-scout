@@ -35,7 +35,7 @@ import java.net.URL;
 
 public class TrailerBuilder {
     /**
-     * Creates an arry of Trailers that are located on the movie servers for a particular Movie
+     * Creates an array of Trailers that are located on the movie servers for a particular Movie
      * instance.
      *
      * @param context
