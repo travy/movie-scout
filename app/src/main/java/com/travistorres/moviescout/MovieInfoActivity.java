@@ -137,6 +137,7 @@ public class MovieInfoActivity extends AppCompatActivity
         super.onDestroy();
 
         destroyMovieTrailerLoader();
+        destroyReviewLoader();
     }
 
     /**
@@ -151,17 +152,38 @@ public class MovieInfoActivity extends AppCompatActivity
     }
 
     /**
+     * Request that reviews be loaded for the movie.
+     *
+     * @param movieBundleExtraKey
+     * @param movie
+     */
+    private void loadMovieReviews(String movieBundleExtraKey, Movie movie) {
+        configureLoader(movieBundleExtraKey, movie, R.integer.movie_review_requester_loader_manager_id);
+    }
+
+    /**
      * Request the trailers from the server
      *
      * @param movieBundleExtraKey
      * @param movie
      */
     private void loadMovieTrailers(String movieBundleExtraKey, Movie movie) {
+        configureLoader(movieBundleExtraKey, movie, R.integer.movie_trailer_requester_loader_manager_id);
+    }
+
+    /**
+     * Loads a specified LoaderManager into its own execution thread.
+     *
+     * @param movieBundleExtraKey
+     * @param movie
+     * @param loaderManagerResourceId
+     */
+    private void configureLoader(String movieBundleExtraKey, Movie movie, int loaderManagerResourceId) {
         Bundle movieBundle = new Bundle();
         movieBundle.putParcelable(movieBundleExtraKey, movie);
 
         Resources resources = getResources();
-        int loaderKey = resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id);
+        int loaderKey = resources.getInteger(loaderManagerResourceId);
 
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<Trailer[]> loader = loaderManager.getLoader(loaderKey);
@@ -173,10 +195,27 @@ public class MovieInfoActivity extends AppCompatActivity
      *
      */
     private void destroyMovieTrailerLoader() {
+        destroyLoader(R.integer.movie_trailer_requester_loader_manager_id);
+    }
+
+    /**
+     * Destroys any threads used for loading of reviews.
+     *
+     */
+    private void destroyReviewLoader() {
+        destroyLoader(R.integer.movie_review_requester_loader_manager_id);
+    }
+
+    /**
+     * Instructs to destroy a specified LoaderManager instance.
+     *
+     * @param loaderManagerResourceId
+     */
+    private void destroyLoader(int loaderManagerResourceId) {
         Resources resources = getResources();
-        int trailerLoaderManagerId = resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id);
+        int loaderManagerId = resources.getInteger(loaderManagerResourceId);
         LoaderManager loaderManager = getSupportLoaderManager();
-        loaderManager.destroyLoader(trailerLoaderManagerId);
+        loaderManager.destroyLoader(loaderManagerId);
     }
 
     /**

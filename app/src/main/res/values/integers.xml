@@ -7,5 +7,6 @@
     <!--  Loader Manager Keys  -->
     <integer name="movie_db_requester_loader_manager_id">33554432</integer><!--  2^25 (My age as of now) -->
     <integer name="movie_trailer_requester_loader_manager_id">33554433</integer>
+    <integer name="movie_review_requester_loader_manager_id">33554434</integer>
 
 </resources>
