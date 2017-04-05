@@ -16,6 +16,7 @@ import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
+import com.travistorres.moviescout.utils.moviedb.loaders.MovieListLoader;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 import java.net.URL;
@@ -39,7 +40,7 @@ public class MovieDbRequester
     public final static String NO_NETWORK_ERROR_MESSAGE = "Unable to access Network Resource";
     public final String MOVIE_REQUEST_URL_EXTRA;
 
-    MovieDbNetworkingErrorHandler errorHandler;
+    private MovieDbNetworkingErrorHandler errorHandler;
     private FragmentActivity parentActivity;
     private MovieListAdapter movieAdapter;
     private int currentPage;
@@ -179,7 +180,7 @@ public class MovieDbRequester
      */
     @Override
     public Loader<Movie[]> onCreateLoader(int id, final Bundle args) {
-        return new MovieListLoader(this, args);
+        return new MovieListLoader(this, args, errorHandler);
     }
 
     /**

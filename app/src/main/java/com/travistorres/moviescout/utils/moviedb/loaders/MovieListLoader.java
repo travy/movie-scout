@@ -2,12 +2,15 @@
  * Copyright (C) 2017 Travis Anthony Torres
  */
 
-package com.travistorres.moviescout.utils.moviedb;
+package com.travistorres.moviescout.utils.moviedb.loaders;
 
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 import android.text.TextUtils;
 
+import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
+import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.networking.NetworkManager;
 import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
@@ -28,9 +31,10 @@ import java.net.URL;
  * @version April 2, 2017
  */
 
-class MovieListLoader extends AsyncTaskLoader<Movie[]> {
+public class MovieListLoader extends AsyncTaskLoader<Movie[]> {
     private Bundle args;
     private MovieDbRequester requester;
+    private MovieDbNetworkingErrorHandler errorHandler;
 
     /**
      * Provides a movie requester instance and a bundle for loading data from.
@@ -38,11 +42,12 @@ class MovieListLoader extends AsyncTaskLoader<Movie[]> {
      * @param movieRequester
      * @param bundle
      */
-    public MovieListLoader(MovieDbRequester movieRequester, Bundle bundle) {
+    public MovieListLoader(MovieDbRequester movieRequester, Bundle bundle, MovieDbNetworkingErrorHandler networkErrorHandler) {
         super(movieRequester.getContext());
 
         requester = movieRequester;
         args = bundle;
+        errorHandler = networkErrorHandler;
     }
 
     /**
@@ -59,7 +64,7 @@ class MovieListLoader extends AsyncTaskLoader<Movie[]> {
         }
 
         //  displays the loading wheel
-        requester.errorHandler.beforeNetworkRequest();
+        errorHandler.beforeNetworkRequest();
 
         //  forces content to display
         forceLoad();
@@ -100,13 +105,13 @@ class MovieListLoader extends AsyncTaskLoader<Movie[]> {
             e.printStackTrace();
         } catch (HttpPageNotFoundException e) {
             e.printStackTrace();
-            requester.errorHandler.onPageNotFound();
+            errorHandler.onPageNotFound();
         } catch (HttpUnauthorizedException e) {
             e.printStackTrace();
-            requester.errorHandler.onUnauthorizedAccess();
+            errorHandler.onUnauthorizedAccess();
         } catch (NetworkingException e) {
             e.printStackTrace();
-            requester.errorHandler.onGeneralNetworkingError();
+            errorHandler.onGeneralNetworkingError();
         }
 
         return movieList;
