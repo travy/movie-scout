@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * @version April 5, 2017
  */
 
-public class ReviewListAdapter extends RecyclerView.Adapter<ReviewItemViewHolder> {
+public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListItemViewHolder> {
     ArrayList<Review> reviewList;
 
     /**
@@ -37,12 +37,12 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewItemViewHolder
      * @return Review interface
      */
     @Override
-    public ReviewItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReviewListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View layout = layoutInflater.inflate(R.layout.movie_review_item, parent, false);
 
-        return new ReviewItemViewHolder(layout);
+        return new ReviewListItemViewHolder(layout);
     }
 
     /**
@@ -52,7 +52,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewItemViewHolder
      * @param position
      */
     @Override
-    public void onBindViewHolder(ReviewItemViewHolder reviewItemViewHolder, int position) {
+    public void onBindViewHolder(ReviewListItemViewHolder reviewItemViewHolder, int position) {
         Review review = reviewList.get(position);
 
         reviewItemViewHolder.mAuthorTextView.setText(review.author);
