@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 import android.text.TextUtils;
 
-import com.travistorres.moviescout.utils.moviedb.MovieDbParser;
+import com.travistorres.moviescout.utils.moviedb.builders.MovieDbParser;
 import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;

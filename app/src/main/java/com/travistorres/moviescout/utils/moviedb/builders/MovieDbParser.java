@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Travis Anthony Torres
  */
 
-package com.travistorres.moviescout.utils.moviedb;
+package com.travistorres.moviescout.utils.moviedb.builders;
 
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
@@ -18,6 +18,8 @@ import org.json.JSONObject;
  *
  * @author Travis Anthony Torres
  * @version February 15, 2017
+ *
+ * TODO-  Use the Builder pattern
  */
 
 public class MovieDbParser {
