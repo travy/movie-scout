@@ -4,7 +4,13 @@
 
 package com.travistorres.moviescout.utils.db.tables;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import com.travistorres.moviescout.utils.db.MoviesDatabase;
+import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 /**
  * MoviesTable
@@ -25,7 +31,6 @@ public final class MoviesTable {
         public static final String IS_ADULT_FILM = "is_adult_film";
         public static final String OVERVIEW = "overview";
         public static final String RELEASE_DATE = "release_date";
-        public static final String GENRE_IDS = "genre_ids";
         public static final String MOVIE_ID = "movie_id";
         public static final String ORIGINAL_TITLE = "original_title";
         public static final String TITLE = "title";
@@ -43,7 +48,6 @@ public final class MoviesTable {
                 Cols.IS_ADULT_FILM + ", " +
                 Cols.OVERVIEW + ", " +
                 Cols.RELEASE_DATE + ", " +
-                Cols.GENRE_IDS + ", " +
                 Cols.MOVIE_ID + ", " +
                 Cols.ORIGINAL_TITLE + ", " +
                 Cols.TITLE + ", " +
@@ -54,5 +58,50 @@ public final class MoviesTable {
                 Cols.VOTE_AVERAGE +
                 ")"
         );
+    }
+
+    private Context context;
+    private SQLiteDatabase connection;
+
+    public MoviesTable(Context mContext) {
+        this(mContext, true);
+    }
+
+    public MoviesTable(Context mContext, boolean readOnly) {
+        context = mContext;
+
+        MoviesDatabase db = new MoviesDatabase(context);
+        connection = (readOnly) ?
+                db.getReadableDatabase() :
+                db.getWritableDatabase();
+    }
+
+    public boolean save(Movie movie) {
+        ContentValues values = getContentValues(movie);
+
+        long res = connection.insert(NAME, null, values);
+
+        Log.d(getClass().getSimpleName(), "Saving Movie " + movie.title + ":  result is " + Long.toString(res));
+
+        return true;
+    }
+
+    private static ContentValues getContentValues(Movie movie) {
+        ContentValues cv = new ContentValues();
+        cv.put(Cols.POSTER_PATH, movie.posterPath);
+        cv.put(Cols.IS_ADULT_FILM, movie.isAdultFilm);
+        cv.put(Cols.OVERVIEW, movie.overview);
+        cv.put(Cols.RELEASE_DATE, movie.releaseDate);
+        //cv.put(Cols.GENRE_IDS, movie.genreIds);
+        cv.put(Cols.MOVIE_ID, movie.id);
+        cv.put(Cols.ORIGINAL_TITLE, movie.originalTitle);
+        cv.put(Cols.TITLE, movie.title);
+        cv.put(Cols.BACKDROP_PATH, movie.backdropPath);
+        cv.put(Cols.POPULARITY, movie.popularity);
+        cv.put(Cols.VOTE_COUNT, movie.voteCount);
+        cv.put(Cols.HAS_VIDEO, movie.hasVideo);
+        cv.put(Cols.VOTE_AVERAGE, movie.voteAverage);
+
+        return cv;
     }
 }

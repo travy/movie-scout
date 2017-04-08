@@ -19,11 +19,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.travistorres.moviescout.utils.db.MoviesDatabase;
+import com.travistorres.moviescout.utils.db.tables.MoviesTable;
 import com.travistorres.moviescout.utils.moviedb.adapters.ReviewListAdapter;
 import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
@@ -46,7 +48,7 @@ import java.net.URL;
  */
 
 public class MovieInfoActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener{
+        implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener {
     private final String LOG_TAG = getClass().getSimpleName();
 
     //  used for separating labels from their data
@@ -62,6 +64,7 @@ public class MovieInfoActivity extends AppCompatActivity
     private ImageView mBackdropImage;
     private RecyclerView mTrailerListRecyclerView;
     private RecyclerView mReviewListRecyclerView;
+    private Button mFavoriteMovieButton;
 
     private SQLiteDatabase mDatabase;
 
@@ -84,7 +87,8 @@ public class MovieInfoActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setupApiPreferences();
-        mDatabase = new MoviesDatabase(this).getWritableDatabase();
+        mDatabase = new MoviesDatabase(getApplicationContext()).getWritableDatabase();
+        Log.d(getClass().getSimpleName(), mDatabase.toString());
 
         //  load page views
         mMovieTitle = (TextView) findViewById(R.id.movie_title);
@@ -97,6 +101,7 @@ public class MovieInfoActivity extends AppCompatActivity
         mBackdropImage = (ImageView) findViewById(R.id.movie_backdrop_image_view);
         mTrailerListRecyclerView = (RecyclerView) findViewById(R.id.movie_trailers_list);
         mReviewListRecyclerView = (RecyclerView) findViewById(R.id.movie_review_list);
+        mFavoriteMovieButton = (Button) findViewById(R.id.favorite_movie_button);
 
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
@@ -105,6 +110,9 @@ public class MovieInfoActivity extends AppCompatActivity
         Intent intent = getIntent();
         if (intent.hasExtra(selectedMovieExtraKey)) {
             Movie movie = (Movie) intent.getParcelableExtra(selectedMovieExtraKey);
+
+            MoviesTable moviesTable = new MoviesTable(getApplicationContext(), false);
+            moviesTable.save(movie);
 
             //  show the title in the app bar
             CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
