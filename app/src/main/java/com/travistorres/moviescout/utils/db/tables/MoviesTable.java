@@ -86,8 +86,6 @@ public final class MoviesTable {
 
         long res = connection.insert(NAME, null, values);
 
-        Log.d(getClass().getSimpleName(), "Saving Movie " + movie.title + ":  result is " + Long.toString(res));
-
         return true;
     }
 
