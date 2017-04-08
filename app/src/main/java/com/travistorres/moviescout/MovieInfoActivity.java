@@ -35,6 +35,7 @@ import com.travistorres.moviescout.utils.moviedb.loaders.TrailerLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
+import com.travistorres.moviescout.utils.widget.buttons.FavoriteButton;
 
 import java.net.URL;
 
@@ -100,6 +101,9 @@ public class MovieInfoActivity extends AppCompatActivity
         mTrailerListRecyclerView = (RecyclerView) findViewById(R.id.movie_trailers_list);
         mReviewListRecyclerView = (RecyclerView) findViewById(R.id.movie_review_list);
         mFavoriteMovieButton = (Button) findViewById(R.id.favorite_movie_button);
+
+        //  Sets up the behavior of the favorites button
+        FavoriteButton favState = new FavoriteButton(mFavoriteMovieButton, false);
 
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
