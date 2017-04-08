@@ -87,8 +87,6 @@ public class MovieInfoActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setupApiPreferences();
-        mDatabase = new MoviesDatabase(getApplicationContext()).getWritableDatabase();
-        Log.d(getClass().getSimpleName(), mDatabase.toString());
 
         //  load page views
         mMovieTitle = (TextView) findViewById(R.id.movie_title);
@@ -110,9 +108,6 @@ public class MovieInfoActivity extends AppCompatActivity
         Intent intent = getIntent();
         if (intent.hasExtra(selectedMovieExtraKey)) {
             Movie movie = (Movie) intent.getParcelableExtra(selectedMovieExtraKey);
-
-            MoviesTable moviesTable = new MoviesTable(getApplicationContext(), false);
-            moviesTable.save(movie);
 
             //  show the title in the app bar
             CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);

@@ -67,6 +67,11 @@ public final class MoviesTable {
         this(mContext, true);
     }
 
+    public MoviesTable(Context mContext, SQLiteDatabase database) {
+        context = mContext;
+        connection = database;
+    }
+
     public MoviesTable(Context mContext, boolean readOnly) {
         context = mContext;
 
@@ -103,5 +108,9 @@ public final class MoviesTable {
         cv.put(Cols.VOTE_AVERAGE, movie.voteAverage);
 
         return cv;
+    }
+
+    public SQLiteDatabase getDatabase() {
+        return connection;
     }
 }
