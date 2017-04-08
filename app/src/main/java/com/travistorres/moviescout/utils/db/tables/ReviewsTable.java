@@ -4,7 +4,11 @@
 
 package com.travistorres.moviescout.utils.db.tables;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.travistorres.moviescout.utils.moviedb.models.Review;
 
 /**
  * ReviewsTable
@@ -16,8 +20,40 @@ import android.database.sqlite.SQLiteDatabase;
  * @version April 5, 2017
  */
 
-public final class ReviewsTable {
+public final class ReviewsTable extends BaseTable {
     public static final String NAME = "reviews";
+
+    public ReviewsTable(Context mContext) {
+        super(mContext);
+
+        setTableName(NAME);
+    }
+
+    public ReviewsTable(Context mContext, SQLiteDatabase database) {
+        super(mContext, database);
+
+        setTableName(NAME);
+    }
+
+    public ReviewsTable(Context mContext, boolean readOnly) {
+        super(mContext, readOnly);
+
+        setTableName(NAME);
+    }
+
+    @Override
+    protected ContentValues getContentValues(Object data) {
+        Review review = (Review) data;
+
+        ContentValues cv = new ContentValues();
+        cv.put(Cols.MOVIE_ID, review.movieId);
+        cv.put(Cols.ID, review.id);
+        cv.put(Cols.AUTHOR, review.author);
+        cv.put(Cols.CONTENT, review.content);
+        cv.put(Cols.REVIEW_URL, review.url);;
+
+        return cv;
+    }
 
     public static final class Cols {
         public static final String MOVIE_ID = "movie_id";   //  identifiers id of movie in apps database

@@ -23,7 +23,7 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  * @version April 5, 2017
  */
 
-public final class MoviesTable {
+public final class MoviesTable extends BaseTable {
     public static final String NAME = "movies";
 
     public static final class Cols {
@@ -60,36 +60,28 @@ public final class MoviesTable {
         );
     }
 
-    private Context context;
-    private SQLiteDatabase connection;
-
     public MoviesTable(Context mContext) {
-        this(mContext, true);
+        super(mContext);
+
+        setTableName(NAME);
     }
 
     public MoviesTable(Context mContext, SQLiteDatabase database) {
-        context = mContext;
-        connection = database;
+        super(mContext, database);
+
+        setTableName(NAME);
     }
 
     public MoviesTable(Context mContext, boolean readOnly) {
-        context = mContext;
+        super(mContext, readOnly);
 
-        MoviesDatabase db = new MoviesDatabase(context);
-        connection = (readOnly) ?
-                db.getReadableDatabase() :
-                db.getWritableDatabase();
+        setTableName(NAME);
     }
 
-    public boolean save(Movie movie) {
-        ContentValues values = getContentValues(movie);
+    @Override
+    protected ContentValues getContentValues(Object object) {
+        Movie movie = (Movie) object;
 
-        long res = connection.insert(NAME, null, values);
-
-        return true;
-    }
-
-    private static ContentValues getContentValues(Movie movie) {
         ContentValues cv = new ContentValues();
         cv.put(Cols.POSTER_PATH, movie.posterPath);
         cv.put(Cols.IS_ADULT_FILM, movie.isAdultFilm);
@@ -106,9 +98,5 @@ public final class MoviesTable {
         cv.put(Cols.VOTE_AVERAGE, movie.voteAverage);
 
         return cv;
-    }
-
-    public SQLiteDatabase getDatabase() {
-        return connection;
     }
 }

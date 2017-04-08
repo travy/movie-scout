@@ -4,7 +4,11 @@
 
 package com.travistorres.moviescout.utils.db.tables;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 /**
  * TrailersTable
@@ -16,8 +20,43 @@ import android.database.sqlite.SQLiteDatabase;
  * @version April 5, 2017
  */
 
-public final class TrailersTable {
+public final class TrailersTable extends BaseTable {
     public static final String NAME = "trailers";
+
+    public TrailersTable(Context mContext) {
+        super(mContext);
+
+        setTableName(NAME);
+    }
+
+    public TrailersTable(Context mContext, SQLiteDatabase database) {
+        super(mContext, database);
+
+        setTableName(NAME);
+    }
+
+    public TrailersTable(Context mContext, boolean readOnly) {
+        super(mContext, readOnly);
+
+        setTableName(NAME);
+    }
+
+    @Override
+    protected ContentValues getContentValues(Object data) {
+        Trailer trailer = (Trailer) data;
+
+        ContentValues cv = new ContentValues();
+        cv.put(Cols.KEY, trailer.key);
+        cv.put(Cols.ISO_639_1, trailer.iso_639_1);
+        cv.put(Cols.ISO_3166_1, trailer.iso_3166_1);
+        //cv.put(Cols.MOVIE_ID, trailer.movie_id);
+        cv.put(Cols.NAME, trailer.name);
+        cv.put(Cols.SITE, trailer.site);
+        cv.put(Cols.SIZE, trailer.size);
+        cv.put(Cols.TYPE, trailer.type);
+
+        return cv;
+    }
 
     public static final class Cols {
         public static final String MOVIE_ID = "movie_id";   //  id within the movie-scout database
