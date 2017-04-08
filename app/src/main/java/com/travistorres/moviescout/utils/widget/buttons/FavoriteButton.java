@@ -7,6 +7,8 @@ package com.travistorres.moviescout.utils.widget.buttons;
 import android.view.View;
 import android.widget.Button;
 
+import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClicked;
+
 /**
  * FavoriteButton
  *
@@ -20,6 +22,7 @@ import android.widget.Button;
 public class FavoriteButton implements View.OnClickListener {
     private boolean isFavorite;
     private Button buttonView;
+    private OnFavoriteButtonClicked onClickOperation;
 
     /**
      * Specifies the Button view object that will represent a Favorite within the system.  The
@@ -27,10 +30,12 @@ public class FavoriteButton implements View.OnClickListener {
      *
      * @param button
      * @param isFavorite
+     * @param clickHandler
      */
-    public FavoriteButton(Button button, boolean isFavorite) {
+    public FavoriteButton(Button button, boolean isFavorite, OnFavoriteButtonClicked clickHandler) {
         buttonView = button;
         buttonView.setOnClickListener(this);
+        onClickOperation = clickHandler;
 
         setIsFavorite(isFavorite);
     }
@@ -75,6 +80,7 @@ public class FavoriteButton implements View.OnClickListener {
      */
     protected void onSetAsFavorite() {
         buttonView.setText("Favorite");
+        onClickOperation.onFavorited(buttonView);
     }
 
     /**
@@ -83,5 +89,6 @@ public class FavoriteButton implements View.OnClickListener {
      */
     protected void onSetAsNotFavorite() {
         buttonView.setText("Unfavorite");
+        onClickOperation.onUnfavorited(buttonView);
     }
 }

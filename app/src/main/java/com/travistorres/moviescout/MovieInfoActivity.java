@@ -36,6 +36,7 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 import com.travistorres.moviescout.utils.widget.buttons.FavoriteButton;
+import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClicked;
 
 import java.net.URL;
 
@@ -49,7 +50,7 @@ import java.net.URL;
  */
 
 public class MovieInfoActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener {
+        implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener, OnFavoriteButtonClicked {
     private final String LOG_TAG = getClass().getSimpleName();
 
     //  used for separating labels from their data
@@ -103,7 +104,7 @@ public class MovieInfoActivity extends AppCompatActivity
         mFavoriteMovieButton = (Button) findViewById(R.id.favorite_movie_button);
 
         //  Sets up the behavior of the favorites button
-        FavoriteButton favState = new FavoriteButton(mFavoriteMovieButton, false);
+        FavoriteButton favState = new FavoriteButton(mFavoriteMovieButton, false, this);
 
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
@@ -388,5 +389,26 @@ public class MovieInfoActivity extends AppCompatActivity
 
         Intent playTrailerIntent = new Intent(Intent.ACTION_VIEW, trailerUri);
         startActivity(playTrailerIntent);
+    }
+
+    /**
+     * Will add the Movie and it's associated Reviews and Trailers to the favorites database where
+     * it will be able to be accessed offline at any time.
+     *
+     * @param buttonView
+     */
+    @Override
+    public void onFavorited(Button buttonView) {
+        Toast.makeText(this, "Movie has been favorited", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Removes the selected Movie and its associated fields from the favorites database.
+     *
+     * @param buttonView
+     */
+    @Override
+    public void onUnfavorited(Button buttonView) {
+        Toast.makeText(this, "Unfavorite", Toast.LENGTH_SHORT).show();
     }
 }
