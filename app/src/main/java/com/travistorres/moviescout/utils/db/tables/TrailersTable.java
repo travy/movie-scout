@@ -25,24 +25,48 @@ import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 public final class TrailersTable extends BaseTable {
     public static final String NAME = "trailers";
 
+    /**
+     * Constructs a Table model.
+     *
+     * @param mContext
+     */
     public TrailersTable(Context mContext) {
         super(mContext);
 
         setTableName(NAME);
     }
 
+    /**
+     * Constructs a Table model.
+     *
+     * @param mContext
+     * @param database
+     */
     public TrailersTable(Context mContext, SQLiteDatabase database) {
         super(mContext, database);
 
         setTableName(NAME);
     }
 
+    /**
+     * Constructs a Table model
+     *
+     * @param mContext
+     * @param readOnly
+     */
     public TrailersTable(Context mContext, boolean readOnly) {
         super(mContext, readOnly);
 
         setTableName(NAME);
     }
 
+    /**
+     * Specifies how to convert the model to the database.
+     *
+     * @param data
+     *
+     * @return content values for storing into the database.
+     */
     @Override
     protected ContentValues getContentValues(Object data) {
         Trailer trailer = (Trailer) data;
@@ -60,6 +84,13 @@ public final class TrailersTable extends BaseTable {
         return cv;
     }
 
+    /**
+     * Determines if the database has a trailer.
+     *
+     * @param data
+     *
+     * @return `true` if the trailer is in the database and false otherwise
+     */
     @Override
     public boolean contains(Object data) {
         Trailer trailer = (Trailer) data;
@@ -71,6 +102,13 @@ public final class TrailersTable extends BaseTable {
         return doesExistsInDatabase(whereClause, whereArgs);
     }
 
+    /**
+     * Removes a specific field from the database.
+     *
+     * @param data
+     *
+     * @return Number of rows deleted.
+     */
     @Override
     public int delete(Object data) {
         Trailer trailer = (Trailer) data;
@@ -82,6 +120,13 @@ public final class TrailersTable extends BaseTable {
         return deleteFromDatabase(whereClause, whereArgs);
     }
 
+    /**
+     * Deletes all trailers associated to a specified movie.
+     *
+     * @param movieId
+     *
+     * @return Number of rows deleted
+     */
     public int deleteAssociatedToMovie(long movieId) {
         String whereClause = Cols.MOVIE_ID + " = ?";
         String[] whereArgs = new String[] {
@@ -91,6 +136,10 @@ public final class TrailersTable extends BaseTable {
         return deleteFromDatabase(whereClause, whereArgs);
     }
 
+    /**
+     * Specifies the tables columns.
+     *
+     */
     public static final class Cols {
         public static final String MOVIE_ID = "movie_id";   //  id within the movie-scout database
         public static final String ISO_639_1 = "iso_639_1";
@@ -102,6 +151,11 @@ public final class TrailersTable extends BaseTable {
         public static final String TYPE = "type";
     }
 
+    /**
+     * Creates a new table.
+     *
+     * @param db
+     */
     public static void createTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + NAME + "(" +
                 " _id INTEGER PRIMARY KEY AUTOINCREMENT, " +

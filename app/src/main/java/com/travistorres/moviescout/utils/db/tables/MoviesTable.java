@@ -6,12 +6,9 @@ package com.travistorres.moviescout.utils.db.tables;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import com.travistorres.moviescout.utils.db.MoviesDatabase;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 /**
@@ -28,6 +25,10 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
 public final class MoviesTable extends BaseTable {
     public static final String NAME = "movies";
 
+    /**
+     * Specifies the tables columns.
+     *
+     */
     public static final class Cols {
         public static final String POSTER_PATH = "poster_path";
         public static final String IS_ADULT_FILM = "is_adult_film";
@@ -43,6 +44,11 @@ public final class MoviesTable extends BaseTable {
         public static final String VOTE_AVERAGE = "vote_average";
     }
 
+    /**
+     * Creates the database table.
+     *
+     * @param db
+     */
     public static void createTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + NAME + "(" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -62,24 +68,48 @@ public final class MoviesTable extends BaseTable {
         );
     }
 
+    /**
+     * Constructs a Table model.
+     *
+     * @param mContext
+     */
     public MoviesTable(Context mContext) {
         super(mContext);
 
         setTableName(NAME);
     }
 
+    /**
+     * Constructs a Table model.
+     *
+     * @param mContext
+     * @param database
+     */
     public MoviesTable(Context mContext, SQLiteDatabase database) {
         super(mContext, database);
 
         setTableName(NAME);
     }
 
+    /**
+     * Constructs a Table model.
+     *
+     * @param mContext
+     * @param readOnly
+     */
     public MoviesTable(Context mContext, boolean readOnly) {
         super(mContext, readOnly);
 
         setTableName(NAME);
     }
 
+    /**
+     * Maps a movie model to the fields in the database.
+     *
+     * @param object
+     *
+     * @return mapping content values.
+     */
     @Override
     protected ContentValues getContentValues(Object object) {
         Movie movie = (Movie) object;
@@ -102,6 +132,13 @@ public final class MoviesTable extends BaseTable {
         return cv;
     }
 
+    /**
+     * Determines if a movie exist in the database.
+     *
+     * @param data
+     *
+     * @return `true` if the movie exist in the database and `false` otherwise.
+     */
     @Override
     public boolean contains(Object data) {
         Movie movie = (Movie) data;
@@ -113,6 +150,13 @@ public final class MoviesTable extends BaseTable {
         return doesExistsInDatabase(whereClause, whereArgs);
     }
 
+    /**
+     * Removes a movie from the database.
+     *
+     * @param data
+     *
+     * @return Number of rows removed
+     */
     @Override
     public int delete(Object data) {
         Movie movie = (Movie) data;
