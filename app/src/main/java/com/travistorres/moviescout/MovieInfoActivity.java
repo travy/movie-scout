@@ -457,9 +457,16 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     @Override
     public void onFavorited(Button buttonView) {
-        String selectedMovieKey = getString(R.string.selected_movie_extra_key);
         Bundle selectedMovieBundle = new Bundle();
+
+        //  stores the selected movie into the bundle
+        String selectedMovieKey = getString(R.string.selected_movie_extra_key);
         selectedMovieBundle.putParcelable(selectedMovieKey, selectedMovie);
+
+        //  adds all reviews into the bundle
+        String moviesReviewsKey = getString(R.string.selected_movies_reviews_extra);
+        Review[] reviews = getReviews();
+        selectedMovieBundle.putParcelableArray(moviesReviewsKey, reviews);
 
         configureLoader(selectedMovieBundle, R.integer.set_movie_favorite_loader_manager_id);
 /*

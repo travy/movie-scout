@@ -10,6 +10,7 @@ import android.support.v4.content.AsyncTaskLoader;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
+import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.widget.FavoritesManager;
 
 /**
@@ -63,7 +64,9 @@ public class SetFavoriteMovieLoaderTask extends AsyncTaskLoader<Boolean[]> {
             FavoritesManager favoritesManager = new FavoritesManager(context);
             boolean isFavorite = favoritesManager.isFavorite(movie);
             if (!isFavorite) {
-                favoritesManager.addFavorite(movie, null, null);
+                Review[] reviews = getReviews();
+
+                favoritesManager.addFavorite(movie, reviews, null);
             }
 
             results = new Boolean[] {
@@ -72,5 +75,33 @@ public class SetFavoriteMovieLoaderTask extends AsyncTaskLoader<Boolean[]> {
         }
 
         return results;
+    }
+
+    /**
+     * Retrieves the movies reviews if any.
+     *
+     * @return null or an array of reviews.
+     */
+    private Review[] getReviews() {
+        return (Review[]) unloadParcel(R.string.selected_movies_reviews_extra);
+    }
+
+    /**
+     * Unpackages an array of Parcelables from the bundle.
+     *
+     * @param bundleExtraKey
+     *
+     * @return Array composed of objects stored in the bundle.
+     */
+    private Object[] unloadParcel(int bundleExtraKey) {
+        Object[] data = null;
+
+        Context context = getContext();
+        String bundleKey = context.getString(bundleExtraKey);
+        if (movieBundle.containsKey(bundleKey)) {
+            data = movieBundle.getParcelableArray(bundleKey);
+        }
+
+        return data;
     }
 }
