@@ -39,6 +39,7 @@ import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 import com.travistorres.moviescout.utils.widget.FavoritesManager;
 import com.travistorres.moviescout.utils.widget.buttons.FavoriteButton;
+import com.travistorres.moviescout.utils.widget.interfaces.IsMovieFavoritedListener;
 import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClicked;
 
 import java.net.URL;
@@ -53,7 +54,7 @@ import java.net.URL;
  */
 
 public class MovieInfoActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener, OnFavoriteButtonClicked {
+        implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener, OnFavoriteButtonClicked, IsMovieFavoritedListener {
     private final String LOG_TAG = getClass().getSimpleName();
 
     //  used for separating labels from their data
@@ -74,6 +75,7 @@ public class MovieInfoActivity extends AppCompatActivity
     private Button mFavoriteMovieButton;
     private ProgressBar mProgressBar;
 
+    private FavoriteButton favoritesButton;
     private FavoritesManager favorites;
     private String movieDbApiThreeKey;
 
@@ -108,6 +110,7 @@ public class MovieInfoActivity extends AppCompatActivity
         mTrailerListRecyclerView = (RecyclerView) findViewById(R.id.movie_trailers_list);
         mReviewListRecyclerView = (RecyclerView) findViewById(R.id.movie_review_list);
         mFavoriteMovieButton = (Button) findViewById(R.id.favorite_movie_button);
+        mFavoriteMovieButton.setVisibility(View.INVISIBLE);
         mProgressBar = (ProgressBar) findViewById(R.id.loading_indicator_pb);
 
         //  retrieves the key for identifying the selected movie
@@ -117,10 +120,6 @@ public class MovieInfoActivity extends AppCompatActivity
         Intent intent = getIntent();
         if (intent.hasExtra(selectedMovieExtraKey)) {
             selectedMovie = intent.getParcelableExtra(selectedMovieExtraKey);
-
-            //  Sets up the behavior of the favorites button
-            boolean isFavorite = favorites.isFavorite(selectedMovie);
-            FavoriteButton favState = new FavoriteButton(mFavoriteMovieButton, isFavorite, this);
 
             //  show the title in the app bar
             CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -460,5 +459,18 @@ public class MovieInfoActivity extends AppCompatActivity
             favorites.removeFavorite(selectedMovie);
             Toast.makeText(this, "Removed Favorite", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Displays the favorite button once it has been determined if the movie has been favorited
+     * or not.
+     *
+     * @param movie
+     * @param isFavorite
+     */
+    @Override
+    public void onDeterminedIsMovieFavorited(Movie movie, boolean isFavorite) {
+        favoritesButton = new FavoriteButton(mFavoriteMovieButton, isFavorite, this);
+        mFavoriteMovieButton.setVisibility(View.VISIBLE);
     }
 }
