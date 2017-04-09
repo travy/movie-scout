@@ -102,31 +102,25 @@ public final class MoviesTable extends BaseTable {
         return cv;
     }
 
+    @Override
     public boolean contains(Object data) {
         Movie movie = (Movie) data;
-
         String whereClause = Cols.MOVIE_ID + " = ?";
         String[] whereArgs = new String[] {
                 Integer.toString(movie.id)
         };
 
-        Cursor cursor = connection.query(NAME, null, whereClause, whereArgs, null, null, null);
-        int count = cursor.getCount();
-        cursor.close();
-
-        return count > 0;
+        return doesExistsInDatabase(whereClause, whereArgs);
     }
 
+    @Override
     public int delete(Object data) {
         Movie movie = (Movie) data;
-
         String whereClause = Cols.MOVIE_ID + " = ?";
         String[] whereArgs = new String[] {
             Integer.toString(movie.id)
         };
 
-        int res = connection.delete(NAME, whereClause, whereArgs);
-
-        return res;
+        return deleteFromDatabase(whereClause, whereArgs);
     }
 }

@@ -6,8 +6,10 @@ package com.travistorres.moviescout.utils.db.tables;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 /**
@@ -56,6 +58,28 @@ public final class TrailersTable extends BaseTable {
         cv.put(Cols.TYPE, trailer.type);
 
         return cv;
+    }
+
+    @Override
+    public boolean contains(Object data) {
+        Trailer trailer = (Trailer) data;
+        String whereClause = Cols.KEY + " = ?";
+        String[] whereArgs = new String[] {
+            trailer.key
+        };
+
+        return doesExistsInDatabase(whereClause, whereArgs);
+    }
+
+    @Override
+    public int delete(Object data) {
+        Trailer trailer = (Trailer) data;
+        String whereClause = Cols.KEY + " = ?";
+        String[] whereArgs = new String[] {
+            trailer.key
+        };
+
+        return deleteFromDatabase(whereClause, whereArgs);
     }
 
     public static final class Cols {

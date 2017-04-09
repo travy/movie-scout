@@ -6,6 +6,7 @@ package com.travistorres.moviescout.utils.db.tables;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.travistorres.moviescout.utils.moviedb.models.Review;
@@ -53,6 +54,28 @@ public final class ReviewsTable extends BaseTable {
         cv.put(Cols.REVIEW_URL, review.url);;
 
         return cv;
+    }
+
+    @Override
+    public boolean contains(Object data) {
+        Review review = (Review) data;
+        String whereClause = Cols.ID + " = ?";
+        String[] whereArgs = new String[] {
+            review.id
+        };
+
+        return doesExistsInDatabase(whereClause, whereArgs);
+    }
+
+    @Override
+    public int delete(Object data) {
+        Review review = (Review) data;
+        String whereClause = Cols.ID + " = ?";
+        String[] whereArgs = new String[] {
+            review.id
+        };
+
+        return deleteFromDatabase(whereClause, whereArgs);
     }
 
     public static final class Cols {

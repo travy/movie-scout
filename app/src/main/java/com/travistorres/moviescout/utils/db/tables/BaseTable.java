@@ -6,6 +6,7 @@ package com.travistorres.moviescout.utils.db.tables;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.travistorres.moviescout.utils.db.MoviesDatabase;
@@ -106,6 +107,37 @@ public abstract class BaseTable {
     }
 
     /**
+     * Deletes a database field from the system.
+     *
+     * @param whereClause
+     * @param whereArgs
+     *
+     * @return
+     */
+    protected final int deleteFromDatabase(String whereClause, String[] whereArgs) {
+        String tableName = getTableName();
+
+        return connection.delete(tableName, whereClause, whereArgs);
+    }
+
+    /**
+     * Determines if there are rows in the database with the specified data fields.
+     *
+     * @param whereClause
+     * @param whereArgs
+     *
+     * @return `true` if fields exist and `false` otherwise.
+     */
+    protected final boolean doesExistsInDatabase(String whereClause, String[] whereArgs) {
+        String tableName = getTableName();
+        Cursor cursor = connection.query(tableName, null, whereClause, whereArgs, null, null, null);
+        int count = cursor.getCount();
+        cursor.close();
+
+        return count > 0;
+    }
+
+    /**
      * Uses a specified `ContentValues` object to save information into the Database.
      *
      * @param data
@@ -124,4 +156,22 @@ public abstract class BaseTable {
      * @return
      */
     protected abstract ContentValues getContentValues(Object data);
+
+    /**
+     * Determines if a given object is contained within the table.
+     *
+     * @param data
+     *
+     * @return `true` if the object is contained in the database and `false` otherwise.
+     */
+    public abstract boolean contains(Object data);
+
+    /**
+     * Removes a given object from the database.
+     *
+     * @param data
+     *
+     * @return
+     */
+    public abstract int delete(Object data);
 }
