@@ -6,6 +6,8 @@ package com.travistorres.moviescout.utils.db.tables;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -88,7 +90,7 @@ public final class MoviesTable extends BaseTable {
         cv.put(Cols.OVERVIEW, movie.overview);
         cv.put(Cols.RELEASE_DATE, movie.releaseDate);
         //cv.put(Cols.GENRE_IDS, movie.genreIds);
-        cv.put(Cols.MOVIE_ID, movie.id);
+        cv.put(Cols.MOVIE_ID, Integer.toString(movie.id));
         cv.put(Cols.ORIGINAL_TITLE, movie.originalTitle);
         cv.put(Cols.TITLE, movie.title);
         cv.put(Cols.BACKDROP_PATH, movie.backdropPath);
@@ -98,5 +100,27 @@ public final class MoviesTable extends BaseTable {
         cv.put(Cols.VOTE_AVERAGE, movie.voteAverage);
 
         return cv;
+    }
+
+    /**
+     * Determines if the specified movie has been favorited.
+     *
+     * @param movie
+     *
+     * @return `true` if favorited and `false` otherwise.
+     */
+    public boolean isFavorite(Movie movie) {
+        String whereClause = Cols.MOVIE_ID + " = ?";
+        String[] whereArgs = new String[] {
+            Integer.toString(movie.id)
+        };
+
+        Cursor cursor = connection.query(NAME, null, whereClause, whereArgs, null, null, null);
+        int count = cursor.getCount();
+        cursor.close();
+
+        Log.d(getClass().getSimpleName(), "Count:  " + Integer.toString(count));
+
+        return count > 0;
     }
 }

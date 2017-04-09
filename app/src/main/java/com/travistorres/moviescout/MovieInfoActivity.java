@@ -103,9 +103,6 @@ public class MovieInfoActivity extends AppCompatActivity
         mReviewListRecyclerView = (RecyclerView) findViewById(R.id.movie_review_list);
         mFavoriteMovieButton = (Button) findViewById(R.id.favorite_movie_button);
 
-        //  Sets up the behavior of the favorites button
-        FavoriteButton favState = new FavoriteButton(mFavoriteMovieButton, false, this);
-
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
 
@@ -113,6 +110,11 @@ public class MovieInfoActivity extends AppCompatActivity
         Intent intent = getIntent();
         if (intent.hasExtra(selectedMovieExtraKey)) {
             Movie movie = (Movie) intent.getParcelableExtra(selectedMovieExtraKey);
+
+            //  Sets up the behavior of the favorites button
+            MoviesTable moviesTable = new MoviesTable(getApplicationContext(), false);
+            boolean isFavorite = moviesTable.isFavorite(movie);
+            FavoriteButton favState = new FavoriteButton(mFavoriteMovieButton, isFavorite, this);
 
             //  show the title in the app bar
             CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);

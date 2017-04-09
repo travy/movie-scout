@@ -79,7 +79,7 @@ public class FavoriteButton implements View.OnClickListener {
      *
      */
     protected void onSetAsFavorite() {
-        buttonView.setText("Favorite");
+        buttonView.setText("Unfavorite");
         onClickOperation.onFavorited(buttonView);
     }
 
@@ -88,7 +88,7 @@ public class FavoriteButton implements View.OnClickListener {
      *
      */
     protected void onSetAsNotFavorite() {
-        buttonView.setText("Unfavorite");
+        buttonView.setText("Favorite");
         onClickOperation.onUnfavorited(buttonView);
     }
 }
