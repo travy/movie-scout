@@ -28,6 +28,7 @@ public class Trailer {
     public String site;
     public String size;
     public String type;
+    public String movieId;
 
     /**
      * Retrieves the youtube URL that will allow for viewing of the trailer.

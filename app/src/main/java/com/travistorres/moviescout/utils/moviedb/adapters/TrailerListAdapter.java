@@ -42,6 +42,21 @@ public class TrailerListAdapter extends RecyclerView.Adapter<TrailerListItemView
     }
 
     /**
+     * Retrieves an array of Trailers that have been looked up.
+     *
+     * @return Trailer[] An array of previously loaded trailers.
+     */
+    public Trailer[] getTrailers() {
+        if (trailerList == null) {
+            return null;
+        }
+
+        int trailerCount = trailerList.size();
+
+        return trailerList.toArray(new Trailer[trailerCount]);
+    }
+
+    /**
      * Instantiates a new TrailerListItemViewHolder for use by a supplied Trailer object.
      *
      * @param parent

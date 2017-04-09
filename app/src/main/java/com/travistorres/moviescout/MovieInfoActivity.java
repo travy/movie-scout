@@ -405,9 +405,32 @@ public class MovieInfoActivity extends AppCompatActivity
     public void onFavorited(Button buttonView) {
         boolean isFavorite = favorites.isFavorite(selectedMovie);
         if (!isFavorite) {
-            favorites.addFavorite(selectedMovie);
+            Trailer[] trailers = getTrailers();
+            Review[] reviews = getReviews();
+
+            favorites.addFavorite(selectedMovie, reviews, trailers);
             Toast.makeText(this, "Added Favorite", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Retrieves all trailers that have been loaded.
+     *
+     * @return trailers for the selected movies
+     */
+    private Trailer[] getTrailers() {
+        TrailerListAdapter adapter = (TrailerListAdapter) mTrailerListRecyclerView.getAdapter();
+        return adapter.getTrailers();
+    }
+
+    /**
+     * Retrieves all reviews for the selected movie.
+     *
+     * @return reviews for the selected movie
+     */
+    private Review[] getReviews() {
+        ReviewListAdapter adapter = (ReviewListAdapter) mReviewListRecyclerView.getAdapter();
+        return adapter.getReviews();
     }
 
     /**

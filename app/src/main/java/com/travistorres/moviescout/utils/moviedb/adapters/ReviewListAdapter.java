@@ -46,6 +46,21 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListItemViewHo
     }
 
     /**
+     * Retrieves an array of Reviews that have been loaded into the adapter.
+     *
+     * @return Review[] An array of previously loaded reviews.
+     */
+    public Review[] getReviews() {
+        if (reviewList == null) {
+            return null;
+        }
+
+        int reviewCount = reviewList.size();
+
+        return reviewList.toArray(new Review[reviewCount]);
+    }
+
+    /**
      * Binds the contents of the Review onto the user interface.
      *
      * @param reviewItemViewHolder

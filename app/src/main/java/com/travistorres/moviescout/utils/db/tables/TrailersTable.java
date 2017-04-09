@@ -51,7 +51,7 @@ public final class TrailersTable extends BaseTable {
         cv.put(Cols.KEY, trailer.key);
         cv.put(Cols.ISO_639_1, trailer.iso_639_1);
         cv.put(Cols.ISO_3166_1, trailer.iso_3166_1);
-        //cv.put(Cols.MOVIE_ID, trailer.movie_id);
+        cv.put(Cols.MOVIE_ID, trailer.movieId);
         cv.put(Cols.NAME, trailer.name);
         cv.put(Cols.SITE, trailer.site);
         cv.put(Cols.SIZE, trailer.size);

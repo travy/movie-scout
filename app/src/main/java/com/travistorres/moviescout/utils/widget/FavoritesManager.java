@@ -12,6 +12,8 @@ import com.travistorres.moviescout.utils.db.tables.MoviesTable;
 import com.travistorres.moviescout.utils.db.tables.ReviewsTable;
 import com.travistorres.moviescout.utils.db.tables.TrailersTable;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
+import com.travistorres.moviescout.utils.moviedb.models.Review;
+import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 /**
  * FavoritesManager
@@ -63,10 +65,66 @@ public class FavoritesManager {
      *
      * @param movie
      */
-    public void addFavorite(Movie movie) {
+    public void addFavorite(Movie movie, Review[] reviews, Trailer[] trailers) {
         if (!isFavorite(movie)) {
-            movieTable.save(movie);
+            long id = movieTable.save(movie);
+            saveReviewsWithMovieId(reviews, id);
+            saveTrailersWithMovieId(trailers, id);
         }
+    }
+
+    /**
+     * Saves a set of Trailer which is associated to a movie.
+     *
+     * @param trailers
+     * @param movieId
+     */
+    public void saveTrailersWithMovieId(Trailer[] trailers, long movieId) {
+        if (trailers != null) {
+            for (int i = 0; i < trailers.length; ++i) {
+                saveTrailerWithMovieId(trailers[i], movieId);
+            }
+        }
+    }
+
+    /**
+     * Adds a new Trailer to the database which is associated to a specific Movie.
+     *
+     * @param trailer
+     * @param movieId
+     *
+     * @return The id of the row in the database.
+     */
+    public long saveTrailerWithMovieId(Trailer trailer, long movieId) {
+        trailer.movieId = Long.toString(movieId);
+        return trailersTable.save(trailer);
+    }
+
+    /**
+     * Saves a set of reviews into the database with the same movie item as its association.
+     *
+     * @param reviews
+     * @param movieId
+     */
+    public void saveReviewsWithMovieId(Review[] reviews, long movieId) {
+        if (reviews != null) {
+            for (int i = 0; i < reviews.length; ++i) {
+                saveReviewWithMovieId(reviews[i], movieId);
+            }
+        }
+    }
+
+    /**
+     * Inserts a new review record into the database with a specified movie as its association.
+     *
+     * @param review
+     * @param movieId
+     *
+     * @return The id of the review in the database.
+     */
+    public long saveReviewWithMovieId(Review review, long movieId) {
+        review.movieId = Long.toString(movieId);
+        return reviewsTable.save(review);
     }
 
     /**
