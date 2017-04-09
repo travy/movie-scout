@@ -7,7 +7,6 @@ package com.travistorres.moviescout;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
@@ -26,8 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.travistorres.moviescout.utils.db.MoviesDatabase;
-import com.travistorres.moviescout.utils.db.tables.MoviesTable;
+import com.travistorres.moviescout.utils.widget.loaders.IsFavoriteMovieLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.adapters.ReviewListAdapter;
 import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
@@ -120,6 +118,7 @@ public class MovieInfoActivity extends AppCompatActivity
         Intent intent = getIntent();
         if (intent.hasExtra(selectedMovieExtraKey)) {
             selectedMovie = intent.getParcelableExtra(selectedMovieExtraKey);
+            determineIfMovieIsFavorited(selectedMovie);
 
             //  show the title in the app bar
             CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -153,6 +152,21 @@ public class MovieInfoActivity extends AppCompatActivity
             String missingMovieMessage = getString(R.string.missing_movie_model_error_message);
             Toast.makeText(this, missingMovieMessage, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Triggers the process of determining if the selected Movie is one of the users favorites.
+     *
+     * @param movie
+     */
+    private void determineIfMovieIsFavorited(Movie movie) {
+        String selectedMovieKey = getString(R.string.selected_movie_extra_key);
+        Bundle selectedMovieBundle = new Bundle();
+        selectedMovieBundle.putParcelable(selectedMovieKey, movie);
+
+        int isFavoriteLoaderManagerId = getResources().getInteger(R.integer.is_movie_favorited_loader_manager_id);
+        LoaderManager isFavoriteLoaderManager = getSupportLoaderManager();
+        isFavoriteLoaderManager.restartLoader(isFavoriteLoaderManagerId, selectedMovieBundle, this);
     }
 
     /**
@@ -298,9 +312,14 @@ public class MovieInfoActivity extends AppCompatActivity
     @Override
     public Loader onCreateLoader(int id, final Bundle args) {
         Resources resources = getResources();
-        Loader loader = (id == resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id)) ?
-                new TrailerLoaderTask(this, args, this, movieDbApiThreeKey) :
-                new ReviewLoaderTask(this, args, this, movieDbApiThreeKey);
+        Loader loader = null;
+        if (id == resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id)) {
+            loader = new TrailerLoaderTask(this, args, this, movieDbApiThreeKey);
+        } else if (id == resources.getInteger(R.integer.movie_review_requester_loader_manager_id)) {
+            loader = new ReviewLoaderTask(this, args, this, movieDbApiThreeKey);
+        } else if (id == resources.getInteger(R.integer.is_movie_favorited_loader_manager_id)) {
+            loader = new IsFavoriteMovieLoaderTask(this, args);
+        }
 
         return loader;
     }
@@ -318,8 +337,13 @@ public class MovieInfoActivity extends AppCompatActivity
 
         if (loader instanceof TrailerLoaderTask) {
             finishLoadingTrailers((Trailer[]) array);
-        } else {
+        } else if (loader instanceof ReviewLoaderTask) {
             finishLoadingReviews((Review[]) array);
+        } else if (loader instanceof IsFavoriteMovieLoaderTask) {
+            Boolean[] favorites = (Boolean[]) array;
+            for (Boolean favorite : favorites) {
+                onDeterminedIsMovieFavorited(selectedMovie, favorite);
+            }
         }
     }
 
