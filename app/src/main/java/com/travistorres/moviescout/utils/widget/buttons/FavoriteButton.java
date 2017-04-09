@@ -37,16 +37,7 @@ public class FavoriteButton implements View.OnClickListener {
         buttonView.setOnClickListener(this);
         onClickOperation = clickHandler;
 
-        setIsFavorite(isFavorite, false);
-    }
-
-    /**
-     * Same functionality as `setIsFavorite(boolean, boolean)`.
-     *
-     * @param setFavorite
-     */
-    public void setIsFavorite(boolean setFavorite) {
-        setIsFavorite(setFavorite, true);
+        setIsFavorite(isFavorite);
     }
 
     /**
@@ -54,17 +45,13 @@ public class FavoriteButton implements View.OnClickListener {
      * `onSetAsFavorite` or `onSetAsNotFavorite` based on the value provided for `setFavorite`.
      *
      * @param setFavorite
-     * @param triggerEvents Determines if the actions `onSetAsFavorite` and `onSetAsNotFavorite`
-     *                      should be fired when called.
      */
-    public void setIsFavorite(boolean setFavorite, boolean triggerEvents) {
+    public void setIsFavorite(boolean setFavorite) {
         isFavorite = setFavorite;
-        if (triggerEvents) {
-            if (isFavorite) {
-                onSetAsFavorite();
-            } else {
-                onSetAsNotFavorite();
-            }
+        if (isFavorite) {
+            onSetAsFavorite();
+        } else {
+            onSetAsNotFavorite();
         }
     }
 
