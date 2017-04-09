@@ -56,6 +56,8 @@ public class MovieInfoActivity extends AppCompatActivity
     //  used for separating labels from their data
     private final static String LABEL_SEPERATOR = ":  ";
 
+    private Movie selectedMovie;
+
     private TextView mMovieTitle;
     private ImageView mMoviePoster;
     private TextView mMovieReleaseDate;
@@ -109,17 +111,18 @@ public class MovieInfoActivity extends AppCompatActivity
         //  obtain the selected video and display it's information
         Intent intent = getIntent();
         if (intent.hasExtra(selectedMovieExtraKey)) {
-            Movie movie = (Movie) intent.getParcelableExtra(selectedMovieExtraKey);
+            selectedMovie = intent.getParcelableExtra(selectedMovieExtraKey);
 
             //  Sets up the behavior of the favorites button
             MoviesTable moviesTable = new MoviesTable(getApplicationContext(), false);
-            boolean isFavorite = moviesTable.isFavorite(movie);
+            mDatabase = moviesTable.getDatabase();
+            boolean isFavorite = moviesTable.isFavorite(selectedMovie);
             FavoriteButton favState = new FavoriteButton(mFavoriteMovieButton, isFavorite, this);
 
             //  show the title in the app bar
             CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
             layout.setExpandedTitleColor(getResources().getColor(android.R.color.white, getResources().newTheme()));
-            layout.setTitle(movie.title);
+            layout.setTitle(selectedMovie.title);
 
             //  get the label strings from the resource files
             String releaseDateLabel = getString(R.string.movie_release_date_label);
@@ -128,20 +131,20 @@ public class MovieInfoActivity extends AppCompatActivity
             String languageLabel = getString(R.string.movie_language_label);
 
             //  display information regarding the video
-            mMovieTitle.setText(movie.originalTitle);
-            mMovieReleaseDate.setText(releaseDateLabel + LABEL_SEPERATOR + movie.getCleanDateFormat());
-            mMovieVoteAverage.setText(voteAverageLabel + LABEL_SEPERATOR + movie.voteAverage);
-            mMoviePopularity.setText(popularityLabel + LABEL_SEPERATOR + movie.popularity);
-            mMovieLanguage.setText(languageLabel + LABEL_SEPERATOR + movie.originalLanguage);
-            mMovieOverview.setText(movie.overview);
-            retrieveBackdrop(movie);
-            retrievePoster(movie);
+            mMovieTitle.setText(selectedMovie.originalTitle);
+            mMovieReleaseDate.setText(releaseDateLabel + LABEL_SEPERATOR + selectedMovie.getCleanDateFormat());
+            mMovieVoteAverage.setText(voteAverageLabel + LABEL_SEPERATOR + selectedMovie.voteAverage);
+            mMoviePopularity.setText(popularityLabel + LABEL_SEPERATOR + selectedMovie.popularity);
+            mMovieLanguage.setText(languageLabel + LABEL_SEPERATOR + selectedMovie.originalLanguage);
+            mMovieOverview.setText(selectedMovie.overview);
+            retrieveBackdrop(selectedMovie);
+            retrievePoster(selectedMovie);
 
             //  load the selected movies trailers
             setupTrailerRecyclerView();
-            loadMovieTrailers(selectedMovieExtraKey, movie);
+            loadMovieTrailers(selectedMovieExtraKey, selectedMovie);
             setupReviewRecyclerView();
-            loadMovieReviews(selectedMovieExtraKey, movie);
+            loadMovieReviews(selectedMovieExtraKey, selectedMovie);
         } else {
             //  display an error message when a movie is not defined within the intent.  Should never occur.
             Log.e(LOG_TAG, getString(R.string.movie_info_activity_missing_movie_message));
@@ -401,7 +404,12 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     @Override
     public void onFavorited(Button buttonView) {
-        Toast.makeText(this, "Movie has been favorited", Toast.LENGTH_SHORT).show();
+        MoviesTable moviesTable = new MoviesTable(getApplicationContext(), mDatabase);
+        boolean isFavorite = moviesTable.isFavorite(selectedMovie);
+        if (!isFavorite) {
+            moviesTable.save(selectedMovie);
+            Toast.makeText(this, "Added Favorite", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
