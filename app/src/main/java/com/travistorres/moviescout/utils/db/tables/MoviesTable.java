@@ -102,17 +102,12 @@ public final class MoviesTable extends BaseTable {
         return cv;
     }
 
-    /**
-     * Determines if the specified movie has been favorited.
-     *
-     * @param movie
-     *
-     * @return `true` if favorited and `false` otherwise.
-     */
-    public boolean isFavorite(Movie movie) {
+    public boolean contains(Object data) {
+        Movie movie = (Movie) data;
+
         String whereClause = Cols.MOVIE_ID + " = ?";
         String[] whereArgs = new String[] {
-            Integer.toString(movie.id)
+                Integer.toString(movie.id)
         };
 
         Cursor cursor = connection.query(NAME, null, whereClause, whereArgs, null, null, null);
@@ -122,14 +117,9 @@ public final class MoviesTable extends BaseTable {
         return count > 0;
     }
 
-    /**
-     * Removes a movie from the favorites database.
-     *
-     * @param movie
-     *
-     * @return
-     */
-    public int deleteMovie(Movie movie) {
+    public int delete(Object data) {
+        Movie movie = (Movie) data;
+
         String whereClause = Cols.MOVIE_ID + " = ?";
         String[] whereArgs = new String[] {
             Integer.toString(movie.id)

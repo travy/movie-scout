@@ -35,6 +35,7 @@ import com.travistorres.moviescout.utils.moviedb.loaders.TrailerLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
+import com.travistorres.moviescout.utils.widget.FavoritesManager;
 import com.travistorres.moviescout.utils.widget.buttons.FavoriteButton;
 import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClicked;
 
@@ -70,8 +71,7 @@ public class MovieInfoActivity extends AppCompatActivity
     private RecyclerView mReviewListRecyclerView;
     private Button mFavoriteMovieButton;
 
-    private SQLiteDatabase mDatabase;
-
+    private FavoritesManager favorites;
     private String movieDbApiThreeKey;
 
     /**
@@ -91,6 +91,7 @@ public class MovieInfoActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setupApiPreferences();
+        favorites = new FavoritesManager(getApplicationContext());
 
         //  load page views
         mMovieTitle = (TextView) findViewById(R.id.movie_title);
@@ -114,9 +115,7 @@ public class MovieInfoActivity extends AppCompatActivity
             selectedMovie = intent.getParcelableExtra(selectedMovieExtraKey);
 
             //  Sets up the behavior of the favorites button
-            MoviesTable moviesTable = new MoviesTable(getApplicationContext(), false);
-            mDatabase = moviesTable.getDatabase();
-            boolean isFavorite = moviesTable.isFavorite(selectedMovie);
+            boolean isFavorite = favorites.isFavorite(selectedMovie);
             FavoriteButton favState = new FavoriteButton(mFavoriteMovieButton, isFavorite, this);
 
             //  show the title in the app bar
@@ -404,10 +403,9 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     @Override
     public void onFavorited(Button buttonView) {
-        MoviesTable moviesTable = new MoviesTable(getApplicationContext(), mDatabase);
-        boolean isFavorite = moviesTable.isFavorite(selectedMovie);
+        boolean isFavorite = favorites.isFavorite(selectedMovie);
         if (!isFavorite) {
-            moviesTable.save(selectedMovie);
+            favorites.addFavorite(selectedMovie);
             Toast.makeText(this, "Added Favorite", Toast.LENGTH_SHORT).show();
         }
     }
@@ -419,10 +417,9 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     @Override
     public void onUnfavorited(Button buttonView) {
-        MoviesTable moviesTable = new MoviesTable(getApplicationContext(), mDatabase);
-        boolean isFavorite = moviesTable.isFavorite(selectedMovie);
+        boolean isFavorite = favorites.isFavorite(selectedMovie);
         if (isFavorite) {
-            moviesTable.deleteMovie(selectedMovie);
+            favorites.removeFavorite(selectedMovie);
             Toast.makeText(this, "Removed Favorite", Toast.LENGTH_SHORT).show();
         }
     }

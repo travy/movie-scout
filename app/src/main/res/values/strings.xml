@@ -90,7 +90,7 @@
     <!--  Settings Textual Information -->
     <string name="movie_db_api_settings_category">Movie DB API Settings</string>
 
-    <string name="movie_db_v3_settings_default" translatable="false">not specified</string>
+    <string name="movie_db_v3_settings_default" translatable="false">ab6a99fb0396689f2528c384cfd20045</string>
     <string name="movie_db_v3_settings_key" translatable="false">movie-db-api-v3-setting-key</string>
     <string name="movie_db_v3_settings_title">V3 API Key</string>
     <string name="movie_db_v3_settings_summary">Access V3 api resources</string>
