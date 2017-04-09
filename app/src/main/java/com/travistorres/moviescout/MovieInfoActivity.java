@@ -39,6 +39,7 @@ import com.travistorres.moviescout.utils.widget.FavoritesManager;
 import com.travistorres.moviescout.utils.widget.buttons.FavoriteButton;
 import com.travistorres.moviescout.utils.widget.interfaces.IsMovieFavoritedListener;
 import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClicked;
+import com.travistorres.moviescout.utils.widget.loaders.RemoveFavoriteMovieLoaderTask;
 import com.travistorres.moviescout.utils.widget.loaders.SetFavoriteMovieLoaderTask;
 
 import java.net.URL;
@@ -326,6 +327,8 @@ public class MovieInfoActivity extends AppCompatActivity
             loader = new IsFavoriteMovieLoaderTask(this, args);
         } else if (id == resources.getInteger(R.integer.set_movie_favorite_loader_manager_id)) {
             loader = new SetFavoriteMovieLoaderTask(this, args);
+        } else if (id == resources.getInteger(R.integer.remove_movie_favorite_loader_manager_id)) {
+            loader = new RemoveFavoriteMovieLoaderTask(this, args);
         }
 
         return loader;
@@ -356,8 +359,13 @@ public class MovieInfoActivity extends AppCompatActivity
             for (Boolean favorite : favorites) {
                 if (favorite) {
                     Toast.makeText(this, "Added " + selectedMovie.title + " to favorites" , Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Could not favorite " + selectedMovie.title, Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else if (loader instanceof RemoveFavoriteMovieLoaderTask) {
+            Boolean[] favorites = (Boolean[]) array;
+            for (Boolean favorite : favorites) {
+                if (favorite) {
+                    Toast.makeText(this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -503,11 +511,8 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     @Override
     public void onUnfavorited(Button buttonView) {
-        boolean isFavorite = favorites.isFavorite(selectedMovie);
-        if (isFavorite) {
-            favorites.removeFavorite(selectedMovie);
-            Toast.makeText(this, "Removed Favorite", Toast.LENGTH_SHORT).show();
-        }
+        String selectedMovieKey = getString(R.string.selected_movie_extra_key);
+        configureLoaderWithSelectedMovieBundle(selectedMovieKey, selectedMovie, R.integer.remove_movie_favorite_loader_manager_id);
     }
 
     /**
