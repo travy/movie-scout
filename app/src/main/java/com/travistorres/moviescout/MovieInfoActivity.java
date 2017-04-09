@@ -468,16 +468,12 @@ public class MovieInfoActivity extends AppCompatActivity
         Review[] reviews = getReviews();
         selectedMovieBundle.putParcelableArray(moviesReviewsKey, reviews);
 
-        configureLoader(selectedMovieBundle, R.integer.set_movie_favorite_loader_manager_id);
-/*
-        boolean isFavorite = favorites.isFavorite(selectedMovie);
-        if (!isFavorite) {
-            Trailer[] trailers = getTrailers();
-            Review[] reviews = getReviews();
+        //  adds all trailers to into the bundle
+        String moviesTrailerKey = getString(R.string.selected_movies_trailers_extra);
+        Trailer[] trailers = getTrailers();
+        selectedMovieBundle.putParcelableArray(moviesTrailerKey, trailers);
 
-            favorites.addFavorite(selectedMovie, reviews, trailers);
-            Toast.makeText(this, "Added Favorite", Toast.LENGTH_SHORT).show();
-        }*/
+        configureLoader(selectedMovieBundle, R.integer.set_movie_favorite_loader_manager_id);
     }
 
     /**

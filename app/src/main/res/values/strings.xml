@@ -6,6 +6,7 @@
     <string name="movie_request_url_extra" translatable="false">movie-request-extra</string>
     <string name="main_activity_state_bundle" translatable="false">main-activity-state-bundle-extra</string>
     <string name="selected_movies_reviews_extra" translatable="false">selected-movie-reviews-extra</string>
+    <string name="selected_movies_trailers_extra" translatable="false">selected-movie-trailer-extra</string>
 
     <!--  Error Messages  -->
     <string name="missing_api_keys">An API key was not provided</string>

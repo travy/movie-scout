@@ -11,6 +11,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
+import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 import com.travistorres.moviescout.utils.widget.FavoritesManager;
 
 /**
@@ -65,8 +66,9 @@ public class SetFavoriteMovieLoaderTask extends AsyncTaskLoader<Boolean[]> {
             boolean isFavorite = favoritesManager.isFavorite(movie);
             if (!isFavorite) {
                 Review[] reviews = getReviews();
+                Trailer[] trailers = getTrailers();
 
-                favoritesManager.addFavorite(movie, reviews, null);
+                favoritesManager.addFavorite(movie, reviews, trailers);
             }
 
             results = new Boolean[] {
@@ -84,6 +86,15 @@ public class SetFavoriteMovieLoaderTask extends AsyncTaskLoader<Boolean[]> {
      */
     private Review[] getReviews() {
         return (Review[]) unloadParcel(R.string.selected_movies_reviews_extra);
+    }
+
+    /**
+     * Retrieves all trailers for the movie.
+     *
+     * @return null or an array of trailers.
+     */
+    private Trailer[] getTrailers() {
+        return (Trailer[]) unloadParcel(R.string.selected_movies_trailers_extra);
     }
 
     /**
