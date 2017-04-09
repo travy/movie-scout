@@ -119,8 +119,24 @@ public final class MoviesTable extends BaseTable {
         int count = cursor.getCount();
         cursor.close();
 
-        Log.d(getClass().getSimpleName(), "Count:  " + Integer.toString(count));
-
         return count > 0;
+    }
+
+    /**
+     * Removes a movie from the favorites database.
+     *
+     * @param movie
+     *
+     * @return
+     */
+    public int deleteMovie(Movie movie) {
+        String whereClause = Cols.MOVIE_ID + " = ?";
+        String[] whereArgs = new String[] {
+            Integer.toString(movie.id)
+        };
+
+        int res = connection.delete(NAME, whereClause, whereArgs);
+
+        return res;
     }
 }

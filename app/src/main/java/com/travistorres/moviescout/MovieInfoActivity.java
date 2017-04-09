@@ -419,6 +419,11 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     @Override
     public void onUnfavorited(Button buttonView) {
-        Toast.makeText(this, "Unfavorite", Toast.LENGTH_SHORT).show();
+        MoviesTable moviesTable = new MoviesTable(getApplicationContext(), mDatabase);
+        boolean isFavorite = moviesTable.isFavorite(selectedMovie);
+        if (isFavorite) {
+            moviesTable.deleteMovie(selectedMovie);
+            Toast.makeText(this, "Removed Favorite", Toast.LENGTH_SHORT).show();
+        }
     }
 }
