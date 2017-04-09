@@ -82,6 +82,15 @@ public final class TrailersTable extends BaseTable {
         return deleteFromDatabase(whereClause, whereArgs);
     }
 
+    public int deleteAssociatedToMovie(long movieId) {
+        String whereClause = Cols.MOVIE_ID + " = ?";
+        String[] whereArgs = new String[] {
+            Long.toString(movieId)
+        };
+
+        return deleteFromDatabase(whereClause, whereArgs);
+    }
+
     public static final class Cols {
         public static final String MOVIE_ID = "movie_id";   //  id within the movie-scout database
         public static final String ISO_639_1 = "iso_639_1";

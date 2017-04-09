@@ -134,6 +134,10 @@ public class FavoritesManager {
      */
     public void removeFavorite(Movie movie) {
         if (isFavorite(movie)) {
+            long movieId = movieTable.getId(movie);
+
+            reviewsTable.deleteAssociatedToMovie(movieId);
+            trailersTable.deleteAssociatedToMovie(movieId);
             movieTable.delete(movie);
         }
     }

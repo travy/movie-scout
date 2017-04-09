@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 
 /**
@@ -73,6 +74,15 @@ public final class ReviewsTable extends BaseTable {
         String whereClause = Cols.ID + " = ?";
         String[] whereArgs = new String[] {
             review.id
+        };
+
+        return deleteFromDatabase(whereClause, whereArgs);
+    }
+
+    public int deleteAssociatedToMovie(long movieId) {
+        String whereClause = Cols.MOVIE_ID + " = ?";
+        String[] whereArgs = new String[] {
+            Long.toString(movieId)
         };
 
         return deleteFromDatabase(whereClause, whereArgs);

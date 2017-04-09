@@ -123,4 +123,29 @@ public final class MoviesTable extends BaseTable {
 
         return deleteFromDatabase(whereClause, whereArgs);
     }
+
+    /**
+     * Retrieves the id of the record for the data field, if one exists.
+     *
+     * @param data
+     *
+     * @return Id of the record if one exists otherwise -1.
+     */
+    public long getId(Object data) {
+        Movie movie = (Movie) data;
+        String whereClause = Cols.MOVIE_ID + " = ?";
+        String[] whereArgs = new String[] {
+            Integer.toString(movie.id)
+        };
+
+        long movieId = -1;
+        Cursor cursor = connection.query(NAME, null, whereClause, whereArgs, null, null, null);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            movieId = cursor.getLong(cursor.getColumnIndex("_id"));
+        }
+        cursor.close();
+
+        return movieId;
+    }
 }
