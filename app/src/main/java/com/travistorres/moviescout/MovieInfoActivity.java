@@ -162,12 +162,7 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     private void determineIfMovieIsFavorited(Movie movie) {
         String selectedMovieKey = getString(R.string.selected_movie_extra_key);
-        Bundle selectedMovieBundle = new Bundle();
-        selectedMovieBundle.putParcelable(selectedMovieKey, movie);
-
-        int isFavoriteLoaderManagerId = getResources().getInteger(R.integer.is_movie_favorited_loader_manager_id);
-        LoaderManager isFavoriteLoaderManager = getSupportLoaderManager();
-        isFavoriteLoaderManager.restartLoader(isFavoriteLoaderManagerId, selectedMovieBundle, this);
+        configureLoaderWithSelectedMovieBundle(selectedMovieKey, movie, R.integer.is_movie_favorited_loader_manager_id);
     }
 
     /**
@@ -211,7 +206,7 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param movie
      */
     private void loadMovieReviews(String movieBundleExtraKey, Movie movie) {
-        configureLoader(movieBundleExtraKey, movie, R.integer.movie_review_requester_loader_manager_id);
+        configureLoaderWithSelectedMovieBundle(movieBundleExtraKey, movie, R.integer.movie_review_requester_loader_manager_id);
     }
 
     /**
@@ -221,7 +216,7 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param movie
      */
     private void loadMovieTrailers(String movieBundleExtraKey, Movie movie) {
-        configureLoader(movieBundleExtraKey, movie, R.integer.movie_trailer_requester_loader_manager_id);
+        configureLoaderWithSelectedMovieBundle(movieBundleExtraKey, movie, R.integer.movie_trailer_requester_loader_manager_id);
     }
 
     /**
@@ -231,16 +226,25 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param movie
      * @param loaderManagerResourceId
      */
-    private void configureLoader(String movieBundleExtraKey, Movie movie, int loaderManagerResourceId) {
+    private void configureLoaderWithSelectedMovieBundle(String movieBundleExtraKey, Movie movie, int loaderManagerResourceId) {
         Bundle movieBundle = new Bundle();
         movieBundle.putParcelable(movieBundleExtraKey, movie);
 
+        configureLoader(movieBundle, loaderManagerResourceId);
+    }
+
+    /**
+     * Starts a particular Loader Manager and passes in a bundle for it to utilize.
+     *
+     * @param bundle
+     * @param loaderManagerResourceId
+     */
+    private void configureLoader(Bundle bundle, int loaderManagerResourceId) {
         Resources resources = getResources();
         int loaderKey = resources.getInteger(loaderManagerResourceId);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        Loader loader = loaderManager.getLoader(loaderKey);
-        loaderManager.restartLoader(loaderKey, movieBundle, this);
+        loaderManager.restartLoader(loaderKey, bundle, this);
     }
 
     /**
@@ -457,10 +461,7 @@ public class MovieInfoActivity extends AppCompatActivity
         Bundle selectedMovieBundle = new Bundle();
         selectedMovieBundle.putParcelable(selectedMovieKey, selectedMovie);
 
-        Resources resources = getResources();
-        int setFavoriteLoaderManagerId = resources.getInteger(R.integer.set_movie_favorite_loader_manager_id);
-        LoaderManager setFavoriteLoaderManager = getSupportLoaderManager();
-        setFavoriteLoaderManager.restartLoader(setFavoriteLoaderManagerId, selectedMovieBundle, this);
+        configureLoader(selectedMovieBundle, R.integer.set_movie_favorite_loader_manager_id);
 /*
         boolean isFavorite = favorites.isFavorite(selectedMovie);
         if (!isFavorite) {
