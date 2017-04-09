@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -  Will display the backdrop image for the selected movie where the app bar used to be
 -  Can view trailers for the selected movie
 -  User reviews
+-  Users Favorites
 
 ###  Changed
 
