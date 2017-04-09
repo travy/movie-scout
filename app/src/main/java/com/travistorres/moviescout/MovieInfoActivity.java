@@ -19,8 +19,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +72,7 @@ public class MovieInfoActivity extends AppCompatActivity
     private RecyclerView mTrailerListRecyclerView;
     private RecyclerView mReviewListRecyclerView;
     private Button mFavoriteMovieButton;
+    private ProgressBar mProgressBar;
 
     private FavoritesManager favorites;
     private String movieDbApiThreeKey;
@@ -105,6 +108,7 @@ public class MovieInfoActivity extends AppCompatActivity
         mTrailerListRecyclerView = (RecyclerView) findViewById(R.id.movie_trailers_list);
         mReviewListRecyclerView = (RecyclerView) findViewById(R.id.movie_review_list);
         mFavoriteMovieButton = (Button) findViewById(R.id.favorite_movie_button);
+        mProgressBar = (ProgressBar) findViewById(R.id.loading_indicator_pb);
 
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
@@ -340,8 +344,6 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param reviews
      */
     private void finishLoadingReviews(Review[] reviews) {
-        //  TODO-  display the reviews
-        Log.d(getClass().getSimpleName(), "Reviews loaded but feature not implemented!");
         if (reviews != null) {
             ReviewListAdapter adapter = (ReviewListAdapter) mReviewListRecyclerView.getAdapter();
             adapter.setReviews(reviews);
@@ -350,6 +352,11 @@ public class MovieInfoActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Specifies the operation to perform when the Loader has reset.
+     *
+     * @param loader
+     */
     @Override
     public void onLoaderReset(Loader<Object[]> loader) {
         //  intentionally left blank
@@ -370,14 +377,22 @@ public class MovieInfoActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Displays the progress bar.
+     *
+     */
     @Override
     public void beforeNetworkRequest() {
-
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Hides the progress bar.
+     *
+     */
     @Override
     public void afterNetworkRequest() {
-
+        mProgressBar.setVisibility(View.INVISIBLE);
     }
 
     /**
