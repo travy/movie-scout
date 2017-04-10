@@ -35,7 +35,6 @@ import com.travistorres.moviescout.utils.moviedb.loaders.TrailerLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
-import com.travistorres.moviescout.utils.widget.FavoritesManager;
 import com.travistorres.moviescout.utils.widget.buttons.FavoriteButton;
 import com.travistorres.moviescout.utils.widget.interfaces.IsMovieFavoritedListener;
 import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClicked;
@@ -75,8 +74,6 @@ public class MovieInfoActivity extends AppCompatActivity
     private Button mFavoriteMovieButton;
     private ProgressBar mProgressBar;
 
-    private FavoriteButton favoritesButton;
-    private FavoritesManager favorites;
     private String movieDbApiThreeKey;
 
     /**
@@ -96,7 +93,6 @@ public class MovieInfoActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setupApiPreferences();
-        favorites = new FavoritesManager(getApplicationContext());
 
         //  load page views
         mMovieTitle = (TextView) findViewById(R.id.movie_title);
@@ -528,7 +524,7 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     @Override
     public void onDeterminedIsMovieFavorited(Movie movie, boolean isFavorite) {
-        favoritesButton = new FavoriteButton(mFavoriteMovieButton, isFavorite, this);
+        FavoriteButton favs = new FavoriteButton(mFavoriteMovieButton, isFavorite, this);
         mFavoriteMovieButton.setVisibility(View.VISIBLE);
     }
 }
