@@ -119,7 +119,6 @@ public final class MoviesTable extends BaseTable {
         cv.put(Cols.IS_ADULT_FILM, movie.isAdultFilm);
         cv.put(Cols.OVERVIEW, movie.overview);
         cv.put(Cols.RELEASE_DATE, movie.releaseDate);
-        //cv.put(Cols.GENRE_IDS, movie.genreIds);
         cv.put(Cols.MOVIE_ID, Integer.toString(movie.id));
         cv.put(Cols.ORIGINAL_TITLE, movie.originalTitle);
         cv.put(Cols.TITLE, movie.title);
