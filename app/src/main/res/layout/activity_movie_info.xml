@@ -45,6 +45,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <!--  Loading Icon -->
+    <ProgressBar
+        android:id="@+id/loading_indicator_pb"
+        android:layout_gravity="center"
+        android:layout_width="@dimen/progress_bar_width"
+        android:layout_height="@dimen/progress_bar_height"
+        android:visibility="invisible" />
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/movie_info_scroll_view"
         android:layout_width="match_parent"
@@ -103,6 +111,13 @@
                         android:id="@+id/movie_vote_average"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/generic_text_size" />
+
+                    <Button
+                        android:id="@+id/favorite_movie_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Favorite"
                         android:textSize="@dimen/generic_text_size" />
 
                 </LinearLayout>

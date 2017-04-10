@@ -18,10 +18,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.travistorres.moviescout.utils.widget.loaders.IsFavoriteMovieLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.adapters.ReviewListAdapter;
 import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
@@ -31,6 +35,11 @@ import com.travistorres.moviescout.utils.moviedb.loaders.TrailerLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
+import com.travistorres.moviescout.utils.widget.buttons.FavoriteButton;
+import com.travistorres.moviescout.utils.widget.interfaces.IsMovieFavoritedListener;
+import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClicked;
+import com.travistorres.moviescout.utils.widget.loaders.RemoveFavoriteMovieLoaderTask;
+import com.travistorres.moviescout.utils.widget.loaders.SetFavoriteMovieLoaderTask;
 
 import java.net.URL;
 
@@ -44,11 +53,13 @@ import java.net.URL;
  */
 
 public class MovieInfoActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener{
+        implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener, OnFavoriteButtonClicked, IsMovieFavoritedListener {
     private final String LOG_TAG = getClass().getSimpleName();
 
     //  used for separating labels from their data
     private final static String LABEL_SEPERATOR = ":  ";
+
+    private Movie selectedMovie;
 
     private TextView mMovieTitle;
     private ImageView mMoviePoster;
@@ -60,6 +71,8 @@ public class MovieInfoActivity extends AppCompatActivity
     private ImageView mBackdropImage;
     private RecyclerView mTrailerListRecyclerView;
     private RecyclerView mReviewListRecyclerView;
+    private Button mFavoriteMovieButton;
+    private ProgressBar mProgressBar;
 
     private String movieDbApiThreeKey;
 
@@ -92,6 +105,9 @@ public class MovieInfoActivity extends AppCompatActivity
         mBackdropImage = (ImageView) findViewById(R.id.movie_backdrop_image_view);
         mTrailerListRecyclerView = (RecyclerView) findViewById(R.id.movie_trailers_list);
         mReviewListRecyclerView = (RecyclerView) findViewById(R.id.movie_review_list);
+        mFavoriteMovieButton = (Button) findViewById(R.id.favorite_movie_button);
+        mFavoriteMovieButton.setVisibility(View.INVISIBLE);
+        mProgressBar = (ProgressBar) findViewById(R.id.loading_indicator_pb);
 
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
@@ -99,12 +115,13 @@ public class MovieInfoActivity extends AppCompatActivity
         //  obtain the selected video and display it's information
         Intent intent = getIntent();
         if (intent.hasExtra(selectedMovieExtraKey)) {
-            Movie movie = (Movie) intent.getParcelableExtra(selectedMovieExtraKey);
+            selectedMovie = intent.getParcelableExtra(selectedMovieExtraKey);
+            determineIfMovieIsFavorited(selectedMovie);
 
             //  show the title in the app bar
             CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
             layout.setExpandedTitleColor(getResources().getColor(android.R.color.white, getResources().newTheme()));
-            layout.setTitle(movie.title);
+            layout.setTitle(selectedMovie.title);
 
             //  get the label strings from the resource files
             String releaseDateLabel = getString(R.string.movie_release_date_label);
@@ -113,26 +130,36 @@ public class MovieInfoActivity extends AppCompatActivity
             String languageLabel = getString(R.string.movie_language_label);
 
             //  display information regarding the video
-            mMovieTitle.setText(movie.originalTitle);
-            mMovieReleaseDate.setText(releaseDateLabel + LABEL_SEPERATOR + movie.getCleanDateFormat());
-            mMovieVoteAverage.setText(voteAverageLabel + LABEL_SEPERATOR + movie.voteAverage);
-            mMoviePopularity.setText(popularityLabel + LABEL_SEPERATOR + movie.popularity);
-            mMovieLanguage.setText(languageLabel + LABEL_SEPERATOR + movie.originalLanguage);
-            mMovieOverview.setText(movie.overview);
-            retrieveBackdrop(movie);
-            retrievePoster(movie);
+            mMovieTitle.setText(selectedMovie.originalTitle);
+            mMovieReleaseDate.setText(releaseDateLabel + LABEL_SEPERATOR + selectedMovie.getCleanDateFormat());
+            mMovieVoteAverage.setText(voteAverageLabel + LABEL_SEPERATOR + selectedMovie.voteAverage);
+            mMoviePopularity.setText(popularityLabel + LABEL_SEPERATOR + selectedMovie.popularity);
+            mMovieLanguage.setText(languageLabel + LABEL_SEPERATOR + selectedMovie.originalLanguage);
+            mMovieOverview.setText(selectedMovie.overview);
+            retrieveBackdrop(selectedMovie);
+            retrievePoster(selectedMovie);
 
             //  load the selected movies trailers
             setupTrailerRecyclerView();
-            loadMovieTrailers(selectedMovieExtraKey, movie);
+            loadMovieTrailers(selectedMovieExtraKey, selectedMovie);
             setupReviewRecyclerView();
-            loadMovieReviews(selectedMovieExtraKey, movie);
+            loadMovieReviews(selectedMovieExtraKey, selectedMovie);
         } else {
             //  display an error message when a movie is not defined within the intent.  Should never occur.
             Log.e(LOG_TAG, getString(R.string.movie_info_activity_missing_movie_message));
             String missingMovieMessage = getString(R.string.missing_movie_model_error_message);
             Toast.makeText(this, missingMovieMessage, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Triggers the process of determining if the selected Movie is one of the users favorites.
+     *
+     * @param movie
+     */
+    private void determineIfMovieIsFavorited(Movie movie) {
+        String selectedMovieKey = getString(R.string.selected_movie_extra_key);
+        configureLoaderWithSelectedMovieBundle(selectedMovieKey, movie, R.integer.is_movie_favorited_loader_manager_id);
     }
 
     /**
@@ -176,7 +203,7 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param movie
      */
     private void loadMovieReviews(String movieBundleExtraKey, Movie movie) {
-        configureLoader(movieBundleExtraKey, movie, R.integer.movie_review_requester_loader_manager_id);
+        configureLoaderWithSelectedMovieBundle(movieBundleExtraKey, movie, R.integer.movie_review_requester_loader_manager_id);
     }
 
     /**
@@ -186,7 +213,7 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param movie
      */
     private void loadMovieTrailers(String movieBundleExtraKey, Movie movie) {
-        configureLoader(movieBundleExtraKey, movie, R.integer.movie_trailer_requester_loader_manager_id);
+        configureLoaderWithSelectedMovieBundle(movieBundleExtraKey, movie, R.integer.movie_trailer_requester_loader_manager_id);
     }
 
     /**
@@ -196,16 +223,25 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param movie
      * @param loaderManagerResourceId
      */
-    private void configureLoader(String movieBundleExtraKey, Movie movie, int loaderManagerResourceId) {
+    private void configureLoaderWithSelectedMovieBundle(String movieBundleExtraKey, Movie movie, int loaderManagerResourceId) {
         Bundle movieBundle = new Bundle();
         movieBundle.putParcelable(movieBundleExtraKey, movie);
 
+        configureLoader(movieBundle, loaderManagerResourceId);
+    }
+
+    /**
+     * Starts a particular Loader Manager and passes in a bundle for it to utilize.
+     *
+     * @param bundle
+     * @param loaderManagerResourceId
+     */
+    private void configureLoader(Bundle bundle, int loaderManagerResourceId) {
         Resources resources = getResources();
         int loaderKey = resources.getInteger(loaderManagerResourceId);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        Loader loader = loaderManager.getLoader(loaderKey);
-        loaderManager.restartLoader(loaderKey, movieBundle, this);
+        loaderManager.restartLoader(loaderKey, bundle, this);
     }
 
     /**
@@ -278,9 +314,18 @@ public class MovieInfoActivity extends AppCompatActivity
     @Override
     public Loader onCreateLoader(int id, final Bundle args) {
         Resources resources = getResources();
-        Loader loader = (id == resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id)) ?
-                new TrailerLoaderTask(this, args, this, movieDbApiThreeKey) :
-                new ReviewLoaderTask(this, args, this, movieDbApiThreeKey);
+        Loader loader = null;
+        if (id == resources.getInteger(R.integer.movie_trailer_requester_loader_manager_id)) {
+            loader = new TrailerLoaderTask(this, args, this, movieDbApiThreeKey);
+        } else if (id == resources.getInteger(R.integer.movie_review_requester_loader_manager_id)) {
+            loader = new ReviewLoaderTask(this, args, this, movieDbApiThreeKey);
+        } else if (id == resources.getInteger(R.integer.is_movie_favorited_loader_manager_id)) {
+            loader = new IsFavoriteMovieLoaderTask(this, args);
+        } else if (id == resources.getInteger(R.integer.set_movie_favorite_loader_manager_id)) {
+            loader = new SetFavoriteMovieLoaderTask(this, args);
+        } else if (id == resources.getInteger(R.integer.remove_movie_favorite_loader_manager_id)) {
+            loader = new RemoveFavoriteMovieLoaderTask(this, args);
+        }
 
         return loader;
     }
@@ -298,8 +343,30 @@ public class MovieInfoActivity extends AppCompatActivity
 
         if (loader instanceof TrailerLoaderTask) {
             finishLoadingTrailers((Trailer[]) array);
-        } else {
+        } else if (loader instanceof ReviewLoaderTask) {
             finishLoadingReviews((Review[]) array);
+        } else if (loader instanceof IsFavoriteMovieLoaderTask) {
+            Boolean[] favorites = (Boolean[]) array;
+            for (Boolean favorite : favorites) {
+                onDeterminedIsMovieFavorited(selectedMovie, favorite);
+            }
+        } else if (loader instanceof SetFavoriteMovieLoaderTask) {
+            Boolean[] favorites = (Boolean[]) array;
+            for (Boolean favorite : favorites) {
+                if (favorite) {
+                    String prefix = getString(R.string.add_movie_to_favorites_prefix_message);
+                    String postfix = getString(R.string.add_movie_to_favorites_postfix_message);
+                    Toast.makeText(this, prefix + selectedMovie.title + postfix, Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else if (loader instanceof RemoveFavoriteMovieLoaderTask) {
+            Boolean[] favorites = (Boolean[]) array;
+            for (Boolean favorite : favorites) {
+                if (favorite) {
+                    String removedMessage = getString(R.string.removed_movie_from_favorites_message);
+                    Toast.makeText(this, removedMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
@@ -323,16 +390,20 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param reviews
      */
     private void finishLoadingReviews(Review[] reviews) {
-        //  TODO-  display the reviews
-        Log.d(getClass().getSimpleName(), "Reviews loaded but feature not implemented!");
         if (reviews != null) {
             ReviewListAdapter adapter = (ReviewListAdapter) mReviewListRecyclerView.getAdapter();
             adapter.setReviews(reviews);
         } else {
-            Toast.makeText(this, "No Reviews were found", Toast.LENGTH_SHORT).show();
+            String noReviewsMessage = getString(R.string.no_reviews_found_for_movie_message);
+            Toast.makeText(this, noReviewsMessage, Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * Specifies the operation to perform when the Loader has reset.
+     *
+     * @param loader
+     */
     @Override
     public void onLoaderReset(Loader<Object[]> loader) {
         //  intentionally left blank
@@ -353,14 +424,22 @@ public class MovieInfoActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Displays the progress bar.
+     *
+     */
     @Override
     public void beforeNetworkRequest() {
-
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Hides the progress bar.
+     *
+     */
     @Override
     public void afterNetworkRequest() {
-
+        mProgressBar.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -376,5 +455,76 @@ public class MovieInfoActivity extends AppCompatActivity
 
         Intent playTrailerIntent = new Intent(Intent.ACTION_VIEW, trailerUri);
         startActivity(playTrailerIntent);
+    }
+
+    /**
+     * Will add the Movie and it's associated Reviews and Trailers to the favorites database where
+     * it will be able to be accessed offline at any time.
+     *
+     * @param buttonView
+     */
+    @Override
+    public void onFavorited(Button buttonView) {
+        Bundle selectedMovieBundle = new Bundle();
+
+        //  stores the selected movie into the bundle
+        String selectedMovieKey = getString(R.string.selected_movie_extra_key);
+        selectedMovieBundle.putParcelable(selectedMovieKey, selectedMovie);
+
+        //  adds all reviews into the bundle
+        String moviesReviewsKey = getString(R.string.selected_movies_reviews_extra);
+        Review[] reviews = getReviews();
+        selectedMovieBundle.putParcelableArray(moviesReviewsKey, reviews);
+
+        //  adds all trailers to into the bundle
+        String moviesTrailerKey = getString(R.string.selected_movies_trailers_extra);
+        Trailer[] trailers = getTrailers();
+        selectedMovieBundle.putParcelableArray(moviesTrailerKey, trailers);
+
+        configureLoader(selectedMovieBundle, R.integer.set_movie_favorite_loader_manager_id);
+    }
+
+    /**
+     * Retrieves all trailers that have been loaded.
+     *
+     * @return trailers for the selected movies
+     */
+    private Trailer[] getTrailers() {
+        TrailerListAdapter adapter = (TrailerListAdapter) mTrailerListRecyclerView.getAdapter();
+        return adapter.getTrailers();
+    }
+
+    /**
+     * Retrieves all reviews for the selected movie.
+     *
+     * @return reviews for the selected movie
+     */
+    private Review[] getReviews() {
+        ReviewListAdapter adapter = (ReviewListAdapter) mReviewListRecyclerView.getAdapter();
+        return adapter.getReviews();
+    }
+
+    /**
+     * Removes the selected Movie and its associated fields from the favorites database.
+     *
+     * @param buttonView
+     */
+    @Override
+    public void onUnfavorited(Button buttonView) {
+        String selectedMovieKey = getString(R.string.selected_movie_extra_key);
+        configureLoaderWithSelectedMovieBundle(selectedMovieKey, selectedMovie, R.integer.remove_movie_favorite_loader_manager_id);
+    }
+
+    /**
+     * Displays the favorite button once it has been determined if the movie has been favorited
+     * or not.
+     *
+     * @param movie
+     * @param isFavorite
+     */
+    @Override
+    public void onDeterminedIsMovieFavorited(Movie movie, boolean isFavorite) {
+        FavoriteButton favs = new FavoriteButton(mFavoriteMovieButton, isFavorite, this);
+        mFavoriteMovieButton.setVisibility(View.VISIBLE);
     }
 }

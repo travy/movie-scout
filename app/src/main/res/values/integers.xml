@@ -8,5 +8,8 @@
     <integer name="movie_db_requester_loader_manager_id">33554432</integer><!--  2^25 (My age as of now) -->
     <integer name="movie_trailer_requester_loader_manager_id">33554433</integer>
     <integer name="movie_review_requester_loader_manager_id">33554434</integer>
+    <integer name="is_movie_favorited_loader_manager_id">33554435</integer>
+    <integer name="set_movie_favorite_loader_manager_id">33554436</integer>
+    <integer name="remove_movie_favorite_loader_manager_id">33554437</integer>
 
 </resources>
