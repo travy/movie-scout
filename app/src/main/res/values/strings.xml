@@ -8,6 +8,11 @@
     <string name="selected_movies_reviews_extra" translatable="false">selected-movie-reviews-extra</string>
     <string name="selected_movies_trailers_extra" translatable="false">selected-movie-trailer-extra</string>
 
+    <string name="removed_movie_from_favorites_message">Removed from Favorites</string>
+    <string name="add_movie_to_favorites_prefix_message">Added&#160;</string>
+    <string name="add_movie_to_favorites_postfix_message">&#160;to Favorites</string>
+    <string name="no_reviews_found_for_movie_message">No Reviews were Found</string>
+
     <!--  Error Messages  -->
     <string name="missing_api_keys">An API key was not provided</string>
 

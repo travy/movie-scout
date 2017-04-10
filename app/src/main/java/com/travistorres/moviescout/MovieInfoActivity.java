@@ -358,14 +358,17 @@ public class MovieInfoActivity extends AppCompatActivity
             Boolean[] favorites = (Boolean[]) array;
             for (Boolean favorite : favorites) {
                 if (favorite) {
-                    Toast.makeText(this, "Added " + selectedMovie.title + " to favorites" , Toast.LENGTH_SHORT).show();
+                    String prefix = getString(R.string.add_movie_to_favorites_prefix_message);
+                    String postfix = getString(R.string.add_movie_to_favorites_postfix_message);
+                    Toast.makeText(this, prefix + selectedMovie.title + postfix, Toast.LENGTH_SHORT).show();
                 }
             }
         } else if (loader instanceof RemoveFavoriteMovieLoaderTask) {
             Boolean[] favorites = (Boolean[]) array;
             for (Boolean favorite : favorites) {
                 if (favorite) {
-                    Toast.makeText(this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                    String removedMessage = getString(R.string.removed_movie_from_favorites_message);
+                    Toast.makeText(this, removedMessage, Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -395,7 +398,8 @@ public class MovieInfoActivity extends AppCompatActivity
             ReviewListAdapter adapter = (ReviewListAdapter) mReviewListRecyclerView.getAdapter();
             adapter.setReviews(reviews);
         } else {
-            Toast.makeText(this, "No Reviews were found", Toast.LENGTH_SHORT).show();
+            String noReviewsMessage = getString(R.string.no_reviews_found_for_movie_message);
+            Toast.makeText(this, noReviewsMessage, Toast.LENGTH_SHORT).show();
         }
     }
 
