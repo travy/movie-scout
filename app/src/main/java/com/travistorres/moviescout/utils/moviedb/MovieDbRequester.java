@@ -134,20 +134,33 @@ public class MovieDbRequester
      */
     public void requestNext() {
         if (hasNextPage()) {
-            URL url = getCurrentRequestUrl();
-            Bundle requestUrlBundle = new Bundle();
-            requestUrlBundle.putString(MOVIE_REQUEST_URL_EXTRA, url.toString());
+            if (sortType == MovieSortType.FAVORITES) {
+                loadLoaderManager(null, R.integer.favorite_movies_loader_manager_id);
+            } else {
+                URL url = getCurrentRequestUrl();
+                Bundle requestUrlBundle = new Bundle();
+                requestUrlBundle.putString(MOVIE_REQUEST_URL_EXTRA, url.toString());
 
-            //  retrieves the loader that will lookup the movies
-            Resources resources = parentActivity.getResources();
-            int loaderKey = resources.getInteger(R.integer.movie_db_requester_loader_manager_id);
-            LoaderManager loaderManager = parentActivity.getSupportLoaderManager();
-            Loader<Movie[]> movieLoader = loaderManager.getLoader(loaderKey);
-            loaderManager.restartLoader(loaderKey, requestUrlBundle, this);
+                //  run the restful request loader
+                loadLoaderManager(requestUrlBundle, R.integer.movie_db_requester_loader_manager_id);
 
-            //  update the page index
-            ++currentPage;
+                //  update the page index
+                ++currentPage;
+            }
         }
+    }
+
+    /**
+     * Executes a specified loader manager by its resource id.
+     *
+     * @param bundle
+     * @param resourceId
+     */
+    private void loadLoaderManager(Bundle bundle, int resourceId) {
+        Resources resources = parentActivity.getResources();
+        int loaderKey = resources.getInteger(resourceId);
+        LoaderManager loaderManager = parentActivity.getSupportLoaderManager();
+        loaderManager.restartLoader(loaderKey, bundle, this);
     }
 
     /**

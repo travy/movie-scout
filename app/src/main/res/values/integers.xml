@@ -11,5 +11,6 @@
     <integer name="is_movie_favorited_loader_manager_id">33554435</integer>
     <integer name="set_movie_favorite_loader_manager_id">33554436</integer>
     <integer name="remove_movie_favorite_loader_manager_id">33554437</integer>
+    <integer name="favorite_movies_loader_manager_id">33554438</integer>
 
 </resources>
