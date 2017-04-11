@@ -136,6 +136,7 @@ public class MovieDbRequester
         if (hasNextPage()) {
             if (sortType == MovieSortType.FAVORITES) {
                 loadLoaderManager(null, R.integer.favorite_movies_loader_manager_id);
+                Toast.makeText(parentActivity, "Display Favorites", Toast.LENGTH_SHORT).show();
             } else {
                 URL url = getCurrentRequestUrl();
                 Bundle requestUrlBundle = new Bundle();
