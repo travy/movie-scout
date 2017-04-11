@@ -10,12 +10,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
+import com.travistorres.moviescout.utils.moviedb.loaders.FavoriteMovieLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.loaders.MovieListLoader;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.networking.UrlManager;
@@ -136,7 +138,6 @@ public class MovieDbRequester
         if (hasNextPage()) {
             if (sortType == MovieSortType.FAVORITES) {
                 loadLoaderManager(null, R.integer.favorite_movies_loader_manager_id);
-                Toast.makeText(parentActivity, "Display Favorites", Toast.LENGTH_SHORT).show();
             } else {
                 URL url = getCurrentRequestUrl();
                 Bundle requestUrlBundle = new Bundle();
@@ -195,7 +196,15 @@ public class MovieDbRequester
      */
     @Override
     public Loader<Movie[]> onCreateLoader(int id, final Bundle args) {
-        return new MovieListLoader(this, args, errorHandler);
+        Loader loader = null;
+        Resources resources = parentActivity.getResources();
+        if (id == resources.getInteger(R.integer.movie_db_requester_loader_manager_id)) {
+            loader = new MovieListLoader(this, args, errorHandler);
+        } else if (id == resources.getInteger(R.integer.favorite_movies_loader_manager_id)) {
+            loader = new FavoriteMovieLoaderTask(parentActivity.getApplicationContext());
+        }
+
+        return loader;
     }
 
     /**
@@ -208,11 +217,19 @@ public class MovieDbRequester
     public void onLoadFinished(Loader<Movie[]> loader, Movie[] list) {
         errorHandler.afterNetworkRequest();
 
-        //  add all of the movies to the list
-        if (list != null) {
-            movieAdapter.setMoviesList(list);
-        } else {
-            Toast.makeText(parentActivity, NO_NETWORK_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
+        if (loader instanceof MovieListLoader) {
+            //  add all of the movies to the list
+            if (list != null) {
+                movieAdapter.setMoviesList(list);
+            } else {
+                Toast.makeText(parentActivity, NO_NETWORK_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
+            }
+        } else if (loader instanceof FavoriteMovieLoaderTask) {
+            if (list != null) {
+                for (int i = 0; i < list.length; ++i) {
+                    Log.d(getClass().getSimpleName(), "Movie:  " + list[i].title);
+                }
+            }
         }
     }
 

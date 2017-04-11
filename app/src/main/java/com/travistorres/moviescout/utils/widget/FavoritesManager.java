@@ -141,4 +141,13 @@ public class FavoritesManager {
             movieTable.delete(movie);
         }
     }
+
+    /**
+     * Acquires all of the users favorites.
+     *
+     * @return array of movies or null.
+     */
+    public Movie[] getFavorites() {
+        return movieTable.getAll();
+    }
 }

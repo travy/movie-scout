@@ -191,4 +191,40 @@ public final class MoviesTable extends BaseTable {
 
         return movieId;
     }
+
+    /**
+     * Acquires all Movies from the database.
+     *
+     * @return
+     */
+    public Movie[] getAll() {
+        Movie[] movies = null;
+        Cursor cursor = connection.query(NAME, null, null, null, null, null, null);
+        int count = cursor.getCount();
+        if (count > 0) {
+            movies = new Movie[count];
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); ++i) {
+                Movie m = new Movie();
+                m.posterPath = cursor.getString(cursor.getColumnIndex(Cols.POSTER_PATH));
+                m.isAdultFilm = Boolean.getBoolean(cursor.getString(cursor.getColumnIndex(Cols.IS_ADULT_FILM)));
+                m.overview = cursor.getString(cursor.getColumnIndex(Cols.OVERVIEW));
+                m.releaseDate = cursor.getString(cursor.getColumnIndex(Cols.RELEASE_DATE));
+                m.id = cursor.getInt(cursor.getColumnIndex(Cols.MOVIE_ID));
+                m.originalTitle = cursor.getString(cursor.getColumnIndex(Cols.ORIGINAL_TITLE));
+                m.title = cursor.getString(cursor.getColumnIndex(Cols.TITLE));
+                m.backdropPath = cursor.getString(cursor.getColumnIndex(Cols.BACKDROP_PATH));
+                m.popularity = cursor.getDouble(cursor.getColumnIndex(Cols.POPULARITY));
+                m.voteCount = cursor.getInt(cursor.getColumnIndex(Cols.VOTE_COUNT));
+                m.hasVideo = Boolean.getBoolean(cursor.getString(cursor.getColumnIndex(Cols.HAS_VIDEO)));
+                m.voteAverage = cursor.getDouble(cursor.getColumnIndex(Cols.VOTE_AVERAGE));
+
+                movies[i] = m;
+
+                cursor.moveToNext();
+            }
+        }
+
+        return movies;
+    }
 }
