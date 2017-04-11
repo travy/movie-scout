@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity
             mMovieRequester = new MovieDbRequester(this, this, this);
             setupMovieView();
             updateMovieApiKey();
-            mMovieRequester.requestNext();
         }
     }
 
@@ -113,8 +112,8 @@ public class MainActivity extends AppCompatActivity
         //  sets up the requester object
         Resources resources = getResources();
         Configuration configuration = resources.getConfiguration();
-        int deviceOrientaton = configuration.orientation;
-        int gridLayoutColumnCount = deviceOrientaton == Configuration.ORIENTATION_PORTRAIT ?
+        int deviceOrientation = configuration.orientation;
+        int gridLayoutColumnCount = deviceOrientation == Configuration.ORIENTATION_PORTRAIT ?
                 resources.getInteger(R.integer.movie_grid_layout_manager_portrait_column_count) :
                 resources.getInteger(R.integer.movie_grid_layout_manager_landscape_column_count);
 
