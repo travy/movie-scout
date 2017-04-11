@@ -291,6 +291,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.rating_sort_button:
                 sortMovies(MovieSortType.HIGHEST_RATED);
                 break;
+            case R.id.favorite_movies_menu_item:
+                loadFavorites();
+                break;
             case R.id.settings_menu_button:
                 loadSettingsPage();
                 return true;
@@ -319,6 +322,17 @@ public class MainActivity extends AppCompatActivity
         Class settingsClass = SettingsActivity.class;
         Intent displaySettingsIntent = new Intent(context, settingsClass);
         startActivity(displaySettingsIntent);
+    }
+
+    /**
+     * Displays the users favorites.
+     *
+     */
+    private void loadFavorites() {
+        Context context = this;
+        Class favoritesClass = FavoritesActivity.class;
+        Intent favoritesIntent = new Intent(context, favoritesClass);
+        startActivity(favoritesIntent);
     }
 
     /**
