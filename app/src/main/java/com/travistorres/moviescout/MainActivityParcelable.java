@@ -67,7 +67,6 @@ public class MainActivityParcelable implements Parcelable {
         Object[] blah = (Object[]) stream[MOVIE_LIST_INDEX];
         movieList = new Movie[blah.length];
         for (int i = 0; i < blah.length; i++) {
-            Movie m = (Movie) blah[i];
             movieList[i] = (Movie) blah[i];
         }
     }

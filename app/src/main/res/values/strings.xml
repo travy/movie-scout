@@ -24,6 +24,7 @@
 
     <string name="popularity_menu_item">Most Popular</string>
     <string name="rating_menu_item">Highly Rated</string>
+    <string name="favorite_movies_menu_item">Favorites</string>
 
     <string name="missing_movie_model_error_message">Unable to acquire Movie data</string>
 
