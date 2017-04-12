@@ -137,6 +137,7 @@ public class MovieDbRequester
     public void requestNext() {
         if (hasNextPage()) {
             if (sortType == MovieSortType.FAVORITES) {
+                totalPages = 0; //  prevents infinite list of results
                 loadLoaderManager(null, R.integer.favorite_movies_loader_manager_id);
             } else {
                 URL url = getCurrentRequestUrl();
@@ -217,20 +218,20 @@ public class MovieDbRequester
     public void onLoadFinished(Loader<Movie[]> loader, Movie[] list) {
         errorHandler.afterNetworkRequest();
 
-        if (loader instanceof MovieListLoader) {
+        //if (loader instanceof MovieListLoader) {
             //  add all of the movies to the list
             if (list != null) {
                 movieAdapter.setMoviesList(list);
             } else {
                 Toast.makeText(parentActivity, NO_NETWORK_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
-        } else if (loader instanceof FavoriteMovieLoaderTask) {
+        /*} else if (loader instanceof FavoriteMovieLoaderTask) {
             if (list != null) {
                 for (int i = 0; i < list.length; ++i) {
                     Log.d(getClass().getSimpleName(), "Movie:  " + list[i].title);
                 }
             }
-        }
+        }*/
     }
 
     /**
