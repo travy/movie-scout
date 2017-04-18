@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -307,9 +308,10 @@ public class MainActivity extends AppCompatActivity
      * @param sortType
      */
     private void sortMovies(MovieSortType sortType) {
+        mMovieRequester = new MovieDbRequester(this, this, this);
         mMovieRequester.setSortType(sortType);
-        mMovieRequester.reset();
-        mMovieRequester.requestNext();
+        setupMovieView();
+        updateMovieApiKey();
     }
 
     /**

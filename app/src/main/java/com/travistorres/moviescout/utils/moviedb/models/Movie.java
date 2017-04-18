@@ -261,4 +261,22 @@ public class Movie implements Parcelable {
 
         dest.writeArray(stream);
     }
+
+    /**
+     * Compares the instance with another Object.
+     *
+     * @param obj
+     *
+     * @return true if both identify the same movie id or if the base Object.equals returns true.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Movie) {
+            Movie other = (Movie) obj;
+
+            return other.id == id;
+        }
+
+        return super.equals(obj);
+    }
 }

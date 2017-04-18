@@ -117,7 +117,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
 
         //  stores all contents within the list
         for (Movie movie : list) {
-            movieList.add(movie);
+            if (!movieList.contains(movie)) {
+                movieList.add(movie);
+            }
         }
 
         notifyDataSetChanged();
