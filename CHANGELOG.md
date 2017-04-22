@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 -  Gridlayout column count differs between portrait and landscape views
 -  Made enhancements which were suggested by Udacity
+-  Sort options will be hidden when there is no network connection
 
 ## [v1.2.0] - 2017-04-01
 
