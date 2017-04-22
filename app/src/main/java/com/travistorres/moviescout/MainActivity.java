@@ -4,11 +4,14 @@
 
 package com.travistorres.moviescout;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +32,8 @@ import com.travistorres.moviescout.utils.moviedb.interfaces.MovieClickedListener
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
+import com.travistorres.moviescout.utils.networking.broadcast_receivers.NetworkConnectionBroadcastReceiver;
+import com.travistorres.moviescout.utils.networking.interfaces.NetworkConnectivityInterface;
 
 /**
  * MainActivity
@@ -44,7 +49,7 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MainActivity extends AppCompatActivity
-        implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener {
+        implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener, NetworkConnectivityInterface {
     private RecyclerView mMovieListView;
     private GridLayoutManager mMovieLayoutManager;
     private MovieListAdapter mMovieAdapter;
@@ -59,6 +64,27 @@ public class MainActivity extends AppCompatActivity
 
     private String movieDbApiThreeKey;
     private String movieDbApiFourKey;
+
+    private IntentFilter networkListeningIntent;
+    private BroadcastReceiver networkBroadcastReceiver;
+
+    /**
+     * Specifies what to do when the os loses a connection to the network.
+     *
+     */
+    @Override
+    public void onNoNetworkConnectivity() {
+        Log.d(getClass().getSimpleName(), "No network connected");
+    }
+
+    /**
+     * Specifies what to do when a network connection is received from the os.
+     *
+     */
+    @Override
+    public void onHasNetworkConnectivity() {
+        Log.d(getClass().getSimpleName(), "A network connection has been found");
+    }
 
     /**
      * Responsible for loading all resource objects and triggering the events that will allow a
@@ -78,6 +104,11 @@ public class MainActivity extends AppCompatActivity
 
         //  acquire the loading indicator
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
+
+        //  create an intent filter for watching network activity
+        networkListeningIntent = new IntentFilter();
+        networkListeningIntent.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        networkBroadcastReceiver = new NetworkConnectionBroadcastReceiver(this);
 
         //  determine if the screen needs to be constructed or if a previous state exists
         String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);
@@ -100,6 +131,28 @@ public class MainActivity extends AppCompatActivity
             setupMovieView();
             updateMovieApiKey();
         }
+    }
+
+    /**
+     * Listens for network connectivity events that are broadcast from the os.
+     *
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        registerReceiver(networkBroadcastReceiver, networkListeningIntent);
+    }
+
+    /**
+     * Stop listening for all broadcast events.
+     *
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        unregisterReceiver(networkBroadcastReceiver);
     }
 
     /**
