@@ -4,18 +4,20 @@
 
 package com.travistorres.moviescout;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +31,8 @@ import com.travistorres.moviescout.utils.moviedb.interfaces.MovieClickedListener
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
+import com.travistorres.moviescout.utils.networking.broadcast_receivers.NetworkConnectionBroadcastReceiver;
+import com.travistorres.moviescout.utils.networking.interfaces.NetworkConnectivityInterface;
 
 /**
  * MainActivity
@@ -44,21 +48,57 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MainActivity extends AppCompatActivity
-        implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener {
+        implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener, NetworkConnectivityInterface {
     private RecyclerView mMovieListView;
     private GridLayoutManager mMovieLayoutManager;
     private MovieListAdapter mMovieAdapter;
-
     private TextView mPageNotFoundTextView;
     private TextView mNetworkingErrorTextView;
     private TextView mUnauthorizedTextView;
-
     private ProgressBar mLoadingIndicator;
-
     private MovieDbRequester mMovieRequester;
-
     private String movieDbApiThreeKey;
     private String movieDbApiFourKey;
+    private IntentFilter networkListeningIntent;
+    private BroadcastReceiver networkBroadcastReceiver;
+    private Menu mMenuBar;
+    private boolean areMenuItemsVisible;
+
+    /**
+     * Specifies what to do when the os loses a connection to the network.
+     *
+     */
+    @Override
+    public void onNoNetworkConnectivity() {
+        setMenuVisibility(false);
+        sortMovies(MovieSortType.FAVORITES);
+        Toast.makeText(this, "The network connection has been lost", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Specifies what to do when a network connection is received from the os.
+     *
+     */
+    @Override
+    public void onHasNetworkConnectivity() {
+        setMenuVisibility(true);
+    }
+
+    /**
+     * Will either show or hide the popularity and rating sort options depending on the value of
+     * `visibilityState`.
+     *
+     * @param visibilityState
+     */
+    private void setMenuVisibility(boolean visibilityState) {
+        areMenuItemsVisible = visibilityState;
+        if (mMenuBar != null) {
+            MenuItem popularity = mMenuBar.findItem(R.id.popularity_sort_button);
+            popularity.setVisible(visibilityState);
+            MenuItem rating = mMenuBar.findItem(R.id.rating_sort_button);
+            rating.setVisible(visibilityState);
+        }
+    }
 
     /**
      * Responsible for loading all resource objects and triggering the events that will allow a
@@ -71,6 +111,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        areMenuItemsVisible = true;
+
         //  obtain all error message objects
         mPageNotFoundTextView = (TextView) findViewById(R.id.page_not_found_error);
         mNetworkingErrorTextView = (TextView) findViewById(R.id.network_connection_failed_error);
@@ -78,6 +120,11 @@ public class MainActivity extends AppCompatActivity
 
         //  acquire the loading indicator
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
+
+        //  create an intent filter for watching network activity
+        networkListeningIntent = new IntentFilter();
+        networkListeningIntent.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        networkBroadcastReceiver = new NetworkConnectionBroadcastReceiver(this);
 
         //  determine if the screen needs to be constructed or if a previous state exists
         String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);
@@ -100,6 +147,28 @@ public class MainActivity extends AppCompatActivity
             setupMovieView();
             updateMovieApiKey();
         }
+    }
+
+    /**
+     * Listens for network connectivity events that are broadcast from the os.
+     *
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        registerReceiver(networkBroadcastReceiver, networkListeningIntent);
+    }
+
+    /**
+     * Stop listening for all broadcast events.
+     *
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        unregisterReceiver(networkBroadcastReceiver);
     }
 
     /**
@@ -270,6 +339,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+
+        //  determines if the menu items should be displayed or not
+        mMenuBar = menu;
+        setMenuVisibility(areMenuItemsVisible);
 
         return true;
     }
