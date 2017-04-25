@@ -10,6 +10,7 @@ import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
 import com.travistorres.moviescout.notifications.NotificationsUtils;
+import com.travistorres.moviescout.utils.widget.FavoritesManager;
 
 /**
  * FavoritesUpdatingTask
@@ -24,6 +25,7 @@ import com.travistorres.moviescout.notifications.NotificationsUtils;
 class FavoritesUpdatingTask extends AsyncTask {
     private JobService jobService;
     private JobParameters jobParameters;
+    private boolean didUpdateOccur;
 
     /**
      * Registers both the service and the parameters with the task.
@@ -46,6 +48,9 @@ class FavoritesUpdatingTask extends AsyncTask {
      */
     @Override
     protected Object doInBackground(Object[] params) {
+        FavoritesManager favoritesManager = new FavoritesManager(jobService);
+        didUpdateOccur = favoritesManager.updateMovies();
+
         return null;
     }
 
@@ -58,7 +63,10 @@ class FavoritesUpdatingTask extends AsyncTask {
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
 
+        //  notify the system that the job is finished and display a notification if an update occurred
         jobService.jobFinished(jobParameters, false);
-        NotificationsUtils.notifyUserThatFavoritesHaveBeenUpdated(jobService);
+        if (didUpdateOccur) {
+            NotificationsUtils.notifyUserThatFavoritesHaveBeenUpdated(jobService);
+        }
     }
 }

@@ -150,4 +150,13 @@ public class FavoritesManager {
     public Movie[] getFavorites() {
         return movieTable.getAll();
     }
+
+    /**
+     * Will request updated information on all of the users favorite movies.
+     *
+     * @return true if there was at least one movie that was updated and false otherwise.
+     */
+    public boolean updateMovies() {
+        return false;
+    }
 }
