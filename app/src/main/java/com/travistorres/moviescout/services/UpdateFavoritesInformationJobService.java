@@ -33,32 +33,7 @@ public class UpdateFavoritesInformationJobService extends JobService {
      */
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
-        mFavoritesUpdateTask = new AsyncTask() {
-            /**
-             * Requests the latest information in the users favorites and if any data has changed
-             * will update the record in the database.
-             *
-             * @param params
-             *
-             * @return
-             */
-            @Override
-            protected Object doInBackground(Object[] params) {
-                return null;
-            }
-
-            /**
-             * Specifies what to do when the job has finished updating all of the users favorites.
-             * @param o
-             */
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-
-                jobFinished(jobParameters, false);
-            }
-        };
-
+        mFavoritesUpdateTask = new FavoritesUpdatingTask(this, jobParameters);
         mFavoritesUpdateTask.execute();
 
         return true;
