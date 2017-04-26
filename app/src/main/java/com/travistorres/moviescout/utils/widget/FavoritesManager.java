@@ -6,7 +6,10 @@ package com.travistorres.moviescout.utils.widget;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.notifications.NotificationsUtils;
 import com.travistorres.moviescout.utils.db.MoviesDatabase;
 import com.travistorres.moviescout.utils.db.tables.MoviesTable;
 import com.travistorres.moviescout.utils.db.tables.ReviewsTable;
@@ -173,6 +176,7 @@ public class FavoritesManager {
             Movie updatedMovie = getLatestMovieInfo(favorite);
             if (updatedMovie != null && !favorite.equals(updatedMovie)) {
                 //  Should update the field in the database
+                updateMovie(favorite.dbId, updatedMovie);
                 didUpdateOccur = true;
             }
         }
@@ -191,8 +195,9 @@ public class FavoritesManager {
         Movie latestCopy = null;
 
         try {
+            String apiKey = context.getString(R.string.movie_scout_version_three_api_key);
             UrlManager urlManager = new UrlManager(context);
-            URL movieUrl = urlManager.getMovieInformation(movie, "ab6a99fb0396689f2528c384cfd20045");
+            URL movieUrl = urlManager.getMovieInformation(movie, apiKey);
             String jsonResponse = NetworkManager.request(movieUrl);
             if (jsonResponse != null) {
                 JSONObject jsonObject = new JSONObject(jsonResponse);
@@ -207,5 +212,14 @@ public class FavoritesManager {
         }
 
         return latestCopy;
+    }
+
+    /**
+     * Will update an individual movie within the database.
+     *
+     * @param movie
+     */
+    public void updateMovie(int id, Movie movie) {
+        movieTable.update(id, movie);
     }
 }

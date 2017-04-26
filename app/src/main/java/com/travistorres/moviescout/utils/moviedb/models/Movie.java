@@ -57,20 +57,21 @@ public class Movie implements Parcelable {
      * Attributes
      *
      */
-    public String posterPath;
-    public boolean isAdultFilm;
-    public String overview;
-    public String releaseDate;
-    public int[] genreIds;
-    public int id;
-    public String originalTitle;
-    public String originalLanguage;
-    public String title;
-    public String backdropPath;
-    public double popularity;
-    public int voteCount;
     public boolean hasVideo;
+    public boolean isAdultFilm;
+    public double popularity;
     public double voteAverage;
+    public int dbId;
+    public int id;
+    public int voteCount;
+    public int[] genreIds;
+    public String backdropPath;
+    public String originalLanguage;
+    public String originalTitle;
+    public String overview;
+    public String posterPath;
+    public String releaseDate;
+    public String title;
 
     /**
      * Constructs a movie object.

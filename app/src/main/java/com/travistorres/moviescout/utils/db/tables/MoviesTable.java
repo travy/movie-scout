@@ -80,6 +80,18 @@ public final class MoviesTable extends BaseTable {
     }
 
     /**
+     * Updates a given row in the database with new information.
+     *
+     * @param fieldId
+     * @param movie
+     */
+    public void update(int fieldId, Movie movie) {
+        String table = getTableName();
+        ContentValues cv = getContentValues(movie);
+        connection.update(table, cv, "_id=" + fieldId, null);
+    }
+
+    /**
      * Constructs a Table model.
      *
      * @param mContext
@@ -218,6 +230,7 @@ public final class MoviesTable extends BaseTable {
                 m.voteCount = cursor.getInt(cursor.getColumnIndex(Cols.VOTE_COUNT));
                 m.hasVideo = Boolean.getBoolean(cursor.getString(cursor.getColumnIndex(Cols.HAS_VIDEO)));
                 m.voteAverage = cursor.getDouble(cursor.getColumnIndex(Cols.VOTE_AVERAGE));
+                m.dbId = cursor.getInt(cursor.getColumnIndex("_id"));
 
                 movies[i] = m;
 

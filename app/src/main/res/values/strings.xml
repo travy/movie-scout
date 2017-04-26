@@ -2,6 +2,8 @@
 
     <string name="app_name">MovieScout</string>
 
+    <string name="movie_scout_version_three_api_key" translatable="false">no-database-key</string>
+
     <!--  Notifications  -->
     <string name="favorites_update_title_notification" translatable="true">Favorites Updated</string>
     <string name="favorites_update_description_notification" translatable="true">Hey!!  One of your favorites on Movie Scout have been updated.  Why not check it out!</string>
