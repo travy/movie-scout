@@ -4,6 +4,7 @@
 
 package com.travistorres.moviescout;
 
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.travistorres.moviescout.notifications.NotificationsUtils;
+import com.travistorres.moviescout.utils.UpdateFavoritesServiceUtils;
 import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
 import com.travistorres.moviescout.utils.moviedb.MovieSortType;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieClickedListener;
@@ -125,6 +128,9 @@ public class MainActivity extends AppCompatActivity
         networkListeningIntent = new IntentFilter();
         networkListeningIntent.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         networkBroadcastReceiver = new NetworkConnectionBroadcastReceiver(this);
+
+        //  schedule the favorites update job
+        UpdateFavoritesServiceUtils.scheduleUpdateFavorites(this);
 
         //  determine if the screen needs to be constructed or if a previous state exists
         String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);

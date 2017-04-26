@@ -12,5 +12,6 @@
     <integer name="set_movie_favorite_loader_manager_id">33554436</integer>
     <integer name="remove_movie_favorite_loader_manager_id">33554437</integer>
     <integer name="favorite_movies_loader_manager_id">33554438</integer>
+    <integer name="favorite_movies_scheduled_updates_task_id">33554439</integer>
 
 </resources>

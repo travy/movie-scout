@@ -6,14 +6,27 @@ package com.travistorres.moviescout.utils.widget;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import com.travistorres.moviescout.R;
+import com.travistorres.moviescout.notifications.NotificationsUtils;
 import com.travistorres.moviescout.utils.db.MoviesDatabase;
 import com.travistorres.moviescout.utils.db.tables.MoviesTable;
 import com.travistorres.moviescout.utils.db.tables.ReviewsTable;
 import com.travistorres.moviescout.utils.db.tables.TrailersTable;
+import com.travistorres.moviescout.utils.moviedb.builders.MovieDbParser;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
+import com.travistorres.moviescout.utils.networking.NetworkManager;
+import com.travistorres.moviescout.utils.networking.UrlManager;
+import com.travistorres.moviescout.utils.networking.exceptions.NetworkingException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * FavoritesManager
@@ -149,5 +162,64 @@ public class FavoritesManager {
      */
     public Movie[] getFavorites() {
         return movieTable.getAll();
+    }
+
+    /**
+     * Will request updated information on all of the users favorite movies.
+     *
+     * @return true if there was at least one movie that was updated and false otherwise.
+     */
+    public boolean updateMovies() {
+        boolean didUpdateOccur = false;
+        Movie[] favorites = getFavorites();
+        for (Movie favorite : favorites) {
+            Movie updatedMovie = getLatestMovieInfo(favorite);
+            if (updatedMovie != null && !favorite.equals(updatedMovie)) {
+                //  Should update the field in the database
+                updateMovie(favorite.dbId, updatedMovie);
+                didUpdateOccur = true;
+            }
+        }
+
+        return didUpdateOccur;
+    }
+
+    /**
+     * Request the latest movie from the server.
+     *
+     * @param movie
+     *
+     * @return Latest copy of the movie
+     */
+    private Movie getLatestMovieInfo(Movie movie) {
+        Movie latestCopy = null;
+
+        try {
+            String apiKey = context.getString(R.string.movie_scout_version_three_api_key);
+            UrlManager urlManager = new UrlManager(context);
+            URL movieUrl = urlManager.getMovieInformation(movie, apiKey);
+            String jsonResponse = NetworkManager.request(movieUrl);
+            if (jsonResponse != null) {
+                JSONObject jsonObject = new JSONObject(jsonResponse);
+                latestCopy = MovieDbParser.mapJsonToMovie(jsonObject);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NetworkingException e) {
+            e.printStackTrace();
+        }
+
+        return latestCopy;
+    }
+
+    /**
+     * Will update an individual movie within the database.
+     *
+     * @param movie
+     */
+    public void updateMovie(int id, Movie movie) {
+        movieTable.update(id, movie);
     }
 }

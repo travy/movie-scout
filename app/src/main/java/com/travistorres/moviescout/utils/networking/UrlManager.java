@@ -43,6 +43,34 @@ public class UrlManager {
     }
 
     /**
+     * Retrieves information regarding a movie from the server.
+     *
+     * @param movie
+     * @param versionThreeApiKey
+     *
+     * @return
+     */
+    public URL getMovieInformation(Movie movie, String versionThreeApiKey) {
+        String httpScheme = context.getString(R.string.movie_db_api_uri_scheme);
+        String domainName = context.getString(R.string.movie_db_api_uri_domain);
+        String apiVersion = context.getString(R.string.movie_db_api_v3_identifier);
+        String movieRequest = context.getString(R.string.movie_db_api_movie_request_action);
+        String apiKeyQuery = context.getString(R.string.movie_db_api_key_query_key);
+        String movieId = Integer.toString(movie.id);
+
+        Uri uri = new Uri.Builder()
+                .scheme(httpScheme)
+                .authority(domainName)
+                .appendPath(apiVersion)
+                .appendPath(movieRequest)
+                .appendPath(movieId)
+                .appendQueryParameter(apiKeyQuery, versionThreeApiKey)
+                .build();
+
+        return getUrl(uri);
+    }
+
+    /**
      * Retrieves the URL for requesting a list of movies.
      *
      * @param sortType The sort order for the movies

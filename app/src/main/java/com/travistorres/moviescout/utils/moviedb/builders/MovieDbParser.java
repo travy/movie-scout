@@ -18,8 +18,6 @@ import org.json.JSONObject;
  *
  * @author Travis Anthony Torres
  * @version February 15, 2017
- *
- * TODO-  Use the Builder pattern
  */
 
 public class MovieDbParser {
@@ -117,7 +115,7 @@ public class MovieDbParser {
      *
      * @throws JSONException When a referenced key was not found
      */
-    private static Movie mapJsonToMovie(JSONObject json)
+    public static Movie mapJsonToMovie(JSONObject json)
             throws JSONException {
         Movie movie = new Movie();
 
