@@ -9,6 +9,8 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  * SettingsFragment
  *
@@ -44,6 +46,8 @@ public class SettingsFragment extends PreferenceFragmentCompat
     private void validatePreferences() {
         listenForChangesOnPreference(R.string.movie_db_v3_settings_key);
         listenForChangesOnPreference(R.string.movie_db_v4_settings_key);
+        listenForChangesOnPreference(R.string.favorite_movies_notification_state_key);
+        listenForChangesOnPreference(R.string.favorite_movies_update_interval_key);
     }
 
     /**
@@ -74,13 +78,12 @@ public class SettingsFragment extends PreferenceFragmentCompat
         //  convert field results
         boolean isValid = true;
         String preferenceKey = preference.getKey();
+
         String apiThreeKey = getString(R.string.movie_db_v3_settings_key);
         String apiFourKey = getString(R.string.movie_db_v4_settings_key);
-        String newApiKeyValue = (String) newValue;
+        if (preferenceKey == apiThreeKey || preferenceKey == apiFourKey) {
+            String newApiKeyValue = (String) newValue;
 
-        //  validates the api key values
-        if (preferenceKey.equals(apiThreeKey) ||
-                preferenceKey.equals(apiFourKey)) {
             //  displays an error message if the object is left blank
             isValid = newApiKeyValue.trim().length() >= 1;
             if (!isValid) {

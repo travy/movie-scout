@@ -31,9 +31,8 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class UpdateFavoritesServiceUtils {
-    private static final int REMINDER_INTERVAL_MINUTES = 2;//15;
-    private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
-    private static final int SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS;
+    public static final int MINIMUM_EXCLUSIVE_MINUTES = 0;
+    public static final int MAXIMUM_INCLUSIVE_MINUTES = 60;
 
     //  specifies if the app has been updated
     private static boolean sInitialized;
@@ -42,12 +41,21 @@ public class UpdateFavoritesServiceUtils {
      * Runs a concurrent thread for determining if any of the users Favorites have been updated.
      *
      * @param context
+     * @param reminderIntervalInMinutes
      */
-    synchronized public static void scheduleUpdateFavorites(@NonNull final Context context) {
+    synchronized public static void scheduleUpdateFavorites(@NonNull final Context context, final int reminderIntervalInMinutes) {
+        //  only allow the interval in the range 1 - 60 minutes
+        if (reminderIntervalInMinutes <= MINIMUM_EXCLUSIVE_MINUTES || reminderIntervalInMinutes > MAXIMUM_INCLUSIVE_MINUTES) {
+            throw new IllegalArgumentException(context.getString(R.string.invalid_interval_duration_for_service_message));
+        }
+
         //  ignore if the service is already initialized
         if (sInitialized) {
             return;
         }
+
+        //  converts the minutes into seconds
+        int intervalInSeconds = (int) (TimeUnit.MINUTES.toSeconds(reminderIntervalInMinutes));
 
         //  configures the service for updating the favorites
         Driver driver = new GooglePlayDriver(context);
@@ -59,8 +67,8 @@ public class UpdateFavoritesServiceUtils {
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(
-                        REMINDER_INTERVAL_SECONDS,
-                        REMINDER_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS
+                        intervalInSeconds,
+                        intervalInSeconds + intervalInSeconds
                 ))
                 .setReplaceCurrent(true)
                 .build();
@@ -68,5 +76,35 @@ public class UpdateFavoritesServiceUtils {
         // schedule the service
         dispatcher.schedule(constraintFavoritesUpdateJob);
         sInitialized = true;
+    }
+
+    /**
+     * Unscheduled the favorites update service.
+     *
+     * @param context
+     */
+    synchronized public static void unscheduledUpdateFavorites(@NonNull final Context context) {
+        //  its fine if the service has not been scheduled
+        if (!sInitialized) {
+            return;
+        }
+
+        //  cancel the service
+        String serviceTag = context.getString(R.string.favorites_update_job_task);
+        Driver driver = new GooglePlayDriver(context);
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
+        dispatcher.cancel(serviceTag);
+        sInitialized = false;
+    }
+
+    /**
+     * Will attempt to reschedule the favorites.
+     *
+     * @param context
+     * @param reminderIntervalInMinutes
+     */
+    synchronized public static void rescheduleUpdateFavorites(@NonNull final Context context, final int reminderIntervalInMinutes) {
+        unscheduledUpdateFavorites(context);
+        scheduleUpdateFavorites(context, reminderIntervalInMinutes);
     }
 }

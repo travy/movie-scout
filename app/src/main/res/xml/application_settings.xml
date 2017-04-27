@@ -21,4 +21,26 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/favorites_updates_notification_settings_category">
+
+        <CheckBoxPreference
+            android:id="@+id/display_movie_update_notification_setting"
+            android:defaultValue="@bool/favorite_movies_update_notification_setting_default_value"
+            android:key="@string/favorite_movies_notification_state_key"
+            android:title="@string/favorite_movies_notification_state_title"
+            android:summary="@string/favorite_movies_notification_state_summary" />
+
+        <ListPreference
+            android:dependency="@string/favorite_movies_notification_state_key"
+            android:id="@+id/update_movies_duration_time_setting"
+            android:defaultValue="@string/favorite_movies_update_interval_default_value"
+            android:key="@string/favorite_movies_update_interval_key"
+            android:title="@string/favorite_movies_update_interval_title"
+            android:summary="@string/favorite_movies_update_interval_summary"
+            android:entries="@array/movie_update_time_interval_options"
+            android:entryValues="@array/movie_update_time_interval_values" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

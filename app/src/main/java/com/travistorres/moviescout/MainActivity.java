@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity
         networkBroadcastReceiver = new NetworkConnectionBroadcastReceiver(this);
 
         //  schedule the favorites update job
-        UpdateFavoritesServiceUtils.scheduleUpdateFavorites(this);
+        updateNotificationStatusSettings();
 
         //  determine if the screen needs to be constructed or if a previous state exists
         String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);
@@ -493,5 +494,55 @@ public class MainActivity extends AppCompatActivity
                 s == getString(R.string.movie_db_v4_settings_key)) {
             updateMovieApiKey();
         }
+
+        if (s == getString(R.string.favorite_movies_notification_state_key)) {
+            updateNotificationStatusSettings();
+        }
+
+        if (s == getString(R.string.favorite_movies_update_interval_key)) {
+            updateNotificationsIntervalTime();
+        }
+    }
+
+    /**
+     * Specifies whether or not the service to update favorites should be scheduled.
+     *
+     */
+    public void updateNotificationStatusSettings() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //  determines if the notifications setting is on
+        Resources resources = getResources();
+        String showNotificationsKey = getString(R.string.favorite_movies_notification_state_key);
+        boolean showNotificationsDefaultValue = resources.getBoolean(R.bool.favorite_movies_update_notification_setting_default_value);
+        boolean notificationsTurnedOn = sharedPreferences.getBoolean(showNotificationsKey, showNotificationsDefaultValue);
+
+        //  acquires the interval for when the service should run
+        String notificationsIntervalKey = getString(R.string.favorite_movies_update_interval_key);
+        String notificationsIntervalDefaultValue = getString(R.string.favorite_movies_update_interval_default_value);
+        int notificationsIntervalValue = Integer.parseInt(sharedPreferences.getString(notificationsIntervalKey, notificationsIntervalDefaultValue));
+
+        //  schedules and unscheduled the service as necessary
+        if (notificationsTurnedOn) {
+            UpdateFavoritesServiceUtils.scheduleUpdateFavorites(this, notificationsIntervalValue);
+        } else {
+            UpdateFavoritesServiceUtils.unscheduledUpdateFavorites(this);
+        }
+    }
+
+    /**
+     * Reschedules the service to run at a specified interval.
+     *
+     */
+    public void updateNotificationsIntervalTime() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //  acquires the interval for when the service should run
+        String notificationsIntervalKey = getString(R.string.favorite_movies_update_interval_key);
+        String notificationsIntervalDefaultValue = getString(R.string.favorite_movies_update_interval_default_value);
+        int notificationsIntervalValue = Integer.parseInt(sharedPreferences.getString(notificationsIntervalKey, notificationsIntervalDefaultValue));
+
+        //  schedules and unscheduled the service as necessary
+        UpdateFavoritesServiceUtils.rescheduleUpdateFavorites(this, notificationsIntervalValue);
     }
 }
