@@ -500,7 +500,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (s == getString(R.string.favorite_movies_update_interval_key)) {
-            //  TODO:  should update the time interval for updating favorites
+            updateNotificationsIntervalTime();
         }
     }
 
@@ -511,16 +511,38 @@ public class MainActivity extends AppCompatActivity
     public void updateNotificationStatusSettings() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        //  determines if the notifications setting is on
         Resources resources = getResources();
-        String statusKey = getString(R.string.favorite_movies_notification_state_key);
-        boolean notificationStatusDefault = resources.getBoolean(R.bool.favorite_movies_update_notification_setting_default_value);
-        boolean notificationsTurnedOn = sharedPreferences.getBoolean(statusKey, notificationStatusDefault);
+        String showNotificationsKey = getString(R.string.favorite_movies_notification_state_key);
+        boolean showNotificationsDefaultValue = resources.getBoolean(R.bool.favorite_movies_update_notification_setting_default_value);
+        boolean notificationsTurnedOn = sharedPreferences.getBoolean(showNotificationsKey, showNotificationsDefaultValue);
+
+        //  acquires the interval for when the service should run
+        String notificationsIntervalKey = getString(R.string.favorite_movies_update_interval_key);
+        String notificationsIntervalDefaultValue = getString(R.string.favorite_movies_update_interval_default_value);
+        int notificationsIntervalValue = Integer.parseInt(sharedPreferences.getString(notificationsIntervalKey, notificationsIntervalDefaultValue));
 
         //  schedules and unscheduled the service as necessary
         if (notificationsTurnedOn) {
-            UpdateFavoritesServiceUtils.scheduleUpdateFavorites(this);
+            UpdateFavoritesServiceUtils.scheduleUpdateFavorites(this, notificationsIntervalValue);
         } else {
             UpdateFavoritesServiceUtils.unscheduledUpdateFavorites(this);
         }
+    }
+
+    /**
+     * Reschedules the service to run at a specified interval.
+     *
+     */
+    public void updateNotificationsIntervalTime() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //  acquires the interval for when the service should run
+        String notificationsIntervalKey = getString(R.string.favorite_movies_update_interval_key);
+        String notificationsIntervalDefaultValue = getString(R.string.favorite_movies_update_interval_default_value);
+        int notificationsIntervalValue = Integer.parseInt(sharedPreferences.getString(notificationsIntervalKey, notificationsIntervalDefaultValue));
+
+        //  schedules and unscheduled the service as necessary
+        UpdateFavoritesServiceUtils.rescheduleUpdateFavorites(this, notificationsIntervalValue);
     }
 }

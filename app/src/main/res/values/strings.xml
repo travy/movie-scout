@@ -35,6 +35,8 @@
 
     <string name="missing_movie_model_error_message" translatable="true">Unable to acquire Movie data</string>
 
+    <string name="invalid_interval_duration_for_service_message" translatable="true">An invalid number was specified for the time interval</string>
+
     <!--  Movie Transport Information  -->
     <string name="selected_movie_extra_key" translatable="false">selected-movie</string>
 
