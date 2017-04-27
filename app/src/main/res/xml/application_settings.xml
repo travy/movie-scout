@@ -32,6 +32,7 @@
             android:summary="@string/favorite_movies_notification_state_summary" />
 
         <ListPreference
+            android:dependency="@string/favorite_movies_notification_state_key"
             android:id="@+id/update_movies_duration_time_setting"
             android:defaultValue="@string/favorite_movies_update_interval_default_value"
             android:key="@string/favorite_movies_update_interval_key"
