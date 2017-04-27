@@ -295,12 +295,7 @@ public class MovieInfoActivity extends AppCompatActivity
      *
      */
     private void setupApiPreferences() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        //  setup the version 3 api key
-        String versionThreeApiSettingsKey = getString(R.string.movie_db_v3_settings_key);
-        String versionThreeApiSettingsDefault = getString(R.string.movie_db_v3_settings_default);
-        movieDbApiThreeKey = sharedPreferences.getString(versionThreeApiSettingsKey, versionThreeApiSettingsDefault);
+        movieDbApiThreeKey = getString(R.string.movie_scout_version_three_api_key);
     }
 
     /**

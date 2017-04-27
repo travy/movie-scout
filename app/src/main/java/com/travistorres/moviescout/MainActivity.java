@@ -4,7 +4,6 @@
 
 package com.travistorres.moviescout;
 
-import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +18,6 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +25,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.travistorres.moviescout.notifications.NotificationsUtils;
 import com.travistorres.moviescout.utils.UpdateFavoritesServiceUtils;
 import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
 import com.travistorres.moviescout.utils.moviedb.MovieSortType;
@@ -130,10 +127,12 @@ public class MainActivity extends AppCompatActivity
         networkListeningIntent.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         networkBroadcastReceiver = new NetworkConnectionBroadcastReceiver(this);
 
-        //  schedule the favorites update job
-        updateNotificationStatusSettings();
+        //  sets the api keys
+        movieDbApiThreeKey = getString(R.string.movie_scout_version_three_api_key);
 
         //  determine if the screen needs to be constructed or if a previous state exists
+        mMovieRequester = new MovieDbRequester(this, this, this);
+        mMovieRequester.setVersionThreeApiKey(movieDbApiThreeKey);
         String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);
         if (savedInstanceState != null && savedInstanceState.containsKey(mainActivityStateExtra)) {
             //  load the previously loaded movies and display the results
@@ -142,18 +141,19 @@ public class MainActivity extends AppCompatActivity
             MovieSortType sortType = parcelable.sortType;
             Movie[] movieList = parcelable.movieList;
 
-            mMovieRequester = new MovieDbRequester(this, this, this);
             mMovieRequester.setCurrentPage(currentPage);
             mMovieRequester.setSortType(sortType);
-
             setupMovieView(movieList);
-            updateMovieApiKey(false, true);
+            mMovieRequester.requestNext();
         } else {
             //  create a movie request object and display the interface
-            mMovieRequester = new MovieDbRequester(this, this, this);
             setupMovieView();
-            updateMovieApiKey();
+            mMovieRequester.reset();
+            mMovieRequester.requestNext();
         }
+
+        //  schedule the favorites update job
+        updateNotificationStatusSettings();
     }
 
     /**
@@ -216,44 +216,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Clears any cached results from previous network requests and then performs a new requests
-     * with any new values passed for the API keys.
-     *
-     * @param shouldReset Specifies if the movie requester instance should be reset or not.
-     * @param shouldRequest Specifies if a new page should be requested.  This is generally useful
-     *                      if the current page is 1.
-     */
-    private void updateMovieApiKey(boolean shouldReset, boolean shouldRequest) {
-        //  hides the unauthorized message
-        mUnauthorizedTextView.setVisibility(TextView.INVISIBLE);
-
-        //  updates the api keys based on the settings
-        setupApiPreferences();
-
-        //  resets the counter fields in the request object if requested
-        if (shouldReset) {
-            mMovieRequester.reset();
-        }
-
-        //  specifies the api keys in the requester
-        mMovieRequester.setApiKeys(movieDbApiThreeKey, movieDbApiFourKey);
-
-        //  request the next page if necessary
-        if (shouldRequest) {
-            mMovieRequester.requestNext();
-        }
-    }
-
-    /**
-     * Updates the movie api key and forces both the requester to reset and a new page be requested
-     * from the server.
-     *
-     */
-    private void updateMovieApiKey() {
-        updateMovieApiKey(true, true);
-    }
-
-    /**
      * Save the movie results.
      *
      * @param outState
@@ -282,58 +244,6 @@ public class MainActivity extends AppCompatActivity
         //  stop listening to changes in preferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    /**
-     * Acquires the settings for the application and stores them so that they are easily
-     * accessible.  Will also redirect the user to the Settings page if they have not yet provided
-     * an API access key.
-     *
-     */
-    private void setupApiPreferences() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        //  setup the version 3 api key
-        String versionThreeApiSettingsKey = getString(R.string.movie_db_v3_settings_key);
-        String versionThreeApiSettingsDefault = getString(R.string.movie_db_v3_settings_default);
-        movieDbApiThreeKey = sharedPreferences.getString(versionThreeApiSettingsKey, versionThreeApiSettingsDefault);
-
-        //  setup the version four api key
-        String versionFourApiSettingsKey = getString(R.string.movie_db_v4_settings_key);
-        String versionFourApiSettingsDefault = getString(R.string.movie_db_v4_settings_default);
-        movieDbApiFourKey = sharedPreferences.getString(versionFourApiSettingsKey, versionFourApiSettingsDefault);
-
-        //  direct the user to the settings page if the api keys have not been specified
-        if (!wereMovieDbApiKeysSet()) {
-            String missingKeyMessage = getString(R.string.missing_api_keys);
-            Toast.makeText(this, missingKeyMessage, Toast.LENGTH_SHORT).show();
-            loadSettingsPage();
-        }
-
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-    }
-
-    /**
-     * Determines if both the Movie DB API v3 and v4 access keys have been provided.
-     *
-     * @return boolean `true` if both keys have a proper value defined as by the
-     * `wasMovieDbApiKeySpecified` method call.
-     */
-    private boolean wereMovieDbApiKeysSet() {
-        return wasMovieDbApiKeySpecified(movieDbApiThreeKey) &&
-                wasMovieDbApiKeySpecified(movieDbApiFourKey);
-    }
-
-    /**
-     * Determines if a specified API access key was provided.  A key is determined to be valid, if
-     * it is not null and is composed of at least one character (excluding white space).
-     *
-     * @param apiKey The API key to check the validity of.
-     *
-     * @return boolean `true` if the key is neither null or an empty string and `false` otherwise.
-     */
-    private boolean wasMovieDbApiKeySpecified(String apiKey) {
-        return apiKey != null && apiKey.trim().length() > 1;
     }
 
     /**
@@ -389,9 +299,11 @@ public class MainActivity extends AppCompatActivity
      */
     private void sortMovies(MovieSortType sortType) {
         mMovieRequester = new MovieDbRequester(this, this, this);
+        mMovieRequester.setVersionThreeApiKey(movieDbApiThreeKey);
         mMovieRequester.setSortType(sortType);
         setupMovieView();
-        updateMovieApiKey();
+        mMovieRequester.reset();
+        mMovieRequester.requestNext();
     }
 
     /**
@@ -490,11 +402,6 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s == getString(R.string.movie_db_v3_settings_key) ||
-                s == getString(R.string.movie_db_v4_settings_key)) {
-            updateMovieApiKey();
-        }
-
         if (s == getString(R.string.favorite_movies_notification_state_key)) {
             updateNotificationStatusSettings();
         }
