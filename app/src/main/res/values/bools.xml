@@ -8,4 +8,6 @@
 
     <bool name="movie_grid_poster_adjust_view_bounds">true</bool>
 
+    <bool name="favorite_movies_update_notification_setting_default_value">true</bool>
+
 </resources>
