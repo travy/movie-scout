@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity
         networkBroadcastReceiver = new NetworkConnectionBroadcastReceiver(this);
 
         //  schedule the favorites update job
-        UpdateFavoritesServiceUtils.scheduleUpdateFavorites(this);
+        updateNotificationStatusSettings();
 
         //  determine if the screen needs to be constructed or if a previous state exists
         String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);
@@ -492,6 +493,34 @@ public class MainActivity extends AppCompatActivity
         if (s == getString(R.string.movie_db_v3_settings_key) ||
                 s == getString(R.string.movie_db_v4_settings_key)) {
             updateMovieApiKey();
+        }
+
+        if (s == getString(R.string.favorite_movies_notification_state_key)) {
+            updateNotificationStatusSettings();
+        }
+
+        if (s == getString(R.string.favorite_movies_update_interval_key)) {
+            //  TODO:  should update the time interval for updating favorites
+        }
+    }
+
+    /**
+     * Specifies whether or not the service to update favorites should be scheduled.
+     *
+     */
+    public void updateNotificationStatusSettings() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Resources resources = getResources();
+        String statusKey = getString(R.string.favorite_movies_notification_state_key);
+        boolean notificationStatusDefault = resources.getBoolean(R.bool.favorite_movies_update_notification_setting_default_value);
+        boolean notificationsTurnedOn = sharedPreferences.getBoolean(statusKey, notificationStatusDefault);
+
+        //  schedules and unscheduled the service as necessary
+        if (notificationsTurnedOn) {
+            UpdateFavoritesServiceUtils.scheduleUpdateFavorites(this);
+        } else {
+            UpdateFavoritesServiceUtils.unscheduledUpdateFavorites(this);
         }
     }
 }

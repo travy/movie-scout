@@ -69,4 +69,23 @@ public class UpdateFavoritesServiceUtils {
         dispatcher.schedule(constraintFavoritesUpdateJob);
         sInitialized = true;
     }
+
+    /**
+     * Unscheduled the favorites update service.
+     *
+     * @param context
+     */
+    synchronized public static void unscheduledUpdateFavorites(@NonNull final Context context) {
+        //  its fine if the service has not been scheduled
+        if (!sInitialized) {
+            return;
+        }
+
+        //  cancel the service
+        String serviceTag = context.getString(R.string.favorites_update_job_task);
+        Driver driver = new GooglePlayDriver(context);
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
+        dispatcher.cancel(serviceTag);
+        sInitialized = false;
+    }
 }
