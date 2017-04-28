@@ -32,6 +32,7 @@ public class FavoriteButton implements View.OnClickListener {
      * @param isFavorite
      * @param clickHandler
      */
+    //  TODO-  take a Context for loading resources
     public FavoriteButton(Button button, boolean isFavorite, OnFavoriteButtonClicked clickHandler) {
         buttonView = button;
         buttonView.setOnClickListener(this);

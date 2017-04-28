@@ -18,7 +18,6 @@ import android.support.v4.content.ContextCompat;
 
 import com.travistorres.moviescout.MainActivity;
 import com.travistorres.moviescout.R;
-import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 /**
  * NotificationUtils

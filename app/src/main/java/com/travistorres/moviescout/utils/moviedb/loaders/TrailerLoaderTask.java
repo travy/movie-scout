@@ -25,8 +25,8 @@ import com.travistorres.moviescout.utils.moviedb.models.Trailer;
  */
 
 public class TrailerLoaderTask extends AsyncTaskLoader<Trailer[]> {
-    private Bundle selectedMovieBundle;
     private AppCompatActivity parentActivity;
+    private Bundle selectedMovieBundle;
     private MovieDbNetworkingErrorHandler errorHandler;
     private String versionThreeApiKey;
 
@@ -41,9 +41,9 @@ public class TrailerLoaderTask extends AsyncTaskLoader<Trailer[]> {
     public TrailerLoaderTask(AppCompatActivity activity, Bundle movieBundle, MovieDbNetworkingErrorHandler networkingErrorHandler, String apiKey) {
         super(activity);
 
-        selectedMovieBundle = movieBundle;
-        parentActivity = activity;
         errorHandler = networkingErrorHandler;
+        parentActivity = activity;
+        selectedMovieBundle = movieBundle;
         versionThreeApiKey = apiKey;
     }
 

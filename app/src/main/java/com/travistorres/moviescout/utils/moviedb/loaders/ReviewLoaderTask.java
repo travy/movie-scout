@@ -40,10 +40,10 @@ public class ReviewLoaderTask extends AsyncTaskLoader<Review[]> {
     public ReviewLoaderTask(AppCompatActivity activity, Bundle movieBundle, MovieDbNetworkingErrorHandler networkingErrorHandler, String movieDbApiKey) {
         super(activity);
 
-        parent = activity;
+        apiKey = movieDbApiKey;
         bundle = movieBundle;
         errorHandler = networkingErrorHandler;
-        apiKey = movieDbApiKey;
+        parent = activity;
     }
 
     /**

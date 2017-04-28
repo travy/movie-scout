@@ -37,6 +37,7 @@ public class Movie implements Parcelable {
      *  Specifies the indexes each attribute will be assigned to when streamed.
      *
      */
+    //  TODO-  build the parcel using the technique in Review and Trailer to elliminate the need for the array
     private final static int NUMBER_FIELDS_IN_STREAM = 14;  //  set to the number of attributes - context
     private final static int STREAM_POSTER_PATH_INDEX = 0;
     private final static int STREAM_IS_ADULT_FILM_INDEX = 1;
@@ -82,7 +83,7 @@ public class Movie implements Parcelable {
     }
 
     /**
-     * Constructs a new Movie instance after retreival from some data stream.
+     * Constructs a new Movie instance after retrieval from some data stream.
      *
      */
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
@@ -118,6 +119,7 @@ public class Movie implements Parcelable {
         String[] dateBreakdown = releaseDate.split(DATE_FORMAT_DELIMITER);
         String formattedDate = null;
 
+        //  TODO-  Move into a Utility class
         //  Evaluate the month to day form
         switch (dateBreakdown[DATE_FORMAT_MONTH_INDEX]) {
             case "01":
@@ -277,7 +279,6 @@ public class Movie implements Parcelable {
 
 
             return other.backdropPath.equals(backdropPath) &&
-                    //other.genreIds == genreIds &&
                     other.hasVideo == hasVideo &&
                     other.id == id &&
                     other.isAdultFilm == isAdultFilm &&

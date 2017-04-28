@@ -21,15 +21,16 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MainActivityParcelable implements Parcelable {
+    //  TODO-  look into how Reviews and Trailers are stored to avoid the use of an array here
     private static final int CURRENT_PAGE_INDEX = 0;
     private static final int SORT_TYPE_INDEX = 1;
     private static final int MOVIE_LIST_INDEX = 2;
     private static final int TOTAL_PAGES_INDEX = 3;
 
     public int currentPage;
-    public MovieSortType sortType;
-    public Movie[] movieList;
     public int totalPages;
+    public Movie[] movieList;
+    public MovieSortType sortType;
 
     /**
      * Instructs Android how to unpack the Parcelable.

@@ -6,10 +6,8 @@ package com.travistorres.moviescout.utils.widget;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.travistorres.moviescout.R;
-import com.travistorres.moviescout.notifications.NotificationsUtils;
 import com.travistorres.moviescout.utils.db.MoviesDatabase;
 import com.travistorres.moviescout.utils.db.tables.MoviesTable;
 import com.travistorres.moviescout.utils.db.tables.ReviewsTable;
@@ -41,10 +39,9 @@ import java.net.URL;
 
 public class FavoritesManager {
     private Context context;
-    private SQLiteDatabase connection;
-
     private MoviesTable movieTable;
     private ReviewsTable reviewsTable;
+    private SQLiteDatabase connection;
     private TrailersTable trailersTable;
 
     /**
@@ -56,7 +53,6 @@ public class FavoritesManager {
     public FavoritesManager(Context mContext) {
         context = mContext;
         connection = new MoviesDatabase(context).getWritableDatabase();
-
         movieTable = new MoviesTable(context, connection);
         reviewsTable = new ReviewsTable(context, connection);
         trailersTable = new TrailersTable(context, connection);

@@ -23,14 +23,14 @@ import java.net.URL;
 
 public class Trailer implements Parcelable{
     public String id;
-    public String iso_639_1;    // this is the name of the field on movieDb, could not resolve using Java conventions
     public String iso_3166_1;
+    public String iso_639_1;    // this is the name of the field on movieDb, could not resolve using Java conventions
     public String key;
+    public String movieId;
     public String name;
     public String site;
     public String size;
     public String type;
-    public String movieId;
 
     /**
      * Constructs a new Trailer instance.

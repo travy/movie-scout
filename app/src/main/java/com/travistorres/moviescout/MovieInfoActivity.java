@@ -5,7 +5,6 @@
 package com.travistorres.moviescout;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -13,7 +12,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -56,25 +54,20 @@ public class MovieInfoActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener, OnFavoriteButtonClicked, IsMovieFavoritedListener {
     private final String LOG_TAG = getClass().getSimpleName();
 
-    //  used for separating labels from their data
-    private final static String LABEL_SEPERATOR = ":  ";
-
-    private Movie selectedMovie;
-
-    private TextView mMovieTitle;
-    private ImageView mMoviePoster;
-    private TextView mMovieReleaseDate;
-    private TextView mMovieOverview;
-    private TextView mMovieLanguage;
-    private TextView mMoviePopularity;
-    private TextView mMovieVoteAverage;
-    private ImageView mBackdropImage;
-    private RecyclerView mTrailerListRecyclerView;
-    private RecyclerView mReviewListRecyclerView;
     private Button mFavoriteMovieButton;
+    private ImageView mBackdropImage;
+    private ImageView mMoviePoster;
+    private Movie selectedMovie;
     private ProgressBar mProgressBar;
-
+    private RecyclerView mReviewListRecyclerView;
+    private RecyclerView mTrailerListRecyclerView;
     private String movieDbApiThreeKey;
+    private TextView mMovieLanguage;
+    private TextView mMovieOverview;
+    private TextView mMoviePopularity;
+    private TextView mMovieReleaseDate;
+    private TextView mMovieTitle;
+    private TextView mMovieVoteAverage;
 
     /**
      * Loads information regarding the selected video and displays it's meta-data on the screen
@@ -95,19 +88,19 @@ public class MovieInfoActivity extends AppCompatActivity
         setupApiPreferences();
 
         //  load page views
-        mMovieTitle = (TextView) findViewById(R.id.movie_title);
-        mMoviePoster = (ImageView) findViewById(R.id.movie_poster);
-        mMovieReleaseDate = (TextView) findViewById(R.id.movie_release_date);
-        mMovieOverview = (TextView) findViewById(R.id.movie_overview);
-        mMovieLanguage = (TextView) findViewById(R.id.movie_language);
-        mMoviePopularity = (TextView) findViewById(R.id.movie_popularity);
-        mMovieVoteAverage = (TextView) findViewById(R.id.movie_vote_average);
         mBackdropImage = (ImageView) findViewById(R.id.movie_backdrop_image_view);
-        mTrailerListRecyclerView = (RecyclerView) findViewById(R.id.movie_trailers_list);
-        mReviewListRecyclerView = (RecyclerView) findViewById(R.id.movie_review_list);
         mFavoriteMovieButton = (Button) findViewById(R.id.favorite_movie_button);
         mFavoriteMovieButton.setVisibility(View.INVISIBLE);
+        mMovieLanguage = (TextView) findViewById(R.id.movie_language);
+        mMovieOverview = (TextView) findViewById(R.id.movie_overview);
+        mMoviePopularity = (TextView) findViewById(R.id.movie_popularity);
+        mMoviePoster = (ImageView) findViewById(R.id.movie_poster);
+        mMovieReleaseDate = (TextView) findViewById(R.id.movie_release_date);
+        mMovieTitle = (TextView) findViewById(R.id.movie_title);
+        mMovieVoteAverage = (TextView) findViewById(R.id.movie_vote_average);
         mProgressBar = (ProgressBar) findViewById(R.id.loading_indicator_pb);
+        mReviewListRecyclerView = (RecyclerView) findViewById(R.id.movie_review_list);
+        mTrailerListRecyclerView = (RecyclerView) findViewById(R.id.movie_trailers_list);
 
         //  retrieves the key for identifying the selected movie
         String selectedMovieExtraKey = getString(R.string.selected_movie_extra_key);
@@ -130,12 +123,13 @@ public class MovieInfoActivity extends AppCompatActivity
             String languageLabel = getString(R.string.movie_language_label);
 
             //  display information regarding the video
-            mMovieTitle.setText(selectedMovie.originalTitle);
-            mMovieReleaseDate.setText(releaseDateLabel + LABEL_SEPERATOR + selectedMovie.getCleanDateFormat());
-            mMovieVoteAverage.setText(voteAverageLabel + LABEL_SEPERATOR + selectedMovie.voteAverage);
-            mMoviePopularity.setText(popularityLabel + LABEL_SEPERATOR + selectedMovie.popularity);
-            mMovieLanguage.setText(languageLabel + LABEL_SEPERATOR + selectedMovie.originalLanguage);
+            String labelSeparator = getString(R.string.movie_info_label_separator);
+            mMovieLanguage.setText(languageLabel + labelSeparator + selectedMovie.originalLanguage);
             mMovieOverview.setText(selectedMovie.overview);
+            mMoviePopularity.setText(popularityLabel + labelSeparator + selectedMovie.popularity);
+            mMovieReleaseDate.setText(releaseDateLabel + labelSeparator + selectedMovie.getCleanDateFormat());
+            mMovieTitle.setText(selectedMovie.originalTitle);
+            mMovieVoteAverage.setText(voteAverageLabel + labelSeparator + selectedMovie.voteAverage);
             retrieveBackdrop(selectedMovie);
             retrievePoster(selectedMovie);
 

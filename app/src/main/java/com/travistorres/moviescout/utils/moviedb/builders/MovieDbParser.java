@@ -20,6 +20,7 @@ import org.json.JSONObject;
  * @version February 15, 2017
  */
 
+//  TODO-  clean up code to move all strings into res.xml
 public class MovieDbParser {
     private final static String RESULTS_KEY = "results";
     private final static String POSTER_PATH_KEY = "poster_path";
