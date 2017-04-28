@@ -222,20 +222,15 @@ public class MovieDbRequester
     public void onLoadFinished(Loader<Movie[]> loader, Movie[] list) {
         errorHandler.afterNetworkRequest();
 
-        //if (loader instanceof MovieListLoader) {
-            //  add all of the movies to the list
-            if (list != null) {
-                movieAdapter.setMoviesList(list);
-            } else {
-                Toast.makeText(parentActivity, NO_NETWORK_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
-            }
-        /*} else if (loader instanceof FavoriteMovieLoaderTask) {
-            if (list != null) {
-                for (int i = 0; i < list.length; ++i) {
-                    Log.d(getClass().getSimpleName(), "Movie:  " + list[i].title);
-                }
-            }
-        }*/
+        //  add all of the movies to the list
+        if (list != null) {
+            movieAdapter.setMoviesList(list);
+        } else {
+            String nothingToDisplayMessage = sortType == MovieSortType.FAVORITES ?
+                    getContext().getString(R.string.no_movies_favored_message) :
+                    NO_NETWORK_ERROR_MESSAGE;
+            Toast.makeText(parentActivity, nothingToDisplayMessage, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
