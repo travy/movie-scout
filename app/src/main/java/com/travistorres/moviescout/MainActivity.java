@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity
     private ProgressBar mLoadingIndicator;
     private MovieDbRequester mMovieRequester;
     private String movieDbApiThreeKey;
-    private String movieDbApiFourKey;
     private IntentFilter networkListeningIntent;
     private BroadcastReceiver networkBroadcastReceiver;
     private Menu mMenuBar;
