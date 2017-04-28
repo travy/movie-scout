@@ -137,8 +137,12 @@ public class MovieDbRequester
     public void requestNext() {
         if (hasNextPage()) {
             if (sortType == MovieSortType.FAVORITES) {
-                totalPages = 0; //  prevents infinite list of results
+                Log.d(getClass().getSimpleName(), "Current Page:  " + Integer.toString(currentPage) + ":  Total Pages:  " + Integer.toString(totalPages));
+                totalPages = 2; //  prevents infinite list of results
+                currentPage = 3;
                 loadLoaderManager(null, R.integer.favorite_movies_loader_manager_id);
+                Log.d(getClass().getSimpleName(), "Current Page:  " + Integer.toString(currentPage) + ":  Total Pages:  " + Integer.toString(totalPages));
+
             } else {
                 URL url = getCurrentRequestUrl();
                 Bundle requestUrlBundle = new Bundle();
@@ -218,20 +222,15 @@ public class MovieDbRequester
     public void onLoadFinished(Loader<Movie[]> loader, Movie[] list) {
         errorHandler.afterNetworkRequest();
 
-        //if (loader instanceof MovieListLoader) {
-            //  add all of the movies to the list
-            if (list != null) {
-                movieAdapter.setMoviesList(list);
-            } else {
-                Toast.makeText(parentActivity, NO_NETWORK_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
-            }
-        /*} else if (loader instanceof FavoriteMovieLoaderTask) {
-            if (list != null) {
-                for (int i = 0; i < list.length; ++i) {
-                    Log.d(getClass().getSimpleName(), "Movie:  " + list[i].title);
-                }
-            }
-        }*/
+        //  add all of the movies to the list
+        if (list != null) {
+            movieAdapter.setMoviesList(list);
+        } else {
+            String nothingToDisplayMessage = sortType == MovieSortType.FAVORITES ?
+                    getContext().getString(R.string.no_movies_favored_message) :
+                    NO_NETWORK_ERROR_MESSAGE;
+            Toast.makeText(parentActivity, nothingToDisplayMessage, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -271,5 +270,9 @@ public class MovieDbRequester
 
     public void setTotalMovies(int totalMovies) {
         this.totalMovies = totalMovies;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
     }
 }

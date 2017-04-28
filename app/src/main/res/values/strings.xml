@@ -2,7 +2,7 @@
 
     <string name="app_name">MovieScout</string>
 
-    <string name="movie_scout_version_three_api_key" translatable="false">no-database-key</string>
+    <string name="movie_scout_version_three_api_key" translatable="false">no-value</string>
 
     <!--  Notifications  -->
     <string name="favorites_update_title_notification" translatable="true">Favorites Updated</string>
@@ -23,6 +23,7 @@
     <!--  Error Messages  -->
     <string name="missing_api_keys" translatable="true">An API key was not provided</string>
 
+    <string name="no_movies_favored_message" translatable="true">You have not favored any movies</string>
     <string name="page_not_found_error_message" translatable="true">The requested page was not found</string>
     <string name="invalid_api_key_error_message" translatable="true">The provided API Key was rejected by the server.  Please check that you\'ve entered the correct api key in the settings.</string>
     <string name="network_failure_error_message" translatable="true">The network connection failed!</string>

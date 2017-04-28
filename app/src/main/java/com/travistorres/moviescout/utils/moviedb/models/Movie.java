@@ -275,18 +275,19 @@ public class Movie implements Parcelable {
         if (obj instanceof Movie) {
             Movie other = (Movie) obj;
 
-            return other.backdropPath == backdropPath &&
-                    other.genreIds == genreIds &&
+
+            return other.backdropPath.equals(backdropPath) &&
+                    //other.genreIds == genreIds &&
                     other.hasVideo == hasVideo &&
                     other.id == id &&
                     other.isAdultFilm == isAdultFilm &&
-                    other.originalLanguage == originalLanguage &&
-                    other.originalTitle == originalTitle &&
-                    other.overview == overview &&
+                    other.originalLanguage.equals(originalLanguage) &&
+                    other.originalTitle.equals(originalTitle) &&
+                    other.overview.equals(overview) &&
                     other.popularity == popularity &&
-                    other.posterPath == posterPath &&
-                    other.releaseDate == releaseDate &&
-                    other.title == title &&
+                    other.posterPath.equals(posterPath) &&
+                    other.releaseDate.equals(releaseDate) &&
+                    other.title.equals(title) &&
                     other.voteAverage == voteAverage &&
                     other.voteCount == voteCount;
         }
