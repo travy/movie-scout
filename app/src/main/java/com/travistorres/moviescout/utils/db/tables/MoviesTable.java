@@ -42,6 +42,7 @@ public final class MoviesTable extends BaseTable {
         public static final String VOTE_COUNT = "vote_count";
         public static final String HAS_VIDEO = "has_video";
         public static final String VOTE_AVERAGE = "vote_average";
+        public static final String ORIGINAL_LANGUAGE = "original_language";
     }
 
     /**
@@ -63,7 +64,8 @@ public final class MoviesTable extends BaseTable {
                 Cols.POPULARITY + ", " +
                 Cols.VOTE_COUNT + ", " +
                 Cols.HAS_VIDEO + ", " +
-                Cols.VOTE_AVERAGE +
+                Cols.VOTE_AVERAGE + ", " +
+                Cols.ORIGINAL_LANGUAGE +
                 ")"
         );
     }
@@ -139,6 +141,7 @@ public final class MoviesTable extends BaseTable {
         cv.put(Cols.VOTE_COUNT, movie.voteCount);
         cv.put(Cols.HAS_VIDEO, movie.hasVideo);
         cv.put(Cols.VOTE_AVERAGE, movie.voteAverage);
+        cv.put(Cols.ORIGINAL_LANGUAGE, movie.originalLanguage);
 
         return cv;
     }
@@ -230,6 +233,7 @@ public final class MoviesTable extends BaseTable {
                 m.voteCount = cursor.getInt(cursor.getColumnIndex(Cols.VOTE_COUNT));
                 m.hasVideo = Boolean.getBoolean(cursor.getString(cursor.getColumnIndex(Cols.HAS_VIDEO)));
                 m.voteAverage = cursor.getDouble(cursor.getColumnIndex(Cols.VOTE_AVERAGE));
+                m.originalLanguage = cursor.getString(cursor.getColumnIndex(Cols.ORIGINAL_LANGUAGE));
                 m.dbId = cursor.getInt(cursor.getColumnIndex("_id"));
 
                 movies[i] = m;

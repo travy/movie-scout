@@ -24,10 +24,12 @@ public class MainActivityParcelable implements Parcelable {
     private static final int CURRENT_PAGE_INDEX = 0;
     private static final int SORT_TYPE_INDEX = 1;
     private static final int MOVIE_LIST_INDEX = 2;
+    private static final int TOTAL_PAGES_INDEX = 3;
 
     public int currentPage;
     public MovieSortType sortType;
     public Movie[] movieList;
+    public int totalPages;
 
     /**
      * Instructs Android how to unpack the Parcelable.
@@ -61,6 +63,7 @@ public class MainActivityParcelable implements Parcelable {
     protected MainActivityParcelable(Parcel in) {
         Object[] stream = in.readArray(getClass().getClassLoader());
 
+        totalPages = (int) stream[TOTAL_PAGES_INDEX];
         currentPage = (int) stream[CURRENT_PAGE_INDEX];
         sortType = (MovieSortType) stream[SORT_TYPE_INDEX];
         //  needs to iterate over the list based on how Java Grammars work with interfaces read http://stackoverflow.com/questions/8745893/i-dont-get-why-this-classcastexception-occurs
@@ -89,10 +92,11 @@ public class MainActivityParcelable implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
-        Object[] stream = new Object[3];
+        Object[] stream = new Object[4];
         stream[CURRENT_PAGE_INDEX] = currentPage;
         stream[SORT_TYPE_INDEX] = sortType;
         stream[MOVIE_LIST_INDEX] = movieList;
+        stream[TOTAL_PAGES_INDEX] = totalPages;
 
         parcel.writeArray(stream);
     }

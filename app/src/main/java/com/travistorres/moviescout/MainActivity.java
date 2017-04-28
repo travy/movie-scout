@@ -138,9 +138,11 @@ public class MainActivity extends AppCompatActivity
             //  load the previously loaded movies and display the results
             MainActivityParcelable parcelable = savedInstanceState.getParcelable(mainActivityStateExtra);
             int currentPage = parcelable.currentPage;
+            int totalPages = parcelable.totalPages;
             MovieSortType sortType = parcelable.sortType;
             Movie[] movieList = parcelable.movieList;
 
+            mMovieRequester.setTotalPages(totalPages);
             mMovieRequester.setCurrentPage(currentPage);
             mMovieRequester.setSortType(sortType);
             setupMovieView(movieList);
@@ -229,6 +231,7 @@ public class MainActivity extends AppCompatActivity
         parcelable.sortType = mMovieRequester.getSortType();
         parcelable.currentPage = mMovieRequester.getCurrentPage();
         parcelable.movieList = mMovieAdapter.getMovies();
+        parcelable.totalPages = mMovieRequester.getTotalPages();
 
         outState.putParcelable(mainActivityStateExtra, parcelable);
     }
