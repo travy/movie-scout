@@ -5,8 +5,11 @@
 package com.travistorres.moviescout.utils.widget.buttons;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClicked;
@@ -23,7 +26,7 @@ import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClick
 
 public class FavoriteButton implements View.OnClickListener {
     private boolean isFavorite;
-    private Button buttonView;
+    private ImageButton buttonView;
     private Context context;
     private OnFavoriteButtonClicked onClickOperation;
 
@@ -36,7 +39,7 @@ public class FavoriteButton implements View.OnClickListener {
      * @param clickHandler
      * @param mContext
      */
-    public FavoriteButton(Button button, boolean isFavorite, OnFavoriteButtonClicked clickHandler, Context mContext) {
+    public FavoriteButton(ImageButton button, boolean isFavorite, OnFavoriteButtonClicked clickHandler, Context mContext) {
         buttonView = button;
         buttonView.setOnClickListener(this);
         context = mContext;
@@ -84,8 +87,12 @@ public class FavoriteButton implements View.OnClickListener {
      *
      */
     protected void onSetAsFavorite() {
-        String unfavoredLabel = context.getString(R.string.favorites_button_unfavored_button_label);
-        buttonView.setText(unfavoredLabel);
+        //String unfavoredLabel = context.getString(R.string.favorites_button_unfavored_button_label);
+        //buttonView.setText(unfavoredLabel);
+        Resources resources = context.getResources();
+        Drawable icon = resources.getDrawable(R.drawable.ic_favorite_movie, null);
+        //buttonView.setBackground(icon);
+        buttonView.setImageDrawable(icon);
         onClickOperation.onFavorited(buttonView);
     }
 
@@ -94,8 +101,12 @@ public class FavoriteButton implements View.OnClickListener {
      *
      */
     protected void onSetAsNotFavorite() {
-        String favoriteLabel = context.getString(R.string.favorites_button_favorite_button_label);
-        buttonView.setText(favoriteLabel);
+        //String favoriteLabel = context.getString(R.string.favorites_button_favorite_button_label);
+        //buttonView.setText(favoriteLabel);
+        Resources resources = context.getResources();
+        Drawable icon = resources.getDrawable(R.drawable.ic_unfavorite_movie, null);
+        //buttonView.setBackground(icon);
+        buttonView.setImageDrawable(icon);
         onClickOperation.onUnfavorited(buttonView);
     }
 }

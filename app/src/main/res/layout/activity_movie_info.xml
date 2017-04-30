@@ -156,15 +156,12 @@
                         android:textSize="@dimen/generic_text_size"
                         tools:text="6.8" />
 
-                    <Button
+                    <ImageButton
+                        android:padding="@dimen/container_view_padding"
                         android:background="@color/colorAccent"
                         android:id="@+id/favorite_movie_button"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
-                        android:elevation="6dp"
-                        android:text="Favorite"
-                        android:textSize="@dimen/generic_text_size" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
