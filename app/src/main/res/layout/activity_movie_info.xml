@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.travistorres.moviescout.MovieInfoActivity" >
-
+<!--  TODO:  move all data to a dimen variable-->
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
@@ -132,12 +132,31 @@
                 android:textSize="@dimen/generic_text_size" />
 
             <!--  Trailers  -->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/movie_trailers_list"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/container_view_padding"
-                tools:listitem="@layout/movie_trailer_item" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/trailers_heading_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Trailers"
+                    tools:text="Trailers"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/movie_trailers_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/container_view_padding"
+                    tools:listitem="@layout/movie_trailer_item" />
+
+            </LinearLayout>
 
             <!--  Reviews  -->
             <android.support.v7.widget.RecyclerView

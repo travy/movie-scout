@@ -185,7 +185,7 @@ public class MovieInfoActivity extends AppCompatActivity
      *
      */
     private void setupTrailerRecyclerView() {
-        LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         RecyclerView.Adapter adapter = new TrailerListAdapter(this);
         mTrailerListRecyclerView.setAdapter(adapter);
         mTrailerListRecyclerView.setLayoutManager(linearLayout);

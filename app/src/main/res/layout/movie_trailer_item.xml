@@ -2,50 +2,51 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content" >
 
+    <!--  TODO:  move all data to a dimen variable-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <ImageView
             android:src="@drawable/youtube_icon"
             android:layout_width="80dp"
             android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_weight="1"
             android:layout_gravity="center" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/video_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            tools:text="Title of Video"/>
 
-            <TextView
-                android:id="@+id/video_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                tools:text="Title of Video"/>
+        <TextView
+            android:id="@+id/video_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="12sp"
+            tools:text="Type of Video"/>
 
-            <TextView
-                android:id="@+id/video_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                tools:text="Type of Video"/>
+        <TextView
+            android:id="@+id/video_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="12sp"
+            tools:text="Language of Video"/>
 
-            <TextView
-                android:id="@+id/video_language"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                tools:text="Language of Video"/>
-
-        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>
