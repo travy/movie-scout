@@ -65,13 +65,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/movie_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/movie_title_bottom_padding"
-                android:textSize="@dimen/movie_title_text_size" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,6 +116,16 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/movie_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:textStyle="bold"
+                android:textSize="25sp" />
 
             <!--  Movie Plot  -->
             <LinearLayout
@@ -195,8 +198,8 @@
                     android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:text="Trailers"
-                    tools:text="Trailers"/>
+                    android:text="Reviews"
+                    tools:text="Reviews"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/movie_review_list"
@@ -206,7 +209,7 @@
                     tools:listitem="@layout/movie_review_item" />
 
             </LinearLayout>
-            
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
