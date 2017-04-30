@@ -61,19 +61,16 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:background="@color/colorPrimary"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -96,12 +93,14 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:text="Release Date"
+                        android:textColor="@color/primary_text"
                         tools:text="Release Date" />
                     <TextView
                         android:id="@+id/movie_release_date"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:layout_marginBottom="6sp"
+                        android:textColor="@color/primary_text"
                         android:textSize="@dimen/generic_text_size"
                         tools:text="Apr 30, 2017" />
 
@@ -111,12 +110,14 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:text="Language"
+                        android:textColor="@color/primary_text"
                         tools:text="Language" />
                     <TextView
                         android:id="@+id/movie_language"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="6sp"
+                        android:textColor="@color/primary_text"
                         android:textSize="@dimen/generic_text_size"
                         tools:text="en" />
 
@@ -126,6 +127,7 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:text="Popularity"
+                        android:textColor="@color/primary_text"
                         tools:text="Popularity" />
                     <TextView
                         android:id="@+id/movie_popularity"
@@ -133,6 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="6sp"
                         android:textSize="@dimen/generic_text_size"
+                        android:textColor="@color/primary_text"
                         tools:text="129.00" />
 
                     <TextView
@@ -140,6 +143,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="15sp"
                         android:textStyle="bold"
+                        android:textColor="@color/primary_text"
                         android:text="Rating"
                         tools:text="Rating" />
                     <TextView
@@ -147,13 +151,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="6sp"
+                        android:textColor="@color/primary_text"
                         android:textSize="@dimen/generic_text_size"
                         tools:text="6.8" />
 
                     <Button
+                        android:background="@color/colorAccent"
                         android:id="@+id/favorite_movie_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text"
                         android:text="Favorite"
                         android:textSize="@dimen/generic_text_size" />
 
@@ -165,27 +172,30 @@
                 android:id="@+id/movie_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:textColor="@color/primary_text"
                 android:textStyle="bold"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                tools:text="Beauty and the Beast" />
 
             <!--  Movie Plot  -->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:textSize="18sp"
+                    android:textColor="@color/primary_text"
                     android:textStyle="bold"
                     android:text="Overview"
                     tools:text="Overview"/>
@@ -194,7 +204,9 @@
                     android:id="@+id/movie_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/generic_text_size" />
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/generic_text_size"
+                    tools:text="A live action version of Disney's classic Beauty and the Beast."/>
 
             </LinearLayout>
 
@@ -203,10 +215,10 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -214,6 +226,7 @@
                     android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    android:textColor="@color/primary_text"
                     android:text="Trailers"
                     tools:text="Trailers"/>
 
@@ -231,10 +244,10 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -242,6 +255,7 @@
                     android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    android:textColor="@color/primary_text"
                     android:text="Reviews"
                     tools:text="Reviews"/>
 
