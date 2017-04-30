@@ -21,12 +21,6 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MainActivityParcelable implements Parcelable {
-    //  TODO-  look into how Reviews and Trailers are stored to avoid the use of an array here
-    private static final int CURRENT_PAGE_INDEX = 0;
-    private static final int SORT_TYPE_INDEX = 1;
-    private static final int MOVIE_LIST_INDEX = 2;
-    private static final int TOTAL_PAGES_INDEX = 3;
-
     public int currentPage;
     public int totalPages;
     public Movie[] movieList;
@@ -62,17 +56,22 @@ public class MainActivityParcelable implements Parcelable {
      * @param in
      */
     protected MainActivityParcelable(Parcel in) {
-        Object[] stream = in.readArray(getClass().getClassLoader());
+        ClassLoader classLoader = getClass().getClassLoader();
 
-        totalPages = (int) stream[TOTAL_PAGES_INDEX];
-        currentPage = (int) stream[CURRENT_PAGE_INDEX];
-        sortType = (MovieSortType) stream[SORT_TYPE_INDEX];
-        //  needs to iterate over the list based on how Java Grammars work with interfaces read http://stackoverflow.com/questions/8745893/i-dont-get-why-this-classcastexception-occurs
-        Object[] blah = (Object[]) stream[MOVIE_LIST_INDEX];
-        movieList = new Movie[blah.length];
-        for (int i = 0; i < blah.length; i++) {
-            movieList[i] = (Movie) blah[i];
+        currentPage = in.readInt();
+        totalPages = in.readInt();
+        movieList = convertArrayToMovies(in.readArray(classLoader));
+        sortType = MovieSortType.valueOf(in.readString());
+    }
+
+    public static Movie[] convertArrayToMovies(Object[] genericArray) {
+        int arrayLength = genericArray.length;
+        Movie[] movies = new Movie[arrayLength];
+        for (int i = 0; i < arrayLength; ++i) {
+            movies[i] = (Movie) genericArray[i];
         }
+
+        return movies;
     }
 
     /**
@@ -93,12 +92,9 @@ public class MainActivityParcelable implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
-        Object[] stream = new Object[4];
-        stream[CURRENT_PAGE_INDEX] = currentPage;
-        stream[SORT_TYPE_INDEX] = sortType;
-        stream[MOVIE_LIST_INDEX] = movieList;
-        stream[TOTAL_PAGES_INDEX] = totalPages;
-
-        parcel.writeArray(stream);
+        parcel.writeInt(currentPage);
+        parcel.writeInt(totalPages);
+        parcel.writeArray(movieList);
+        parcel.writeString(sortType.name());
     }
 }
