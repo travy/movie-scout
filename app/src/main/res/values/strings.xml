@@ -82,6 +82,27 @@
     <string name="tmdb_image_size_default" translatable="false">@string/tmdb_image_size_342</string>
     <string name="tmdb_image_size_original" translatable="false">original</string>
 
+    <!--  TMDB Movie Json Parsers  -->
+    <string name="movie_parser_json_results" translatable="false">results</string>
+    <string name="movie_parser_json_poster_path" translatable="false">poster_path</string>
+    <string name="movie_parser_json_adult" translatable="false">adult</string>
+    <string name="movie_parser_json_overview" translatable="false">overview</string>
+    <string name="movie_parser_json_release_date" translatable="false">release_date</string>
+    <string name="movie_parser_json_genre_id" translatable="false">genre_ids</string>
+    <string name="movie_parser_json_id" translatable="false">id</string>
+    <string name="movie_parser_json_original_title" translatable="false">original_title</string>
+    <string name="movie_parser_json_original_language" translatable="false">original_language</string>
+    <string name="movie_parser_json_title" translatable="false">title</string>
+    <string name="movie_parser_json_backdrop_path" translatable="false">backdrop_path</string>
+    <string name="movie_parser_json_popularity" translatable="false">popularity</string>
+    <string name="movie_parser_json_vote_count" translatable="false">vote_count</string>
+    <string name="movie_parser_json_video" translatable="false">video</string>
+    <string name="movie_parser_json_vote_average" translatable="false">vote_average</string>
+    <string name="movie_parser_json_total_results" translatable="false">total_results</string>
+    <string name="movie_parser_json_total_pages" translatable="false">total_pages</string>
+    <string name="movie_parser_json_poster_path_prefix" translatable="false">/</string>
+    <string name="movie_parser_json_poster_path_prefix_off" translatable="false"></string>
+
     <!--  TMDB Trailer Json Parsers  -->
     <string name="movie_trailer_json_id" translatable="false">id</string>
     <string name="movie_trailer_json_iso_3166_1" translatable="false">iso_3166_1</string>
@@ -146,5 +167,6 @@
 
     <string name="date_parse_month_day_separator" translatable="false">&#160;</string>
     <string name="date_parse_day_year_separator" translatable="false">,&#160;</string>
+
 
 </resources>

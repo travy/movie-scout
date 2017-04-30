@@ -4,11 +4,12 @@
 
 package com.travistorres.moviescout.utils.moviedb.loaders;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 import android.text.TextUtils;
 
-import com.travistorres.moviescout.utils.moviedb.builders.MovieDbParser;
+import com.travistorres.moviescout.utils.moviedb.builders.MovieBuilder;
 import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
 import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
@@ -95,9 +96,10 @@ public class MovieListLoader extends AsyncTaskLoader<Movie[]> {
             URL url = new URL(urlString);
             String json = NetworkManager.request(url);
             if (json != null) {
-                movieList = MovieDbParser.retrieveMovieList(json);
-                requester.setTotalMovies(MovieDbParser.acquireTotalResults(json));
-                requester.setTotalPages(MovieDbParser.acquireTotalPages(json));
+                Context context = getContext();
+                movieList = MovieBuilder.createMovies(context, json);
+                requester.setTotalMovies(MovieBuilder.totalResults(context, json));
+                requester.setTotalPages(MovieBuilder.totalPages(context, json));
             }
         } catch (IOException e) {
             e.printStackTrace();

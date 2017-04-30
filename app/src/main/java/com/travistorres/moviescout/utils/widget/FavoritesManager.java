@@ -12,7 +12,7 @@ import com.travistorres.moviescout.utils.db.MoviesDatabase;
 import com.travistorres.moviescout.utils.db.tables.MoviesTable;
 import com.travistorres.moviescout.utils.db.tables.ReviewsTable;
 import com.travistorres.moviescout.utils.db.tables.TrailersTable;
-import com.travistorres.moviescout.utils.moviedb.builders.MovieDbParser;
+import com.travistorres.moviescout.utils.moviedb.builders.MovieBuilder;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
@@ -197,7 +197,7 @@ public class FavoritesManager {
             String jsonResponse = NetworkManager.request(movieUrl);
             if (jsonResponse != null) {
                 JSONObject jsonObject = new JSONObject(jsonResponse);
-                latestCopy = MovieDbParser.mapJsonToMovie(jsonObject);
+                latestCopy = MovieBuilder.createMovie(context, jsonObject);
             }
         } catch (JSONException e) {
             e.printStackTrace();
