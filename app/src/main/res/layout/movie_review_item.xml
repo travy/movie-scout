@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"
-    android:padding="@dimen/container_view_padding">
+    android:padding="@dimen/container_view_padding"
+    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardElevation="5dp"
+    card_view:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/review_content"
+    <LinearLayout
+        android:padding="23dp"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/container_view_padding"
-        android:textStyle="italic"
-        android:textSize="@dimen/generic_text_size"
-        tools:text="Emma Watson is more beautiful than ever!! She can cast a spell on me any day ;)" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/review_author"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/container_view_padding"
-        android:textStyle="bold"
-        android:textSize="@dimen/generic_text_size"
-        android:gravity="right"
-        tools:text="Travis Anthony Torres" />
+        <TextView
+            android:id="@+id/review_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/container_view_padding"
+            android:textStyle="italic"
+            android:textSize="@dimen/generic_text_size"
+            tools:text="Emma Watson is more beautiful than ever!! She can cast a spell on me any day ;)" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/review_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/container_view_padding"
+            android:textStyle="bold"
+            android:textSize="@dimen/generic_text_size"
+            android:gravity="right"
+            tools:text="Travis Anthony Torres" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
