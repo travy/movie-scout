@@ -26,7 +26,6 @@ public class NetworkingException extends Exception {
      *
      * @param message An appropriate message for the error
      */
-    //  TODO- look into providing a context so that the default message can be read from configs.
     public NetworkingException(String message, URL url, int httpResponseCode) {
         super(message + url.toString());
 

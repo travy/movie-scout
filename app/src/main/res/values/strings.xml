@@ -6,8 +6,8 @@
     <string name="movie_scout_version_three_api_key" translatable="false"></string>
 
     <!--  Favorite Button  -->
-    <string name="favorites_button_unfavored_button_label" translatable="true">Un-favorite</string>
     <string name="favorites_button_favorite_button_label" translatable="true">Favorite</string>
+    <string name="favorites_button_unfavored_button_label" translatable="true">Un-favorite</string>
 
     <!--  Notifications  -->
     <string name="favorites_update_description_notification" translatable="true">Hey!!  One of your favorites on Movie Scout have been updated.  Why not check it out!</string>
@@ -27,6 +27,8 @@
     <string name="removed_movie_from_favorites_message" translatable="true">Removed from Favorites</string>
 
     <!--  Error Messages  -->
+    <string name="default_networking_exception_log_message_postfix" translatable="true">]&#160;</string>
+    <string name="default_networking_exception_log_message_prefix" translatable="true">Movie Scout Networking Exception was thrown:  [HTTP </string>
     <string name="invalid_api_key_error_message" translatable="true">The provided API Key was rejected by the server.  Please check that you\'ve entered the correct api key in the settings.</string>
     <string name="invalid_interval_duration_for_service_message" translatable="true">An invalid number was specified for the time interval</string>
     <string name="lost_network_connection_message" translatable="true">The network connection has been lost</string>
@@ -87,25 +89,25 @@
     <string name="tmdb_image_size_original" translatable="false">original</string>
 
     <!--  TMDB Movie Json Parsers  -->
-    <string name="movie_parser_json_results" translatable="false">results</string>
-    <string name="movie_parser_json_poster_path" translatable="false">poster_path</string>
     <string name="movie_parser_json_adult" translatable="false">adult</string>
-    <string name="movie_parser_json_overview" translatable="false">overview</string>
-    <string name="movie_parser_json_release_date" translatable="false">release_date</string>
+    <string name="movie_parser_json_backdrop_path" translatable="false">backdrop_path</string>
     <string name="movie_parser_json_genre_id" translatable="false">genre_ids</string>
     <string name="movie_parser_json_id" translatable="false">id</string>
-    <string name="movie_parser_json_original_title" translatable="false">original_title</string>
     <string name="movie_parser_json_original_language" translatable="false">original_language</string>
-    <string name="movie_parser_json_title" translatable="false">title</string>
-    <string name="movie_parser_json_backdrop_path" translatable="false">backdrop_path</string>
+    <string name="movie_parser_json_original_title" translatable="false">original_title</string>
+    <string name="movie_parser_json_overview" translatable="false">overview</string>
     <string name="movie_parser_json_popularity" translatable="false">popularity</string>
-    <string name="movie_parser_json_vote_count" translatable="false">vote_count</string>
-    <string name="movie_parser_json_video" translatable="false">video</string>
-    <string name="movie_parser_json_vote_average" translatable="false">vote_average</string>
-    <string name="movie_parser_json_total_results" translatable="false">total_results</string>
-    <string name="movie_parser_json_total_pages" translatable="false">total_pages</string>
+    <string name="movie_parser_json_poster_path" translatable="false">poster_path</string>
     <string name="movie_parser_json_poster_path_prefix" translatable="false">/</string>
     <string name="movie_parser_json_poster_path_prefix_off" translatable="false"></string>
+    <string name="movie_parser_json_release_date" translatable="false">release_date</string>
+    <string name="movie_parser_json_results" translatable="false">results</string>
+    <string name="movie_parser_json_title" translatable="false">title</string>
+    <string name="movie_parser_json_total_pages" translatable="false">total_pages</string>
+    <string name="movie_parser_json_total_results" translatable="false">total_results</string>
+    <string name="movie_parser_json_video" translatable="false">video</string>
+    <string name="movie_parser_json_vote_average" translatable="false">vote_average</string>
+    <string name="movie_parser_json_vote_count" translatable="false">vote_count</string>
 
     <!--  TMDB Trailer Json Parsers  -->
     <string name="movie_trailer_json_id" translatable="false">id</string>
