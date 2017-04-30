@@ -125,24 +125,45 @@
             </LinearLayout>
 
             <!--  Movie Plot  -->
-            <TextView
-                android:id="@+id/movie_overview"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/generic_text_size" />
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Overview"
+                    tools:text="Overview"/>
+
+                <TextView
+                    android:id="@+id/movie_overview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/generic_text_size" />
+
+            </LinearLayout>
 
             <!--  Trailers  -->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <TextView
-                    android:id="@+id/trailers_heading_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -159,12 +180,33 @@
             </LinearLayout>
 
             <!--  Reviews  -->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/movie_review_list"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/container_view_padding"
-                tools:listitem="@layout/movie_review_item" />
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Trailers"
+                    tools:text="Trailers"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/movie_review_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/container_view_padding"
+                    tools:listitem="@layout/movie_review_item" />
+
+            </LinearLayout>
+            
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
