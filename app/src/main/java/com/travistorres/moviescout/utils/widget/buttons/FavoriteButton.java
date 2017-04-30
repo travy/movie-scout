@@ -4,9 +4,11 @@
 
 package com.travistorres.moviescout.utils.widget.buttons;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 
+import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClicked;
 
 /**
@@ -22,6 +24,7 @@ import com.travistorres.moviescout.utils.widget.interfaces.OnFavoriteButtonClick
 public class FavoriteButton implements View.OnClickListener {
     private boolean isFavorite;
     private Button buttonView;
+    private Context context;
     private OnFavoriteButtonClicked onClickOperation;
 
     /**
@@ -31,18 +34,19 @@ public class FavoriteButton implements View.OnClickListener {
      * @param button
      * @param isFavorite
      * @param clickHandler
+     * @param mContext
      */
-    //  TODO-  take a Context for loading resources
-    public FavoriteButton(Button button, boolean isFavorite, OnFavoriteButtonClicked clickHandler) {
+    public FavoriteButton(Button button, boolean isFavorite, OnFavoriteButtonClicked clickHandler, Context mContext) {
         buttonView = button;
         buttonView.setOnClickListener(this);
+        context = mContext;
         onClickOperation = clickHandler;
 
         setIsFavorite(isFavorite);
     }
 
     /**
-     * Sets the state of the button to either favorite or unfavorite.  Will then call either
+     * Sets the state of the button to either favorite or un-favorite.  Will then call either
      * `onSetAsFavorite` or `onSetAsNotFavorite` based on the value provided for `setFavorite`.
      *
      * @param setFavorite
@@ -67,8 +71,8 @@ public class FavoriteButton implements View.OnClickListener {
     }
 
     /**
-     * Toggles the state of the Favorite button for being `favorited` to `unfavorited` or from
-     * `unfavorited` to being `favorited`.
+     * Toggles the state of the Favorite button for being `favorite` to `un-favorite` or from
+     * `un-favorite` to being `favorite`.
      *
      */
     public void toggle() {
@@ -80,16 +84,18 @@ public class FavoriteButton implements View.OnClickListener {
      *
      */
     protected void onSetAsFavorite() {
-        buttonView.setText("Unfavorite");
+        String unfavoredLabel = context.getString(R.string.favorites_button_unfavored_button_label);
+        buttonView.setText(unfavoredLabel);
         onClickOperation.onFavorited(buttonView);
     }
 
     /**
-     * Specifies what to do when the unfavorited state is triggered.
+     * Specifies what to do when the un-favorite state is triggered.
      *
      */
     protected void onSetAsNotFavorite() {
-        buttonView.setText("Favorite");
+        String favoriteLabel = context.getString(R.string.favorites_button_favorite_button_label);
+        buttonView.setText(favoriteLabel);
         onClickOperation.onUnfavorited(buttonView);
     }
 }

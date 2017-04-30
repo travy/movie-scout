@@ -514,7 +514,7 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     @Override
     public void onDeterminedIsMovieFavorited(Movie movie, boolean isFavorite) {
-        FavoriteButton favs = new FavoriteButton(mFavoriteMovieButton, isFavorite, this);
+        FavoriteButton favs = new FavoriteButton(mFavoriteMovieButton, isFavorite, this, this);
         mFavoriteMovieButton.setVisibility(View.VISIBLE);
     }
 }

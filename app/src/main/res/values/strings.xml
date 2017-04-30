@@ -5,6 +5,10 @@
     <!--  Specifies the api key to use for requests on themoviedb.org  -->
     <string name="movie_scout_version_three_api_key" translatable="false"></string>
 
+    <!--  Favorite Button  -->
+    <string name="favorites_button_unfavored_button_label" translatable="true">Un-favorite</string>
+    <string name="favorites_button_favorite_button_label" translatable="true">Favorite</string>
+
     <!--  Notifications  -->
     <string name="favorites_update_description_notification" translatable="true">Hey!!  One of your favorites on Movie Scout have been updated.  Why not check it out!</string>
     <string name="favorites_update_job_task" translatable="false">favorite-movies-update-job-task</string>
