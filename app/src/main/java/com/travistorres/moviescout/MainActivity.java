@@ -50,19 +50,19 @@ import com.travistorres.moviescout.utils.networking.interfaces.NetworkConnectivi
 
 public class MainActivity extends AppCompatActivity
         implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener, NetworkConnectivityInterface {
-    private RecyclerView mMovieListView;
-    private GridLayoutManager mMovieLayoutManager;
-    private MovieListAdapter mMovieAdapter;
-    private TextView mPageNotFoundTextView;
-    private TextView mNetworkingErrorTextView;
-    private TextView mUnauthorizedTextView;
-    private ProgressBar mLoadingIndicator;
-    private MovieDbRequester mMovieRequester;
-    private String movieDbApiThreeKey;
-    private IntentFilter networkListeningIntent;
-    private BroadcastReceiver networkBroadcastReceiver;
-    private Menu mMenuBar;
     private boolean areMenuItemsVisible;
+    private BroadcastReceiver networkBroadcastReceiver;
+    private GridLayoutManager mMovieLayoutManager;
+    private IntentFilter networkListeningIntent;
+    private Menu mMenuBar;
+    private MovieDbRequester mMovieRequester;
+    private MovieListAdapter mMovieAdapter;
+    private ProgressBar mLoadingIndicator;
+    private RecyclerView mMovieListView;
+    private String movieDbApiThreeKey;
+    private TextView mNetworkingErrorTextView;
+    private TextView mPageNotFoundTextView;
+    private TextView mUnauthorizedTextView;
 
     /**
      * Specifies what to do when the os loses a connection to the network.
@@ -72,7 +72,9 @@ public class MainActivity extends AppCompatActivity
     public void onNoNetworkConnectivity() {
         setMenuVisibility(false);
         sortMovies(MovieSortType.FAVORITES);
-        Toast.makeText(this, "The network connection has been lost", Toast.LENGTH_SHORT).show();
+
+        String lostConnectionMessage = getString(R.string.lost_network_connection_message);
+        Toast.makeText(this, lostConnectionMessage, Toast.LENGTH_SHORT).show();
     }
 
     /**

@@ -17,11 +17,11 @@ import android.os.Parcelable;
  */
 
 public class Review implements Parcelable {
-    public String id;
     public String author;
     public String content;
-    public String url;
+    public String id;
     public String movieId;
+    public String url;
 
     /**
      * Allows an instance to be created without loading in a parcel.

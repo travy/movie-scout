@@ -6,15 +6,13 @@ package com.travistorres.moviescout.utils.widget;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.travistorres.moviescout.R;
-import com.travistorres.moviescout.notifications.NotificationsUtils;
 import com.travistorres.moviescout.utils.db.MoviesDatabase;
 import com.travistorres.moviescout.utils.db.tables.MoviesTable;
 import com.travistorres.moviescout.utils.db.tables.ReviewsTable;
 import com.travistorres.moviescout.utils.db.tables.TrailersTable;
-import com.travistorres.moviescout.utils.moviedb.builders.MovieDbParser;
+import com.travistorres.moviescout.utils.moviedb.builders.MovieBuilder;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
@@ -41,10 +39,9 @@ import java.net.URL;
 
 public class FavoritesManager {
     private Context context;
-    private SQLiteDatabase connection;
-
     private MoviesTable movieTable;
     private ReviewsTable reviewsTable;
+    private SQLiteDatabase connection;
     private TrailersTable trailersTable;
 
     /**
@@ -56,7 +53,6 @@ public class FavoritesManager {
     public FavoritesManager(Context mContext) {
         context = mContext;
         connection = new MoviesDatabase(context).getWritableDatabase();
-
         movieTable = new MoviesTable(context, connection);
         reviewsTable = new ReviewsTable(context, connection);
         trailersTable = new TrailersTable(context, connection);
@@ -201,7 +197,7 @@ public class FavoritesManager {
             String jsonResponse = NetworkManager.request(movieUrl);
             if (jsonResponse != null) {
                 JSONObject jsonObject = new JSONObject(jsonResponse);
-                latestCopy = MovieDbParser.mapJsonToMovie(jsonObject);
+                latestCopy = MovieBuilder.createMovie(context, jsonObject);
             }
         } catch (JSONException e) {
             e.printStackTrace();

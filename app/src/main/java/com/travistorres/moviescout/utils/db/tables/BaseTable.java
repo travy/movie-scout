@@ -67,7 +67,7 @@ public abstract class BaseTable {
     /**
      * Acquires the database that the Table is using.
      *
-     * @return Table database connecton
+     * @return Table database connection
      */
     public final SQLiteDatabase getDatabase() {
         return connection;

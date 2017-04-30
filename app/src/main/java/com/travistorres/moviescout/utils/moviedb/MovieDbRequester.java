@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.travistorres.moviescout.R;
@@ -40,15 +39,15 @@ public class MovieDbRequester
      *  Error message to display when no network could be reached.
      *
      */
-    public final static String NO_NETWORK_ERROR_MESSAGE = "Unable to access Network Resource";
     public final String MOVIE_REQUEST_URL_EXTRA;
+    public final String NO_NETWORK_ERROR_MESSAGE;
 
-    private MovieDbNetworkingErrorHandler errorHandler;
     private FragmentActivity parentActivity;
-    private MovieListAdapter movieAdapter;
     private int currentPage;
-    private int totalPages;
     private int totalMovies;
+    private int totalPages;
+    private MovieDbNetworkingErrorHandler errorHandler;
+    private MovieListAdapter movieAdapter;
     private MovieSortType sortType;
     private String versionThreeApiKey;
 
@@ -60,13 +59,14 @@ public class MovieDbRequester
      * @param clickListener
      */
     public MovieDbRequester(FragmentActivity parent, MovieDbNetworkingErrorHandler networkHandler, MovieClickedListener clickListener) {
-        parentActivity = parent;
         errorHandler = networkHandler;
         movieAdapter = new MovieListAdapter(clickListener, this);
+        parentActivity = parent;
         sortType = MovieSortType.MOST_POPULAR;
 
         //  specifies the extra to use for acquiring the resource url
         MOVIE_REQUEST_URL_EXTRA = parentActivity.getString(R.string.movie_request_url_extra);
+        NO_NETWORK_ERROR_MESSAGE = parentActivity.getString(R.string.unable_to_access_network_resource_message);
 
         reset();
     }
