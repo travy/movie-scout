@@ -3,7 +3,7 @@
     <string name="app_name">MovieScout</string>
 
     <!--  Specifies the api key to use for requests on themoviedb.org  -->
-    <string name="movie_scout_version_three_api_key" translatable="false">ab6a99fb0396689f2528c384cfd20045</string>
+    <string name="movie_scout_version_three_api_key" translatable="false"></string>
 
     <!--  Notifications  -->
     <string name="favorites_update_description_notification" translatable="true">Hey!!  One of your favorites on Movie Scout have been updated.  Why not check it out!</string>
@@ -128,5 +128,23 @@
     <string name="favorite_movies_update_interval_key" translatable="false">update-movies-duration-time-key</string>
     <string name="favorite_movies_update_interval_summary" translatable="true">Specifies after what interval of time will new updates be looked up</string>
     <string name="favorite_movies_update_interval_title" translatable="true">Favorites Update Interval</string>
+
+    <!--  Date Conversion Strings  -->
+    <string name="date_parse_token_delimiter" translatable="false">-</string>
+    <string name="date_parse_january_word" translatable="true">Jan</string>
+    <string name="date_parse_february_word" translatable="true">Feb</string>
+    <string name="date_parse_march_word" translatable="true">Mar</string>
+    <string name="date_parse_april_word" translatable="true">Apr</string>
+    <string name="date_parse_may_word" translatable="true">May</string>
+    <string name="date_parse_june_word" translatable="true">Jun</string>
+    <string name="date_parse_july_word" translatable="true">Jul</string>
+    <string name="date_parse_august_word" translatable="true">Aug</string>
+    <string name="date_parse_september_word" translatable="true">Sep</string>
+    <string name="date_parse_october_word" translatable="true">Oct</string>
+    <string name="date_parse_november_word" translatable="true">Nov</string>
+    <string name="date_parse_december_word" translatable="true">Dec</string>
+
+    <string name="date_parse_month_day_separator" translatable="false">&#160;</string>
+    <string name="date_parse_day_year_separator" translatable="false">,&#160;</string>
 
 </resources>

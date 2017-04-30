@@ -24,19 +24,6 @@ import java.net.URL;
  */
 
 public class Movie implements Parcelable {
-    /*
-     *  Date formatting constants.
-     *
-     */
-    private final static String DATE_FORMAT_DELIMITER = "-";
-    private final static int DATE_FORMAT_YEAR_INDEX = 0;
-    private final static int DATE_FORMAT_MONTH_INDEX = 1;
-    private final static int DATE_FORMAT_DAY_INDEX = 2;
-
-    /*
-     * Attributes
-     *
-     */
     public boolean hasVideo;
     public boolean isAdultFilm;
     public double popularity;
@@ -88,58 +75,6 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
-
-    /**
-     * Converts the date into the format MMM dd, yyyy.
-     *
-     * @return  Formatted date string
-     */
-    public String getCleanDateFormat() {
-        String[] dateBreakdown = releaseDate.split(DATE_FORMAT_DELIMITER);
-        String formattedDate = null;
-
-        //  TODO-  Move into a Utility class
-        //  Evaluate the month to day form
-        switch (dateBreakdown[DATE_FORMAT_MONTH_INDEX]) {
-            case "01":
-                formattedDate = "Jan ";
-                break;
-            case "02":
-                formattedDate = "Feb ";
-                break;
-            case "03":
-                formattedDate = "Mar ";
-                break;
-            case "04":
-                formattedDate = "Apr ";
-                break;
-            case "05":
-                formattedDate = "May ";
-                break;
-            case "06":
-                formattedDate = "Jun ";
-                break;
-            case "07":
-                formattedDate = "Jul ";
-                break;
-            case "08":
-                formattedDate = "Aug ";
-                break;
-            case "09":
-                formattedDate = "Sep ";
-                break;
-            case "10":
-                formattedDate = "Oct ";
-                break;
-            case "11":
-                formattedDate = "Nov ";
-                break;
-            case "12":
-                formattedDate = "Dec ";
-        }
-
-        return formattedDate + dateBreakdown[DATE_FORMAT_DAY_INDEX] + ", " + dateBreakdown[DATE_FORMAT_YEAR_INDEX];
-    }
 
     /**
      * Stores the backdrop image into a given ImageView.

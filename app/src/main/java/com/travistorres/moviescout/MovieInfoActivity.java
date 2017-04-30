@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.travistorres.moviescout.utils.DateConversionUtility;
 import com.travistorres.moviescout.utils.widget.loaders.IsFavoriteMovieLoaderTask;
 import com.travistorres.moviescout.utils.moviedb.adapters.ReviewListAdapter;
 import com.travistorres.moviescout.utils.moviedb.adapters.TrailerListAdapter;
@@ -127,7 +128,7 @@ public class MovieInfoActivity extends AppCompatActivity
             mMovieLanguage.setText(languageLabel + labelSeparator + selectedMovie.originalLanguage);
             mMovieOverview.setText(selectedMovie.overview);
             mMoviePopularity.setText(popularityLabel + labelSeparator + selectedMovie.popularity);
-            mMovieReleaseDate.setText(releaseDateLabel + labelSeparator + selectedMovie.getCleanDateFormat());
+            mMovieReleaseDate.setText(releaseDateLabel + labelSeparator + DateConversionUtility.convertNumericalDateToFullDate(this, selectedMovie.releaseDate));
             mMovieTitle.setText(selectedMovie.originalTitle);
             mMovieVoteAverage.setText(voteAverageLabel + labelSeparator + selectedMovie.voteAverage);
             retrieveBackdrop(selectedMovie);
