@@ -61,11 +61,19 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -83,28 +91,64 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="Release Date"
+                        tools:text="Release Date" />
+                    <TextView
                         android:id="@+id/movie_release_date"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:textSize="@dimen/generic_text_size"/>
+                        android:layout_marginBottom="6sp"
+                        android:textSize="@dimen/generic_text_size"
+                        tools:text="Apr 30, 2017" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="Language"
+                        tools:text="Language" />
                     <TextView
                         android:id="@+id/movie_language"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/generic_text_size" />
+                        android:layout_marginBottom="6sp"
+                        android:textSize="@dimen/generic_text_size"
+                        tools:text="en" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="Popularity"
+                        tools:text="Popularity" />
                     <TextView
                         android:id="@+id/movie_popularity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/generic_text_size" />
+                        android:layout_marginBottom="6sp"
+                        android:textSize="@dimen/generic_text_size"
+                        tools:text="129.00" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="Rating"
+                        tools:text="Rating" />
                     <TextView
                         android:id="@+id/movie_vote_average"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/generic_text_size" />
+                        android:layout_marginBottom="6sp"
+                        android:textSize="@dimen/generic_text_size"
+                        tools:text="6.8" />
 
                     <Button
                         android:id="@+id/favorite_movie_button"

@@ -116,7 +116,7 @@ public class MovieInfoActivity extends AppCompatActivity
             CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
             layout.setExpandedTitleColor(getResources().getColor(android.R.color.white, getResources().newTheme()));
             layout.setTitle(selectedMovie.title);
-
+//  TODO-  remove unused variables
             //  get the label strings from the resource files
             String releaseDateLabel = getString(R.string.movie_release_date_label);
             String voteAverageLabel = getString(R.string.movie_vote_average_label);
@@ -125,12 +125,12 @@ public class MovieInfoActivity extends AppCompatActivity
 
             //  display information regarding the video
             String labelSeparator = getString(R.string.movie_info_label_separator);
-            mMovieLanguage.setText(languageLabel + labelSeparator + selectedMovie.originalLanguage);
+            mMovieLanguage.setText(selectedMovie.originalLanguage);
             mMovieOverview.setText(selectedMovie.overview);
-            mMoviePopularity.setText(popularityLabel + labelSeparator + selectedMovie.popularity);
-            mMovieReleaseDate.setText(releaseDateLabel + labelSeparator + DateConversionUtility.convertNumericalDateToFullDate(this, selectedMovie.releaseDate));
+            mMoviePopularity.setText(Double.toString(selectedMovie.popularity));
+            mMovieReleaseDate.setText(DateConversionUtility.convertNumericalDateToFullDate(this, selectedMovie.releaseDate));
             mMovieTitle.setText(selectedMovie.originalTitle);
-            mMovieVoteAverage.setText(voteAverageLabel + labelSeparator + selectedMovie.voteAverage);
+            mMovieVoteAverage.setText(Double.toString(selectedMovie.voteAverage));
             retrieveBackdrop(selectedMovie);
             retrievePoster(selectedMovie);
 
