@@ -117,15 +117,8 @@ public class MovieInfoActivity extends AppCompatActivity
             CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
             layout.setExpandedTitleColor(getResources().getColor(android.R.color.white, getResources().newTheme()));
             layout.setTitle(selectedMovie.title);
-//  TODO-  remove unused variables
-            //  get the label strings from the resource files
-            String releaseDateLabel = getString(R.string.movie_release_date_label);
-            String voteAverageLabel = getString(R.string.movie_vote_average_label);
-            String popularityLabel = getString(R.string.movie_popularity_rating_label);
-            String languageLabel = getString(R.string.movie_language_label);
 
             //  display information regarding the video
-            String labelSeparator = getString(R.string.movie_info_label_separator);
             mMovieLanguage.setText(selectedMovie.originalLanguage);
             mMovieOverview.setText(selectedMovie.overview);
             mMoviePopularity.setText(Double.toString(selectedMovie.popularity));

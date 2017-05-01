@@ -50,13 +50,6 @@
     <!--  Movie Transport Information  -->
     <string name="selected_movie_extra_key" translatable="false">selected-movie</string>
 
-    <!--  Movie Information  -->
-    <string name="movie_info_label_separator" translatable="false">:&#160;&#160;</string>
-    <string name="movie_language_label" translatable="true">Language</string>
-    <string name="movie_popularity_rating_label" translatable="true">Popularity</string>
-    <string name="movie_release_date_label" translatable="true">Release</string>
-    <string name="movie_vote_average_label" translatable="true">Vote Average</string>
-
     <!--  MovieDB API Url Configurations  -->
     <string name="movie_db_api_key_query_key" translatable="false">api_key</string>
     <string name="movie_db_api_movie_request_action" translatable="false">movie</string>
