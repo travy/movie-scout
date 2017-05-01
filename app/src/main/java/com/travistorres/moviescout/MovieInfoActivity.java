@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -55,7 +56,7 @@ public class MovieInfoActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Object[]>, MovieDbNetworkingErrorHandler, TrailerClickedListener, OnFavoriteButtonClicked, IsMovieFavoritedListener {
     private final String LOG_TAG = getClass().getSimpleName();
 
-    private Button mFavoriteMovieButton;
+    private ImageButton mFavoriteMovieButton;
     private ImageView mBackdropImage;
     private ImageView mMoviePoster;
     private Movie selectedMovie;
@@ -90,7 +91,7 @@ public class MovieInfoActivity extends AppCompatActivity
 
         //  load page views
         mBackdropImage = (ImageView) findViewById(R.id.movie_backdrop_image_view);
-        mFavoriteMovieButton = (Button) findViewById(R.id.favorite_movie_button);
+        mFavoriteMovieButton = (ImageButton) findViewById(R.id.favorite_movie_button);
         mFavoriteMovieButton.setVisibility(View.INVISIBLE);
         mMovieLanguage = (TextView) findViewById(R.id.movie_language);
         mMovieOverview = (TextView) findViewById(R.id.movie_overview);
@@ -117,20 +118,13 @@ public class MovieInfoActivity extends AppCompatActivity
             layout.setExpandedTitleColor(getResources().getColor(android.R.color.white, getResources().newTheme()));
             layout.setTitle(selectedMovie.title);
 
-            //  get the label strings from the resource files
-            String releaseDateLabel = getString(R.string.movie_release_date_label);
-            String voteAverageLabel = getString(R.string.movie_vote_average_label);
-            String popularityLabel = getString(R.string.movie_popularity_rating_label);
-            String languageLabel = getString(R.string.movie_language_label);
-
             //  display information regarding the video
-            String labelSeparator = getString(R.string.movie_info_label_separator);
-            mMovieLanguage.setText(languageLabel + labelSeparator + selectedMovie.originalLanguage);
+            mMovieLanguage.setText(selectedMovie.originalLanguage);
             mMovieOverview.setText(selectedMovie.overview);
-            mMoviePopularity.setText(popularityLabel + labelSeparator + selectedMovie.popularity);
-            mMovieReleaseDate.setText(releaseDateLabel + labelSeparator + DateConversionUtility.convertNumericalDateToFullDate(this, selectedMovie.releaseDate));
+            mMoviePopularity.setText(Double.toString(selectedMovie.popularity));
+            mMovieReleaseDate.setText(DateConversionUtility.convertNumericalDateToFullDate(this, selectedMovie.releaseDate));
             mMovieTitle.setText(selectedMovie.originalTitle);
-            mMovieVoteAverage.setText(voteAverageLabel + labelSeparator + selectedMovie.voteAverage);
+            mMovieVoteAverage.setText(Double.toString(selectedMovie.voteAverage));
             retrieveBackdrop(selectedMovie);
             retrievePoster(selectedMovie);
 
@@ -185,7 +179,7 @@ public class MovieInfoActivity extends AppCompatActivity
      *
      */
     private void setupTrailerRecyclerView() {
-        LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         RecyclerView.Adapter adapter = new TrailerListAdapter(this);
         mTrailerListRecyclerView.setAdapter(adapter);
         mTrailerListRecyclerView.setLayoutManager(linearLayout);
@@ -454,7 +448,7 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param buttonView
      */
     @Override
-    public void onFavorited(Button buttonView) {
+    public void onFavorited(ImageButton buttonView) {
         Bundle selectedMovieBundle = new Bundle();
 
         //  stores the selected movie into the bundle
@@ -500,7 +494,7 @@ public class MovieInfoActivity extends AppCompatActivity
      * @param buttonView
      */
     @Override
-    public void onUnfavorited(Button buttonView) {
+    public void onUnfavorited(ImageButton buttonView) {
         String selectedMovieKey = getString(R.string.selected_movie_extra_key);
         configureLoaderWithSelectedMovieBundle(selectedMovieKey, selectedMovie, R.integer.remove_movie_favorite_loader_manager_id);
     }

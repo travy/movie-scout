@@ -5,6 +5,7 @@
 package com.travistorres.moviescout.utils.widget.interfaces;
 
 import android.widget.Button;
+import android.widget.ImageButton;
 
 /**
  * OnFavoriteButtonClicked
@@ -17,6 +18,6 @@ import android.widget.Button;
  */
 
 public interface OnFavoriteButtonClicked {
-    void onFavorited(Button buttonView);
-    void onUnfavorited(Button buttonView);
+    void onFavorited(ImageButton buttonView);
+    void onUnfavorited(ImageButton buttonView);
 }
