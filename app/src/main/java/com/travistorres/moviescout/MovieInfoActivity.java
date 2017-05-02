@@ -268,6 +268,7 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     private void retrieveBackdrop(Movie movie) {
         movie.loadBackdropIntoImageView(this, mBackdropImage);
+        mMoviePoster.setContentDescription(movie.title);
     }
 
     /**
@@ -277,6 +278,7 @@ public class MovieInfoActivity extends AppCompatActivity
      */
     private void retrievePoster(Movie movie) {
         movie.loadPosterIntoImageView(this, mMoviePoster);
+        mMoviePoster.setContentDescription(movie.title);
     }
 
     /**

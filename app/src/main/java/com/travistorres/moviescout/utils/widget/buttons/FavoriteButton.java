@@ -87,12 +87,8 @@ public class FavoriteButton implements View.OnClickListener {
      *
      */
     protected void onSetAsFavorite() {
-        //String unfavoredLabel = context.getString(R.string.favorites_button_unfavored_button_label);
-        //buttonView.setText(unfavoredLabel);
-        Resources resources = context.getResources();
-        Drawable icon = resources.getDrawable(R.drawable.ic_favorite_movie, null);
-        //buttonView.setBackground(icon);
-        buttonView.setImageDrawable(icon);
+        String addedFavorite = context.getString(R.string.added_movie_to_favorites_message);
+        specifyButtonState(R.drawable.ic_favorite_movie, addedFavorite);
         onClickOperation.onFavorited(buttonView);
     }
 
@@ -101,12 +97,21 @@ public class FavoriteButton implements View.OnClickListener {
      *
      */
     protected void onSetAsNotFavorite() {
-        //String favoriteLabel = context.getString(R.string.favorites_button_favorite_button_label);
-        //buttonView.setText(favoriteLabel);
-        Resources resources = context.getResources();
-        Drawable icon = resources.getDrawable(R.drawable.ic_unfavorite_movie, null);
-        //buttonView.setBackground(icon);
-        buttonView.setImageDrawable(icon);
+        String removedFavorite = context.getString(R.string.removed_movie_from_favorites_message);
+        specifyButtonState(R.drawable.ic_unfavorite_movie, removedFavorite);
         onClickOperation.onUnfavorited(buttonView);
+    }
+
+    /**
+     * Appends an image resource and content description to the ImageButton.
+     *
+     * @param resourceId
+     * @param contentDescription
+     */
+    private void specifyButtonState(int resourceId, String contentDescription) {
+        Resources resources = context.getResources();
+        Drawable icon = resources.getDrawable(resourceId, null);
+        buttonView.setImageDrawable(icon);
+        buttonView.setContentDescription(contentDescription);
     }
 }

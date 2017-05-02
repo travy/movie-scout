@@ -23,6 +23,7 @@
     <!--  Messages  -->
     <string name="add_movie_to_favorites_postfix_message" translatable="true">&#160;to Favorites</string>
     <string name="add_movie_to_favorites_prefix_message" translatable="true">Added&#160;</string>
+    <string name="added_movie_to_favorites_message" translatable="true">The movie has been added to your favorites</string>
     <string name="no_reviews_found_for_movie_message" translatable="true">No Reviews were Found</string>
     <string name="removed_movie_from_favorites_message" translatable="true">Removed from Favorites</string>
 
