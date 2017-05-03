@@ -8,7 +8,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
+import com.travistorres.moviescout.utils.db.MoviesDatabase;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 /**
@@ -25,6 +27,8 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
 public final class MoviesTable extends BaseTable {
     public static final String NAME = "movies";
 
+    public static final String CONTENT_PATH = "movies";
+    public static final Uri MOVIE_CONTENT_URI = MoviesDatabase.BASE_CONTENT_URI.buildUpon().appendPath(CONTENT_PATH).build();
     /**
      * Specifies the tables columns.
      *
@@ -125,7 +129,7 @@ public final class MoviesTable extends BaseTable {
      * @return mapping content values.
      */
     @Override
-    protected ContentValues getContentValues(Object object) {
+    public ContentValues getContentValues(Object object) {
         Movie movie = (Movie) object;
 
         ContentValues cv = new ContentValues();

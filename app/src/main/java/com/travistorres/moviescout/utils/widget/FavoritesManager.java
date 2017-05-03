@@ -4,8 +4,11 @@
 
 package com.travistorres.moviescout.utils.widget;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.util.Log;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.db.MoviesDatabase;
@@ -76,7 +79,10 @@ public class FavoritesManager {
      */
     public void addFavorite(Movie movie, Review[] reviews, Trailer[] trailers) {
         if (!isFavorite(movie)) {
-            long id = movieTable.save(movie);
+            ContentValues cv = movieTable.getContentValues(movie);
+            Uri resUri = context.getContentResolver().insert(MoviesTable.MOVIE_CONTENT_URI, cv);
+
+            long id = Long.parseLong(resUri.getLastPathSegment());
             saveReviewsWithMovieId(reviews, id);
             saveTrailersWithMovieId(trailers, id);
         }
@@ -106,7 +112,10 @@ public class FavoritesManager {
      */
     public long saveTrailerWithMovieId(Trailer trailer, long movieId) {
         trailer.movieId = Long.toString(movieId);
-        return trailersTable.save(trailer);
+
+        ContentValues cv = trailersTable.getContentValues(trailer);
+        Uri res = context.getContentResolver().insert(TrailersTable.TRAILER_CONTENT_URI, cv);
+        return Long.parseLong(res.getLastPathSegment());
     }
 
     /**
@@ -133,7 +142,10 @@ public class FavoritesManager {
      */
     public long saveReviewWithMovieId(Review review, long movieId) {
         review.movieId = Long.toString(movieId);
-        return reviewsTable.save(review);
+
+        ContentValues cv = reviewsTable.getContentValues(review);
+        Uri res = context.getContentResolver().insert(ReviewsTable.REVIEW_CONTENT_URI, cv);
+        return Long.parseLong(res.getLastPathSegment());
     }
 
     /**

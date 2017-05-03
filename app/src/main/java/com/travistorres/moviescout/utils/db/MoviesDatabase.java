@@ -7,6 +7,7 @@ package com.travistorres.moviescout.utils.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 
 import com.travistorres.moviescout.utils.db.tables.MoviesTable;
 import com.travistorres.moviescout.utils.db.tables.ReviewsTable;
@@ -25,6 +26,9 @@ import com.travistorres.moviescout.utils.db.tables.TrailersTable;
 public class MoviesDatabase extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String DATABASE_NAME = "moviescout.db";
+
+    public static final String AUTHORITY = "com.travistorres.moviescout";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     /**
      * Constructs a new database model.

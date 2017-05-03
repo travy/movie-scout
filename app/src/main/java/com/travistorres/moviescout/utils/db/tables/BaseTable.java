@@ -106,6 +106,11 @@ public abstract class BaseTable {
         return connection.insert(tableName, nullColumnStack, values);
     }
 
+    public final long save(String nullColumnStack, ContentValues contentValues) {
+        String tableName = getTableName();
+        return connection.insert(tableName, nullColumnStack, contentValues);
+    }
+
     /**
      * Deletes a database field from the system.
      *
@@ -155,7 +160,7 @@ public abstract class BaseTable {
      *
      * @return
      */
-    protected abstract ContentValues getContentValues(Object data);
+    public abstract ContentValues getContentValues(Object data);
 
     /**
      * Determines if a given object is contained within the table.
