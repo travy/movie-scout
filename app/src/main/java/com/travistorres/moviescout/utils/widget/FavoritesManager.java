@@ -4,6 +4,7 @@
 
 package com.travistorres.moviescout.utils.widget;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -155,11 +156,18 @@ public class FavoritesManager {
      */
     public void removeFavorite(Movie movie) {
         if (isFavorite(movie)) {
+            Uri uri;
             long movieId = movieTable.getId(movie);
+            String idOfMovie = Long.toString(movieId);
+            ContentResolver cr = context.getContentResolver();
 
-            reviewsTable.deleteAssociatedToMovie(movieId);
-            trailersTable.deleteAssociatedToMovie(movieId);
-            movieTable.delete(movie);
+            //  remove all associated data
+            cr.delete(ReviewsTable.REVIEW_CONTENT_URI, ReviewsTable.Cols.MOVIE_ID + "=?", new String[]{idOfMovie});
+            cr.delete(TrailersTable.TRAILER_CONTENT_URI, TrailersTable.Cols.MOVIE_ID + "=?", new String[]{idOfMovie});
+
+            //  delete the movie
+            uri = MoviesTable.MOVIE_CONTENT_URI.buildUpon().appendPath(idOfMovie).build();
+            cr.delete(uri, "_id=?", new String[]{idOfMovie});
         }
     }
 

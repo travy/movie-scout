@@ -119,7 +119,7 @@ public abstract class BaseTable {
      *
      * @return
      */
-    protected final int deleteFromDatabase(String whereClause, String[] whereArgs) {
+    public final int deleteFromDatabase(String whereClause, String[] whereArgs) {
         String tableName = getTableName();
 
         return connection.delete(tableName, whereClause, whereArgs);
