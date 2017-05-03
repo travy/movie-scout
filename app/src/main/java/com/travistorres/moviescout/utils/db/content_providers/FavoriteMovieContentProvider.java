@@ -101,10 +101,76 @@ public class FavoriteMovieContentProvider extends ContentProvider {
         return movieDatabase.getReadableDatabase();
     }
 
+    /**
+     * Will execute a `SELECT` query on a given table.
+     *
+     * @param uri
+     * @param projection
+     * @param selection
+     * @param selectionArgs
+     * @param sortOrder
+     *
+     * @return Cursor object from the `SELECT` operation.
+     */
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        return null;
+        final SQLiteDatabase readableDatabase = getReadableDatabase();
+
+        BaseTable table;
+        Cursor cursor;
+        Context context = getContext();
+        int uriCode = sUriMatcher.match(uri);
+        switch (uriCode) {
+            case MOVIES:
+                table = new MoviesTable(context, readableDatabase);
+                cursor = table.query(projection, selection, selectionArgs, sortOrder);
+                break;
+            case MOVIE_WITH_ID:
+                table = new MoviesTable(context, readableDatabase);
+                cursor = getFieldFromTable(uri, table, projection, sortOrder);
+                break;
+            case REVIEWS:
+                table = new ReviewsTable(context, readableDatabase);
+                cursor = table.query(projection, selection, selectionArgs, sortOrder);
+                break;
+            case REVIEW_WITH_ID:
+                table = new ReviewsTable(context, readableDatabase);
+                cursor = getFieldFromTable(uri, table, projection, sortOrder);
+                break;
+            case TRAILERS:
+                table = new TrailersTable(context, readableDatabase);
+                cursor = table.query(projection, selection, selectionArgs, sortOrder);
+                break;
+            case TRAILER_WITH_ID:
+                table = new TrailersTable(context, readableDatabase);
+                cursor = getFieldFromTable(uri, table, projection, sortOrder);
+                break;
+            default:
+                throw new UnsupportedOperationException(context.getString(R.string.content_provider_unknown_uri_message));
+        }
+
+        cursor.setNotificationUri(context.getContentResolver(), uri);
+
+        return cursor;
+    }
+
+    /**
+     * Requests a `SELECT` operation on a particular row in the table.
+     *
+     * @param uri
+     * @param table
+     * @param projection
+     * @param sortOrder
+     *
+     * @return
+     */
+    private Cursor getFieldFromTable(Uri uri, BaseTable table, String[] projection, String sortOrder) {
+        String id = uri.getPathSegments().get(1);
+        String mSelection = "_id=?";
+        String[] mSelectionArgs = new String[]{id};
+
+        return table.query(projection, mSelection, mSelectionArgs, sortOrder);
     }
 
     @Nullable

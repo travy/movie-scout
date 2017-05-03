@@ -154,6 +154,21 @@ public abstract class BaseTable {
     }
 
     /**
+     * Executes a raw query operation on the table.
+     *
+     * @param projection
+     * @param selection
+     * @param selectionArgs
+     * @param sortOrder
+     *
+     * @return
+     */
+    public final Cursor query(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        String tableName = getTableName();
+        return connection.query(tableName, projection, selection, selectionArgs, null, null, sortOrder);
+    }
+
+    /**
      * Describes how to package the data being saved into the database table.
      *
      * @param data
