@@ -173,6 +173,13 @@ public class FavoriteMovieContentProvider extends ContentProvider {
         return table.query(projection, mSelection, mSelectionArgs, sortOrder);
     }
 
+    /**
+     * Constant null as not needed.
+     *
+     * @param uri
+     *
+     * @return value null or some mime type
+     */
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
