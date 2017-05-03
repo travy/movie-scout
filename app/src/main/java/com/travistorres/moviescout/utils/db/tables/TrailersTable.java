@@ -7,7 +7,9 @@ package com.travistorres.moviescout.utils.db.tables;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
+import com.travistorres.moviescout.utils.db.MoviesDatabase;
 import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 /**
@@ -22,6 +24,9 @@ import com.travistorres.moviescout.utils.moviedb.models.Trailer;
 
 public final class TrailersTable extends BaseTable {
     public static final String NAME = "trailers";
+
+    public static final String CONTENT_PATH = "trailers";
+    public static final Uri TRAILER_CONTENT_URI = MoviesDatabase.BASE_CONTENT_URI.buildUpon().appendPath(CONTENT_PATH).build();
 
     /**
      * Constructs a Table model.
@@ -66,7 +71,7 @@ public final class TrailersTable extends BaseTable {
      * @return content values for storing into the database.
      */
     @Override
-    protected ContentValues getContentValues(Object data) {
+    public ContentValues getContentValues(Object data) {
         Trailer trailer = (Trailer) data;
 
         ContentValues cv = new ContentValues();

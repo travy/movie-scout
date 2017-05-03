@@ -47,6 +47,12 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
+
+        <provider
+            android:authorities="com.travistorres.moviescout"
+            android:name="com.travistorres.moviescout.utils.db.content_providers.FavoriteMovieContentProvider"
+            android:exported="false" />
+
     </application>
 
 </manifest>

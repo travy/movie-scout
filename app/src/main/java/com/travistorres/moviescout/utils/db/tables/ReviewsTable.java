@@ -7,7 +7,9 @@ package com.travistorres.moviescout.utils.db.tables;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
+import com.travistorres.moviescout.utils.db.MoviesDatabase;
 import com.travistorres.moviescout.utils.moviedb.models.Review;
 
 /**
@@ -22,6 +24,9 @@ import com.travistorres.moviescout.utils.moviedb.models.Review;
 
 public final class ReviewsTable extends BaseTable {
     public static final String NAME = "reviews";
+
+    public static final String CONTENT_PATH = "reviews";
+    public static final Uri REVIEW_CONTENT_URI = MoviesDatabase.BASE_CONTENT_URI.buildUpon().appendPath(CONTENT_PATH).build();
 
     /**
      * Constructs a Review table model.
@@ -66,7 +71,7 @@ public final class ReviewsTable extends BaseTable {
      * @return content values
      */
     @Override
-    protected ContentValues getContentValues(Object data) {
+    public ContentValues getContentValues(Object data) {
         Review review = (Review) data;
 
         ContentValues cv = new ContentValues();

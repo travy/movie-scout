@@ -28,6 +28,8 @@
     <string name="removed_movie_from_favorites_message" translatable="true">Removed from Favorites</string>
 
     <!--  Error Messages  -->
+    <string name="content_provider_failed_insert_message" translatable="true">Failed to insert row into&#160;</string>
+    <string name="content_provider_unknown_uri_message" translatable="true">Unknown Uri:&#160;&#160;</string>
     <string name="default_networking_exception_log_message_postfix" translatable="true">]&#160;</string>
     <string name="default_networking_exception_log_message_prefix" translatable="true">Movie Scout Networking Exception was thrown:  [HTTP </string>
     <string name="invalid_api_key_error_message" translatable="true">The provided API Key was rejected by the server.  Please check that you\'ve entered the correct api key in the settings.</string>

@@ -107,6 +107,33 @@ public abstract class BaseTable {
     }
 
     /**
+     * Saves a new entry into the database.
+     *
+     * @param nullColumnStack
+     * @param contentValues
+     *
+     * @return id of the inserted row
+     */
+    public final long save(String nullColumnStack, ContentValues contentValues) {
+        String tableName = getTableName();
+        return connection.insert(tableName, nullColumnStack, contentValues);
+    }
+
+    /**
+     * Updates a field in the database.
+     *
+     * @param contentValues
+     * @param whereClause
+     * @param whereArgs
+     *
+     * @return The number of fields updated
+     */
+    public final int update(ContentValues contentValues, String whereClause, String[] whereArgs) {
+        String tableName = getTableName();
+        return connection.update(tableName, contentValues, whereClause, whereArgs);
+    }
+
+    /**
      * Deletes a database field from the system.
      *
      * @param whereClause
@@ -114,7 +141,7 @@ public abstract class BaseTable {
      *
      * @return
      */
-    protected final int deleteFromDatabase(String whereClause, String[] whereArgs) {
+    public final int deleteFromDatabase(String whereClause, String[] whereArgs) {
         String tableName = getTableName();
 
         return connection.delete(tableName, whereClause, whereArgs);
@@ -149,13 +176,28 @@ public abstract class BaseTable {
     }
 
     /**
+     * Executes a raw query operation on the table.
+     *
+     * @param projection
+     * @param selection
+     * @param selectionArgs
+     * @param sortOrder
+     *
+     * @return
+     */
+    public final Cursor query(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        String tableName = getTableName();
+        return connection.query(tableName, projection, selection, selectionArgs, null, null, sortOrder);
+    }
+
+    /**
      * Describes how to package the data being saved into the database table.
      *
      * @param data
      *
      * @return
      */
-    protected abstract ContentValues getContentValues(Object data);
+    public abstract ContentValues getContentValues(Object data);
 
     /**
      * Determines if a given object is contained within the table.

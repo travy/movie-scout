@@ -4,8 +4,13 @@
 
 package com.travistorres.moviescout.utils.widget;
 
+import android.content.ContentProvider;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.util.Log;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.db.MoviesDatabase;
@@ -24,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 
 /**
@@ -76,7 +82,10 @@ public class FavoritesManager {
      */
     public void addFavorite(Movie movie, Review[] reviews, Trailer[] trailers) {
         if (!isFavorite(movie)) {
-            long id = movieTable.save(movie);
+            ContentValues cv = movieTable.getContentValues(movie);
+            Uri resUri = context.getContentResolver().insert(MoviesTable.MOVIE_CONTENT_URI, cv);
+
+            long id = Long.parseLong(resUri.getLastPathSegment());
             saveReviewsWithMovieId(reviews, id);
             saveTrailersWithMovieId(trailers, id);
         }
@@ -106,7 +115,10 @@ public class FavoritesManager {
      */
     public long saveTrailerWithMovieId(Trailer trailer, long movieId) {
         trailer.movieId = Long.toString(movieId);
-        return trailersTable.save(trailer);
+
+        ContentValues cv = trailersTable.getContentValues(trailer);
+        Uri res = context.getContentResolver().insert(TrailersTable.TRAILER_CONTENT_URI, cv);
+        return Long.parseLong(res.getLastPathSegment());
     }
 
     /**
@@ -133,7 +145,10 @@ public class FavoritesManager {
      */
     public long saveReviewWithMovieId(Review review, long movieId) {
         review.movieId = Long.toString(movieId);
-        return reviewsTable.save(review);
+
+        ContentValues cv = reviewsTable.getContentValues(review);
+        Uri res = context.getContentResolver().insert(ReviewsTable.REVIEW_CONTENT_URI, cv);
+        return Long.parseLong(res.getLastPathSegment());
     }
 
     /**
@@ -143,11 +158,18 @@ public class FavoritesManager {
      */
     public void removeFavorite(Movie movie) {
         if (isFavorite(movie)) {
+            Uri uri;
             long movieId = movieTable.getId(movie);
+            String idOfMovie = Long.toString(movieId);
+            ContentResolver cr = context.getContentResolver();
 
-            reviewsTable.deleteAssociatedToMovie(movieId);
-            trailersTable.deleteAssociatedToMovie(movieId);
-            movieTable.delete(movie);
+            //  remove all associated data
+            cr.delete(ReviewsTable.REVIEW_CONTENT_URI, ReviewsTable.Cols.MOVIE_ID + "=?", new String[]{idOfMovie});
+            cr.delete(TrailersTable.TRAILER_CONTENT_URI, TrailersTable.Cols.MOVIE_ID + "=?", new String[]{idOfMovie});
+
+            //  delete the movie
+            uri = MoviesTable.MOVIE_CONTENT_URI.buildUpon().appendPath(idOfMovie).build();
+            cr.delete(uri, "_id=?", new String[]{idOfMovie});
         }
     }
 
@@ -213,9 +235,13 @@ public class FavoritesManager {
     /**
      * Will update an individual movie within the database.
      *
+     * @param id Id for the movie in the database
      * @param movie
      */
-    public void updateMovie(int id, Movie movie) {
-        movieTable.update(id, movie);
+    public void updateMovie(long id, Movie movie) {
+        MoviesTable mt = new MoviesTable(context);
+        ContentValues cv = mt.getContentValues(movie);
+        Uri uri = MoviesTable.MOVIE_CONTENT_URI.buildUpon().appendPath(MoviesTable.Cols.MOVIE_ID).build();
+        context.getContentResolver().update(uri, cv, "_id=?", new String[] {Long.toString(id)});
     }
 }
