@@ -90,11 +90,12 @@ public final class MoviesTable extends BaseTable {
      *
      * @param fieldId
      * @param movie
+     *
+     * @return The number of rows updated
      */
-    public void update(int fieldId, Movie movie) {
-        String table = getTableName();
+    public int update(int fieldId, Movie movie) {
         ContentValues cv = getContentValues(movie);
-        connection.update(table, cv, "_id=" + fieldId, null);
+        return update(cv, "_id=?", new String[] {Long.toString(fieldId)});
     }
 
     /**

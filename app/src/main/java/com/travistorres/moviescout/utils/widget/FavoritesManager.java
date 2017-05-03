@@ -4,6 +4,7 @@
 
 package com.travistorres.moviescout.utils.widget;
 
+import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 
 /**
@@ -233,9 +235,13 @@ public class FavoritesManager {
     /**
      * Will update an individual movie within the database.
      *
+     * @param id Id for the movie in the database
      * @param movie
      */
-    public void updateMovie(int id, Movie movie) {
-        movieTable.update(id, movie);
+    public void updateMovie(long id, Movie movie) {
+        MoviesTable mt = new MoviesTable(context);
+        ContentValues cv = mt.getContentValues(movie);
+        Uri uri = MoviesTable.MOVIE_CONTENT_URI.buildUpon().appendPath(MoviesTable.Cols.MOVIE_ID).build();
+        context.getContentResolver().update(uri, cv, "_id=?", new String[] {Long.toString(id)});
     }
 }

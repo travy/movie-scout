@@ -106,9 +106,31 @@ public abstract class BaseTable {
         return connection.insert(tableName, nullColumnStack, values);
     }
 
+    /**
+     * Saves a new entry into the database.
+     *
+     * @param nullColumnStack
+     * @param contentValues
+     *
+     * @return id of the inserted row
+     */
     public final long save(String nullColumnStack, ContentValues contentValues) {
         String tableName = getTableName();
         return connection.insert(tableName, nullColumnStack, contentValues);
+    }
+
+    /**
+     * Updates a field in the database.
+     *
+     * @param contentValues
+     * @param whereClause
+     * @param whereArgs
+     *
+     * @return The number of fields updated
+     */
+    public final int update(ContentValues contentValues, String whereClause, String[] whereArgs) {
+        String tableName = getTableName();
+        return connection.update(tableName, contentValues, whereClause, whereArgs);
     }
 
     /**

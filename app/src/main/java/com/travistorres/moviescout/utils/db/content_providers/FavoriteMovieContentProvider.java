@@ -278,8 +278,43 @@ public class FavoriteMovieContentProvider extends ContentProvider {
         return numDeletedRows;
     }
 
+    /**
+     * Updates fields in the database.
+     *
+     * @param uri
+     * @param values
+     * @param selection
+     * @param selectionArgs
+     *
+     * @return The number of updated fields.
+     */
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase writableDatabase = getWritableDatabase();
+
+        BaseTable table;
+        Context context = getContext();
+        int uriCode = sUriMatcher.match(uri);
+        switch (uriCode) {
+            case MOVIES:
+            case MOVIE_WITH_ID:
+                table = new MoviesTable(context, writableDatabase);
+                break;
+            case TRAILERS:
+            case TRAILER_WITH_ID:
+                table = new TrailersTable(context, writableDatabase);
+                break;
+            case REVIEWS:
+            case REVIEW_WITH_ID:
+                table = new ReviewsTable(context, writableDatabase);
+                break;
+            default:
+                throw new UnsupportedOperationException(context.getString(R.string.content_provider_unknown_uri_message));
+        }
+
+        int numUpdated = table.update(values, selection, selectionArgs);
+        context.getContentResolver().notifyChange(uri, null);
+
+        return numUpdated;
     }
 }
