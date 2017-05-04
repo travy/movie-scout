@@ -4,11 +4,14 @@
 
 package com.travistorres.moviescout;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,12 +25,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.travistorres.moviescout.utils.UpdateFavoritesServiceUtils;
 import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
 import com.travistorres.moviescout.utils.moviedb.MovieSortType;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieClickedListener;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieDbNetworkingErrorHandler;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
+import com.travistorres.moviescout.utils.networking.broadcast_receivers.NetworkConnectionBroadcastReceiver;
+import com.travistorres.moviescout.utils.networking.interfaces.NetworkConnectivityInterface;
 
 /**
  * MainActivity
@@ -43,21 +49,58 @@ import com.travistorres.moviescout.utils.moviedb.models.Movie;
  */
 
 public class MainActivity extends AppCompatActivity
-        implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener {
-    private RecyclerView mMovieListView;
+        implements MovieClickedListener, MovieDbNetworkingErrorHandler, SharedPreferences.OnSharedPreferenceChangeListener, NetworkConnectivityInterface {
+    private boolean areMenuItemsVisible;
+    private BroadcastReceiver networkBroadcastReceiver;
     private GridLayoutManager mMovieLayoutManager;
+    private IntentFilter networkListeningIntent;
+    private Menu mMenuBar;
+    private MovieDbRequester mMovieRequester;
     private MovieListAdapter mMovieAdapter;
-
-    private TextView mPageNotFoundTextView;
+    private ProgressBar mLoadingIndicator;
+    private RecyclerView mMovieListView;
+    private String movieDbApiThreeKey;
     private TextView mNetworkingErrorTextView;
+    private TextView mPageNotFoundTextView;
     private TextView mUnauthorizedTextView;
 
-    private ProgressBar mLoadingIndicator;
+    /**
+     * Specifies what to do when the os loses a connection to the network.
+     *
+     */
+    @Override
+    public void onNoNetworkConnectivity() {
+        setMenuVisibility(false);
+        sortMovies(MovieSortType.FAVORITES);
 
-    private MovieDbRequester mMovieRequester;
+        String lostConnectionMessage = getString(R.string.lost_network_connection_message);
+        Toast.makeText(this, lostConnectionMessage, Toast.LENGTH_SHORT).show();
+    }
 
-    private String movieDbApiThreeKey;
-    private String movieDbApiFourKey;
+    /**
+     * Specifies what to do when a network connection is received from the os.
+     *
+     */
+    @Override
+    public void onHasNetworkConnectivity() {
+        setMenuVisibility(true);
+    }
+
+    /**
+     * Will either show or hide the popularity and rating sort options depending on the value of
+     * `visibilityState`.
+     *
+     * @param visibilityState
+     */
+    private void setMenuVisibility(boolean visibilityState) {
+        areMenuItemsVisible = visibilityState;
+        if (mMenuBar != null) {
+            MenuItem popularity = mMenuBar.findItem(R.id.popularity_sort_button);
+            popularity.setVisible(visibilityState);
+            MenuItem rating = mMenuBar.findItem(R.id.rating_sort_button);
+            rating.setVisible(visibilityState);
+        }
+    }
 
     /**
      * Responsible for loading all resource objects and triggering the events that will allow a
@@ -70,6 +113,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        areMenuItemsVisible = true;
+
         //  obtain all error message objects
         mPageNotFoundTextView = (TextView) findViewById(R.id.page_not_found_error);
         mNetworkingErrorTextView = (TextView) findViewById(R.id.network_connection_failed_error);
@@ -78,28 +123,62 @@ public class MainActivity extends AppCompatActivity
         //  acquire the loading indicator
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
 
+        //  create an intent filter for watching network activity
+        networkListeningIntent = new IntentFilter();
+        networkListeningIntent.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        networkBroadcastReceiver = new NetworkConnectionBroadcastReceiver(this);
+
+        //  sets the api keys
+        movieDbApiThreeKey = getString(R.string.movie_scout_version_three_api_key);
+
         //  determine if the screen needs to be constructed or if a previous state exists
+        mMovieRequester = new MovieDbRequester(this, this, this);
+        mMovieRequester.setVersionThreeApiKey(movieDbApiThreeKey);
         String mainActivityStateExtra = getString(R.string.main_activity_state_bundle);
         if (savedInstanceState != null && savedInstanceState.containsKey(mainActivityStateExtra)) {
             //  load the previously loaded movies and display the results
             MainActivityParcelable parcelable = savedInstanceState.getParcelable(mainActivityStateExtra);
             int currentPage = parcelable.currentPage;
+            int totalPages = parcelable.totalPages;
             MovieSortType sortType = parcelable.sortType;
             Movie[] movieList = parcelable.movieList;
 
-            mMovieRequester = new MovieDbRequester(this, this, this);
+            mMovieRequester.setTotalPages(totalPages);
             mMovieRequester.setCurrentPage(currentPage);
             mMovieRequester.setSortType(sortType);
-
             setupMovieView(movieList);
-            updateMovieApiKey(false, true);
+            mMovieRequester.requestNext();
         } else {
             //  create a movie request object and display the interface
-            mMovieRequester = new MovieDbRequester(this, this, this);
             setupMovieView();
-            updateMovieApiKey();
+            mMovieRequester.reset();
             mMovieRequester.requestNext();
         }
+
+        //  schedule the favorites update job
+        updateNotificationStatusSettings();
+    }
+
+    /**
+     * Listens for network connectivity events that are broadcast from the os.
+     *
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        registerReceiver(networkBroadcastReceiver, networkListeningIntent);
+    }
+
+    /**
+     * Stop listening for all broadcast events.
+     *
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        unregisterReceiver(networkBroadcastReceiver);
     }
 
     /**
@@ -113,8 +192,8 @@ public class MainActivity extends AppCompatActivity
         //  sets up the requester object
         Resources resources = getResources();
         Configuration configuration = resources.getConfiguration();
-        int deviceOrientaton = configuration.orientation;
-        int gridLayoutColumnCount = deviceOrientaton == Configuration.ORIENTATION_PORTRAIT ?
+        int deviceOrientation = configuration.orientation;
+        int gridLayoutColumnCount = deviceOrientation == Configuration.ORIENTATION_PORTRAIT ?
                 resources.getInteger(R.integer.movie_grid_layout_manager_portrait_column_count) :
                 resources.getInteger(R.integer.movie_grid_layout_manager_landscape_column_count);
 
@@ -140,44 +219,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Clears any cached results from previous network requests and then performs a new requests
-     * with any new values passed for the API keys.
-     *
-     * @param shouldReset Specifies if the movie requester instance should be reset or not.
-     * @param shouldRequest Specifies if a new page should be requested.  This is generally useful
-     *                      if the current page is 1.
-     */
-    private void updateMovieApiKey(boolean shouldReset, boolean shouldRequest) {
-        //  hides the unauthorized message
-        mUnauthorizedTextView.setVisibility(TextView.INVISIBLE);
-
-        //  updates the api keys based on the settings
-        setupApiPreferences();
-
-        //  resets the counter fields in the request object if requested
-        if (shouldReset) {
-            mMovieRequester.reset();
-        }
-
-        //  specifies the api keys in the requester
-        mMovieRequester.setApiKeys(movieDbApiThreeKey, movieDbApiFourKey);
-
-        //  request the next page if necessary
-        if (shouldRequest) {
-            mMovieRequester.requestNext();
-        }
-    }
-
-    /**
-     * Updates the movie api key and forces both the requester to reset and a new page be requested
-     * from the server.
-     *
-     */
-    private void updateMovieApiKey() {
-        updateMovieApiKey(true, true);
-    }
-
-    /**
      * Save the movie results.
      *
      * @param outState
@@ -191,6 +232,7 @@ public class MainActivity extends AppCompatActivity
         parcelable.sortType = mMovieRequester.getSortType();
         parcelable.currentPage = mMovieRequester.getCurrentPage();
         parcelable.movieList = mMovieAdapter.getMovies();
+        parcelable.totalPages = mMovieRequester.getTotalPages();
 
         outState.putParcelable(mainActivityStateExtra, parcelable);
     }
@@ -209,58 +251,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Acquires the settings for the application and stores them so that they are easily
-     * accessible.  Will also redirect the user to the Settings page if they have not yet provided
-     * an API access key.
-     *
-     */
-    private void setupApiPreferences() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        //  setup the version 3 api key
-        String versionThreeApiSettingsKey = getString(R.string.movie_db_v3_settings_key);
-        String versionThreeApiSettingsDefault = getString(R.string.movie_db_v3_settings_default);
-        movieDbApiThreeKey = sharedPreferences.getString(versionThreeApiSettingsKey, versionThreeApiSettingsDefault);
-
-        //  setup the version four api key
-        String versionFourApiSettingsKey = getString(R.string.movie_db_v4_settings_key);
-        String versionFourApiSettingsDefault = getString(R.string.movie_db_v4_settings_default);
-        movieDbApiFourKey = sharedPreferences.getString(versionFourApiSettingsKey, versionFourApiSettingsDefault);
-
-        //  direct the user to the settings page if the api keys have not been specified
-        if (!wereMovieDbApiKeysSet()) {
-            String missingKeyMessage = getString(R.string.missing_api_keys);
-            Toast.makeText(this, missingKeyMessage, Toast.LENGTH_SHORT).show();
-            loadSettingsPage();
-        }
-
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-    }
-
-    /**
-     * Determines if both the Movie DB API v3 and v4 access keys have been provided.
-     *
-     * @return boolean `true` if both keys have a proper value defined as by the
-     * `wasMovieDbApiKeySpecified` method call.
-     */
-    private boolean wereMovieDbApiKeysSet() {
-        return wasMovieDbApiKeySpecified(movieDbApiThreeKey) &&
-                wasMovieDbApiKeySpecified(movieDbApiFourKey);
-    }
-
-    /**
-     * Determines if a specified API access key was provided.  A key is determined to be valid, if
-     * it is not null and is composed of at least one character (excluding white space).
-     *
-     * @param apiKey The API key to check the validity of.
-     *
-     * @return boolean `true` if the key is neither null or an empty string and `false` otherwise.
-     */
-    private boolean wasMovieDbApiKeySpecified(String apiKey) {
-        return apiKey != null && apiKey.trim().length() > 1;
-    }
-
-    /**
      * Allows the menu to be displayed on the activity bar.
      *
      * @param menu
@@ -270,6 +260,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+
+        //  determines if the menu items should be displayed or not
+        mMenuBar = menu;
+        setMenuVisibility(areMenuItemsVisible);
 
         return true;
     }
@@ -291,6 +285,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.rating_sort_button:
                 sortMovies(MovieSortType.HIGHEST_RATED);
                 break;
+            case R.id.favorite_movies_menu_item:
+                sortMovies(MovieSortType.FAVORITES);
+                break;
             case R.id.settings_menu_button:
                 loadSettingsPage();
                 return true;
@@ -305,7 +302,10 @@ public class MainActivity extends AppCompatActivity
      * @param sortType
      */
     private void sortMovies(MovieSortType sortType) {
+        mMovieRequester = new MovieDbRequester(this, this, this);
+        mMovieRequester.setVersionThreeApiKey(movieDbApiThreeKey);
         mMovieRequester.setSortType(sortType);
+        setupMovieView();
         mMovieRequester.reset();
         mMovieRequester.requestNext();
     }
@@ -406,9 +406,54 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s == getString(R.string.movie_db_v3_settings_key) ||
-                s == getString(R.string.movie_db_v4_settings_key)) {
-            updateMovieApiKey();
+        if (s == getString(R.string.favorite_movies_notification_state_key)) {
+            updateNotificationStatusSettings();
         }
+
+        if (s == getString(R.string.favorite_movies_update_interval_key)) {
+            updateNotificationsIntervalTime();
+        }
+    }
+
+    /**
+     * Specifies whether or not the service to update favorites should be scheduled.
+     *
+     */
+    public void updateNotificationStatusSettings() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //  determines if the notifications setting is on
+        Resources resources = getResources();
+        String showNotificationsKey = getString(R.string.favorite_movies_notification_state_key);
+        boolean showNotificationsDefaultValue = resources.getBoolean(R.bool.favorite_movies_update_notification_setting_default_value);
+        boolean notificationsTurnedOn = sharedPreferences.getBoolean(showNotificationsKey, showNotificationsDefaultValue);
+
+        //  acquires the interval for when the service should run
+        String notificationsIntervalKey = getString(R.string.favorite_movies_update_interval_key);
+        String notificationsIntervalDefaultValue = getString(R.string.favorite_movies_update_interval_default_value);
+        int notificationsIntervalValue = Integer.parseInt(sharedPreferences.getString(notificationsIntervalKey, notificationsIntervalDefaultValue));
+
+        //  schedules and unscheduled the service as necessary
+        if (notificationsTurnedOn) {
+            UpdateFavoritesServiceUtils.scheduleUpdateFavorites(this, notificationsIntervalValue);
+        } else {
+            UpdateFavoritesServiceUtils.unscheduledUpdateFavorites(this);
+        }
+    }
+
+    /**
+     * Reschedules the service to run at a specified interval.
+     *
+     */
+    public void updateNotificationsIntervalTime() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //  acquires the interval for when the service should run
+        String notificationsIntervalKey = getString(R.string.favorite_movies_update_interval_key);
+        String notificationsIntervalDefaultValue = getString(R.string.favorite_movies_update_interval_default_value);
+        int notificationsIntervalValue = Integer.parseInt(sharedPreferences.getString(notificationsIntervalKey, notificationsIntervalDefaultValue));
+
+        //  schedules and unscheduled the service as necessary
+        UpdateFavoritesServiceUtils.rescheduleUpdateFavorites(this, notificationsIntervalValue);
     }
 }

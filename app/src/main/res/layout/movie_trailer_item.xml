@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="@dimen/movie_trailer_height"
+    android:padding="@dimen/container_view_padding"
+    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardElevation="@dimen/user_interface_elevation"
+    card_view:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/card_view_padding">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_height="@dimen/movie_trailer_youtube_icon_height"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_weight="1"
+            android:layout_width="@dimen/movie_trailer_youtube_icon_width"
+            android:src="@drawable/youtube_icon"/>
+
+        <TextView
+            android:id="@+id/video_title"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/movie_info_text_size"
+            android:textStyle="bold"
+            tools:text="@string/movie_trailer_title_sample"/>
+
+        <TextView
+            android:id="@+id/video_type"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/generic_text_size"
+            tools:text="@string/movie_trailer_video_type_sample"/>
+
+        <TextView
+            android:id="@+id/video_language"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/generic_text_size"
+            tools:text="@string/movie_trailer_language_sample"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

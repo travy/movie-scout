@@ -16,6 +16,12 @@
         android:title="@string/rating_menu_item" />
 
     <item
+        app:showAsAction="ifRoom"
+        android:id="@+id/favorite_movies_menu_item"
+        android:orderInCategory="3"
+        android:title="@string/favorite_movies_menu_item" />
+
+    <item
         app:showAsAction="never"
         android:id="@+id/settings_menu_button"
         android:orderInCategory="100"

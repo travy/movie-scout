@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.moviedb.MovieDbRequester;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieClickedListener;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieClickedListener;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
 
 import java.util.ArrayList;
@@ -116,7 +116,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListItemViewHold
 
         //  stores all contents within the list
         for (Movie movie : list) {
-            movieList.add(movie);
+            if (!movieList.contains(movie)) {
+                movieList.add(movie);
+            }
         }
 
         notifyDataSetChanged();

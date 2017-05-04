@@ -9,23 +9,18 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.travistorres.moviescout.R;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieClickedListener;
-import com.travistorres.moviescout.utils.moviedb.listeners.MovieDbNetworkingErrorHandler;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieClickedListener;
+import com.travistorres.moviescout.utils.moviedb.interfaces.MovieDbNetworkingErrorHandler;
 import com.travistorres.moviescout.utils.moviedb.adapters.MovieListAdapter;
+import com.travistorres.moviescout.utils.moviedb.loaders.FavoriteMovieLoaderTask;
+import com.travistorres.moviescout.utils.moviedb.loaders.MovieListLoader;
 import com.travistorres.moviescout.utils.moviedb.models.Movie;
-import com.travistorres.moviescout.utils.networking.NetworkManager;
-import com.travistorres.moviescout.utils.networking.exceptions.HttpConnectionTimeoutException;
-import com.travistorres.moviescout.utils.networking.exceptions.HttpPageNotFoundException;
-import com.travistorres.moviescout.utils.networking.exceptions.HttpUnauthorizedException;
-import com.travistorres.moviescout.utils.networking.exceptions.NetworkingException;
+import com.travistorres.moviescout.utils.networking.UrlManager;
 
-import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -44,18 +39,17 @@ public class MovieDbRequester
      *  Error message to display when no network could be reached.
      *
      */
-    public final static String NO_NETWORK_ERROR_MESSAGE = "Unable to access Network Resource";
     public final String MOVIE_REQUEST_URL_EXTRA;
+    public final String NO_NETWORK_ERROR_MESSAGE;
 
-    MovieDbNetworkingErrorHandler errorHandler;
     private FragmentActivity parentActivity;
-    private MovieListAdapter movieAdapter;
     private int currentPage;
-    private int totalPages;
     private int totalMovies;
+    private int totalPages;
+    private MovieDbNetworkingErrorHandler errorHandler;
+    private MovieListAdapter movieAdapter;
     private MovieSortType sortType;
     private String versionThreeApiKey;
-    private String versionFourApiKey;
 
     /**
      * Constructs a new Request object that will queried.
@@ -65,13 +59,14 @@ public class MovieDbRequester
      * @param clickListener
      */
     public MovieDbRequester(FragmentActivity parent, MovieDbNetworkingErrorHandler networkHandler, MovieClickedListener clickListener) {
-        parentActivity = parent;
         errorHandler = networkHandler;
         movieAdapter = new MovieListAdapter(clickListener, this);
+        parentActivity = parent;
         sortType = MovieSortType.MOST_POPULAR;
 
         //  specifies the extra to use for acquiring the resource url
         MOVIE_REQUEST_URL_EXTRA = parentActivity.getString(R.string.movie_request_url_extra);
+        NO_NETWORK_ERROR_MESSAGE = parentActivity.getString(R.string.unable_to_access_network_resource_message);
 
         reset();
     }
@@ -86,32 +81,12 @@ public class MovieDbRequester
     }
 
     /**
-     * Specifies the api keys to use for accessing resources from the Movie DB.
-     *
-     * @param versionThreeKey
-     * @param versionFourKey
-     */
-    public void setApiKeys(String versionThreeKey, String versionFourKey) {
-        setVersionThreeApiKey(versionThreeKey);
-        setVersionFourApiKey(versionFourKey);
-    }
-
-    /**
      * Specifies the key to use for accessing Version 3 API features.
      *
      * @param versionThreeKey
      */
     public void setVersionThreeApiKey(String versionThreeKey) {
         versionThreeApiKey = versionThreeKey;
-    }
-
-    /**
-     * Specifies the key to use for accessing Version 4 API features.
-     *
-     * @param versionFourKey
-     */
-    public void setVersionFourApiKey(String versionFourKey) {
-        versionFourApiKey = versionFourKey;
     }
 
     /**
@@ -140,20 +115,35 @@ public class MovieDbRequester
      */
     public void requestNext() {
         if (hasNextPage()) {
-            URL url = getCurrentRequestUrl();
-            Bundle requestUrlBundle = new Bundle();
-            requestUrlBundle.putString(MOVIE_REQUEST_URL_EXTRA, url.toString());
+            if (sortType == MovieSortType.FAVORITES) {
+                totalPages = 2; //  prevents infinite list of results
+                currentPage = 3;
+                loadLoaderManager(null, R.integer.favorite_movies_loader_manager_id);
+            } else {
+                URL url = getCurrentRequestUrl();
+                Bundle requestUrlBundle = new Bundle();
+                requestUrlBundle.putString(MOVIE_REQUEST_URL_EXTRA, url.toString());
 
-            //  retrieves the loader that will lookup the movies
-            Resources resources = parentActivity.getResources();
-            int loaderKey = resources.getInteger(R.integer.movie_db_requester_loader_manager_id);
-            LoaderManager loaderManager = parentActivity.getSupportLoaderManager();
-            Loader<Movie[]> movieLoader = loaderManager.getLoader(loaderKey);
-            loaderManager.restartLoader(loaderKey, requestUrlBundle, this);
+                //  run the restful request loader
+                loadLoaderManager(requestUrlBundle, R.integer.movie_db_requester_loader_manager_id);
 
-            //  update the page index
-            ++currentPage;
+                //  update the page index
+                ++currentPage;
+            }
         }
+    }
+
+    /**
+     * Executes a specified loader manager by its resource id.
+     *
+     * @param bundle
+     * @param resourceId
+     */
+    private void loadLoaderManager(Bundle bundle, int resourceId) {
+        Resources resources = parentActivity.getResources();
+        int loaderKey = resources.getInteger(resourceId);
+        LoaderManager loaderManager = parentActivity.getSupportLoaderManager();
+        loaderManager.restartLoader(loaderKey, bundle, this);
     }
 
     /**
@@ -162,7 +152,7 @@ public class MovieDbRequester
      * @return The URL to acquire the next set of results.
      */
     public URL getCurrentRequestUrl() {
-        MovieDbUrlManager urlManager = new MovieDbUrlManager(parentActivity);
+        UrlManager urlManager = new UrlManager(parentActivity);
         URL url = urlManager.getSortedMoveListUrl(sortType, currentPage, versionThreeApiKey);
 
         return url;
@@ -187,7 +177,15 @@ public class MovieDbRequester
      */
     @Override
     public Loader<Movie[]> onCreateLoader(int id, final Bundle args) {
-        return new MovieListLoader(this, args);
+        Loader loader = null;
+        Resources resources = parentActivity.getResources();
+        if (id == resources.getInteger(R.integer.movie_db_requester_loader_manager_id)) {
+            loader = new MovieListLoader(this, args, errorHandler);
+        } else if (id == resources.getInteger(R.integer.favorite_movies_loader_manager_id)) {
+            loader = new FavoriteMovieLoaderTask(parentActivity.getApplicationContext());
+        }
+
+        return loader;
     }
 
     /**
@@ -204,7 +202,10 @@ public class MovieDbRequester
         if (list != null) {
             movieAdapter.setMoviesList(list);
         } else {
-            Toast.makeText(parentActivity, NO_NETWORK_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
+            String nothingToDisplayMessage = sortType == MovieSortType.FAVORITES ?
+                    getContext().getString(R.string.no_movies_favored_message) :
+                    NO_NETWORK_ERROR_MESSAGE;
+            Toast.makeText(parentActivity, nothingToDisplayMessage, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -245,5 +246,9 @@ public class MovieDbRequester
 
     public void setTotalMovies(int totalMovies) {
         this.totalMovies = totalMovies;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
     }
 }

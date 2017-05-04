@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Travis Anthony Torres
  */
 
-package com.travistorres.moviescout.utils.moviedb.listeners;
+package com.travistorres.moviescout.utils.moviedb.interfaces;
 
 /**
  * MovieDbNetworkingErrorHandler

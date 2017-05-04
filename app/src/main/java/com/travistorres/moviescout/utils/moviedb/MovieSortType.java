@@ -16,4 +16,5 @@ package com.travistorres.moviescout.utils.moviedb;
 public enum MovieSortType {
     MOST_POPULAR,
     HIGHEST_RATED,
+    FAVORITES
 }

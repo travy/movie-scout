@@ -2,73 +2,194 @@
 
     <string name="app_name">MovieScout</string>
 
+    <!--  Specifies the api key to use for requests on themoviedb.org  -->
+    <string name="movie_scout_version_three_api_key" translatable="false"></string>
+
+    <!--  Favorite Button  -->
+    <string name="favorites_button_favorite_button_label" translatable="true">Favorite</string>
+    <string name="favorites_button_unfavored_button_label" translatable="true">Un-favorite</string>
+
+    <!--  Notifications  -->
+    <string name="favorites_update_description_notification" translatable="true">Hey!!  One of your favorites on Movie Scout have been updated.  Why not check it out!</string>
+    <string name="favorites_update_job_task" translatable="false">favorite-movies-update-job-task</string>
+    <string name="favorites_update_title_notification" translatable="true">Favorites Updated</string>
+
     <!--  Bundle Extras Keys  -->
-    <string name="movie_request_url_extra">movie-request-extra</string>
-    <string name="main_activity_state_bundle">main-activity-state-bundle-extra</string>
+    <string name="main_activity_state_bundle" translatable="false">main-activity-state-bundle-extra</string>
+    <string name="movie_request_url_extra" translatable="false">movie-request-extra</string>
+    <string name="selected_movies_reviews_extra" translatable="false">selected-movie-reviews-extra</string>
+    <string name="selected_movies_trailers_extra" translatable="false">selected-movie-trailer-extra</string>
+
+    <!--  Messages  -->
+    <string name="add_movie_to_favorites_postfix_message" translatable="true">&#160;to Favorites</string>
+    <string name="add_movie_to_favorites_prefix_message" translatable="true">Added&#160;</string>
+    <string name="added_movie_to_favorites_message" translatable="true">The movie has been added to your favorites</string>
+    <string name="no_reviews_found_for_movie_message" translatable="true">No Reviews were Found</string>
+    <string name="removed_movie_from_favorites_message" translatable="true">Removed from Favorites</string>
 
     <!--  Error Messages  -->
-    <string name="missing_api_keys">An API key was not provided</string>
+    <string name="content_provider_failed_insert_message" translatable="true">Failed to insert row into&#160;</string>
+    <string name="content_provider_unknown_uri_message" translatable="true">Unknown Uri:&#160;&#160;</string>
+    <string name="default_networking_exception_log_message_postfix" translatable="true">]&#160;</string>
+    <string name="default_networking_exception_log_message_prefix" translatable="true">Movie Scout Networking Exception was thrown:  [HTTP </string>
+    <string name="invalid_api_key_error_message" translatable="true">The provided API Key was rejected by the server.  Please check that you\'ve entered the correct api key in the settings.</string>
+    <string name="invalid_interval_duration_for_service_message" translatable="true">An invalid number was specified for the time interval</string>
+    <string name="lost_network_connection_message" translatable="true">The network connection has been lost</string>
+    <string name="missing_api_keys" translatable="true">An API key was not provided</string>
+    <string name="missing_movie_model_error_message" translatable="true">Unable to acquire Movie data</string>
+    <string name="movie_info_activity_missing_movie_message" translatable="true">Activity triggered without a selected movie being specified</string>
+    <string name="movie_poster_content_description" translatable="true">Movie Poster</string>
+    <string name="network_failure_error_message" translatable="true">The network connection failed!</string>
+    <string name="no_movie_trailer_found" translatable="true">No trailers were found</string>
+    <string name="no_movies_favored_message" translatable="true">You have not favored any movies</string>
+    <string name="page_not_found_error_message" translatable="true">The requested page was not found</string>
+    <string name="unable_to_access_network_resource_message" translatable="true">Unable to access Network Resource</string>
 
-    <string name="page_not_found_error_message">The requested page was not found</string>
-    <string name="invalid_api_key_error_message">The provided API Key was rejected by the server.  Please check that you\'ve entered the correct api key in the settings.</string>
-    <string name="network_failure_error_message">The network connection failed!</string>
-
-    <string name="movie_poster_content_description">Movie Poster</string>
-
-    <string name="popularity_menu_item">Most Popular</string>
-    <string name="rating_menu_item">Highly Rated</string>
-
-    <string name="missing_movie_model_error_message">Unable to acquire Movie data</string>
+    <!--  Menu Strings  -->
+    <string name="favorite_movies_menu_item" translatable="true">Favorites</string>
+    <string name="popularity_menu_item" translatable="true">Most Popular</string>
+    <string name="rating_menu_item" translatable="true">Highly Rated</string>
 
     <!--  Movie Transport Information  -->
-    <string name="selected_movie_extra_key">selected-movie</string>
-
-    <!--  Movie Information  -->
-    <string name="movie_release_date_label">Release</string>
-    <string name="movie_popularity_rating_label">Popularity</string>
-    <string name="movie_language_label">Language</string>
-    <string name="movie_vote_average_label">Vote Average</string>
+    <string name="selected_movie_extra_key" translatable="false">selected-movie</string>
 
     <!--  MovieDB API Url Configurations  -->
-    <string name="movie_db_api_uri_scheme">HTTP</string>
-    <string name="movie_db_api_uri_domain">api.themoviedb.org</string>
-    <string name="movie_db_api_v3_identifier">3</string>
-    <string name="movie_db_api_v4_identifier">4</string>
-    <string name="movie_db_api_movie_request_action">movie</string>
-    <string name="movie_db_api_popular_movie_sort_action">popular</string>
-    <string name="movie_db_api_top_rating_sort_action">top_rated</string>
-    <string name="movie_db_api_key_query_key">api_key</string>
-    <string name="movie_db_api_page_query_key">page</string>
+    <string name="movie_db_api_key_query_key" translatable="false">api_key</string>
+    <string name="movie_db_api_movie_request_action" translatable="false">movie</string>
+    <string name="movie_db_api_page_query_key" translatable="false">page</string>
+    <string name="movie_db_api_popular_movie_sort_action" translatable="false">popular</string>
+    <string name="movie_db_api_reviews_action" translatable="false">reviews</string>
+    <string name="movie_db_api_top_rating_sort_action" translatable="false">top_rated</string>
+    <string name="movie_db_api_trailer_action" translatable="false">videos</string>
+    <string name="movie_db_api_uri_domain" translatable="false">api.themoviedb.org</string>
+    <string name="movie_db_api_uri_scheme" translatable="false">HTTP</string>
+    <string name="movie_db_api_v3_identifier" translatable="false">3</string>
+    <string name="movie_db_api_v4_identifier" translatable="false">4</string>
 
     <!--  TMDB Image Resource Configurations  -->
-    <string name="tmdb_uri_scheme">HTTP</string>
-    <string name="tmdb_uri_domain">image.tmdb.org</string>
-    <string name="tmdb_uri_image_host_path_one">t</string>
-    <string name="tmdb_uri_image_host_path_two">p</string>
+    <string name="tmdb_uri_domain" translatable="false">image.tmdb.org</string>
+    <string name="tmdb_uri_image_host_path_one" translatable="false">t</string>
+    <string name="tmdb_uri_image_host_path_two" translatable="false">p</string>
+    <string name="tmdb_uri_scheme" translatable="false">HTTP</string>
 
     <!--  TMDB Image Resolution Sizes  -->
-    <string name="tmdb_image_size_original">original</string>
-    <string name="tmdb_image_size_92">w92</string>
-    <string name="tmdb_image_size_154">w154</string>
-    <string name="tmdb_image_size_185">w185</string>
-    <string name="tmdb_image_size_300">w300</string>
-    <string name="tmdb_image_size_342">w342</string>
-    <string name="tmdb_image_size_500">w500</string>
-    <string name="tmdb_image_size_780">w780</string>
-    <string name="tmdb_image_size_1280">w1280</string>
-    <string name="tmdb_image_size_default">@string/tmdb_image_size_342</string>
+    <string name="tmdb_image_size_1280" translatable="false">w1280</string>
+    <string name="tmdb_image_size_154" translatable="false">w154</string>
+    <string name="tmdb_image_size_185" translatable="false">w185</string>
+    <string name="tmdb_image_size_300" translatable="false">w300</string>
+    <string name="tmdb_image_size_342" translatable="false">w342</string>
+    <string name="tmdb_image_size_500" translatable="false">w500</string>
+    <string name="tmdb_image_size_780" translatable="false">w780</string>
+    <string name="tmdb_image_size_92" translatable="false">w92</string>
+    <string name="tmdb_image_size_default" translatable="false">@string/tmdb_image_size_342</string>
+    <string name="tmdb_image_size_original" translatable="false">original</string>
+
+    <!--  TMDB Movie Json Parsers  -->
+    <string name="movie_parser_json_adult" translatable="false">adult</string>
+    <string name="movie_parser_json_backdrop_path" translatable="false">backdrop_path</string>
+    <string name="movie_parser_json_genre_id" translatable="false">genre_ids</string>
+    <string name="movie_parser_json_id" translatable="false">id</string>
+    <string name="movie_parser_json_original_language" translatable="false">original_language</string>
+    <string name="movie_parser_json_original_title" translatable="false">original_title</string>
+    <string name="movie_parser_json_overview" translatable="false">overview</string>
+    <string name="movie_parser_json_popularity" translatable="false">popularity</string>
+    <string name="movie_parser_json_poster_path" translatable="false">poster_path</string>
+    <string name="movie_parser_json_poster_path_prefix" translatable="false">/</string>
+    <string name="movie_parser_json_poster_path_prefix_off" translatable="false"></string>
+    <string name="movie_parser_json_release_date" translatable="false">release_date</string>
+    <string name="movie_parser_json_results" translatable="false">results</string>
+    <string name="movie_parser_json_title" translatable="false">title</string>
+    <string name="movie_parser_json_total_pages" translatable="false">total_pages</string>
+    <string name="movie_parser_json_total_results" translatable="false">total_results</string>
+    <string name="movie_parser_json_video" translatable="false">video</string>
+    <string name="movie_parser_json_vote_average" translatable="false">vote_average</string>
+    <string name="movie_parser_json_vote_count" translatable="false">vote_count</string>
+
+    <!--  TMDB Trailer Json Parsers  -->
+    <string name="movie_trailer_json_id" translatable="false">id</string>
+    <string name="movie_trailer_json_iso_3166_1" translatable="false">iso_3166_1</string>
+    <string name="movie_trailer_json_iso_639_1" translatable="false">iso_639_1</string>
+    <string name="movie_trailer_json_key" translatable="false">key</string>
+    <string name="movie_trailer_json_name" translatable="false">name</string>
+    <string name="movie_trailer_json_results" translatable="false">results</string>
+    <string name="movie_trailer_json_site" translatable="false">site</string>
+    <string name="movie_trailer_json_size" translatable="false">size</string>
+    <string name="movie_trailer_json_type" translatable="false">type</string>
+
+    <!--  TMDB Review Json Parsers -->
+    <string name="movie_review_json_author" translatable="false">author</string>
+    <string name="movie_review_json_content" translatable="false">content</string>
+    <string name="movie_review_json_id" translatable="false">id</string>
+    <string name="movie_review_json_results" translatable="false">results</string>
+    <string name="movie_review_json_url" translatable="false">url</string>
+
+    <!--  Youtube Video Url  -->
+    <string name="youtube_domain" translatable="false">www.youtube.com</string>
+    <string name="youtube_scheme" translatable="false">https</string>
+    <string name="youtube_video_identifier_query" translatable="false">v</string>
+    <string name="youtube_video_param" translatable="false">watch</string>
 
     <!--  Settings Textual Information -->
-    <string name="movie_db_api_settings_category">Movie DB API Settings</string>
+    <string name="favorites_updates_notification_settings_category" translatable="true">Notification Settings</string>
+    <string name="movie_db_api_settings_category" translatable="true">Movie DB API Settings</string>
 
     <string name="movie_db_v3_settings_default" translatable="false">not specified</string>
     <string name="movie_db_v3_settings_key" translatable="false">movie-db-api-v3-setting-key</string>
-    <string name="movie_db_v3_settings_title">V3 API Key</string>
-    <string name="movie_db_v3_settings_summary">Access V3 api resources</string>
+    <string name="movie_db_v3_settings_summary" translatable="true">Access V3 api resources</string>
+    <string name="movie_db_v3_settings_title" translatable="false">V3 API Key</string>
 
     <string name="movie_db_v4_settings_default" translatable="false">not specified</string>
     <string name="movie_db_v4_settings_key" translatable="false">movie-db-api-v4-setting-key</string>
-    <string name="movie_db_v4_settings_title">V4 API Key</string>
-    <string name="movie_db_v4_settings_summary">Access V4 api resources</string>
+    <string name="movie_db_v4_settings_summary" translatable="true">Access V4 api resources</string>
+    <string name="movie_db_v4_settings_title" translatable="false">V4 API Key</string>
+
+    <string name="favorite_movies_notification_state_key" translatable="false">display-movie-update-notification-key</string>
+    <string name="favorite_movies_notification_state_summary" translatable="true">Will display notifications from the app</string>
+    <string name="favorite_movies_notification_state_title" translatable="true">Display Notifications</string>
+
+    <string name="favorite_movies_update_interval_default_value" translatable="false">15</string>
+    <string name="favorite_movies_update_interval_key" translatable="false">update-movies-duration-time-key</string>
+    <string name="favorite_movies_update_interval_summary" translatable="true">Specifies after what interval of time will new updates be looked up</string>
+    <string name="favorite_movies_update_interval_title" translatable="true">Favorites Update Interval</string>
+
+    <!--  Date Conversion Strings  -->
+    <string name="date_parse_token_delimiter" translatable="false">-</string>
+    <string name="date_parse_january_word" translatable="true">Jan</string>
+    <string name="date_parse_february_word" translatable="true">Feb</string>
+    <string name="date_parse_march_word" translatable="true">Mar</string>
+    <string name="date_parse_april_word" translatable="true">Apr</string>
+    <string name="date_parse_may_word" translatable="true">May</string>
+    <string name="date_parse_june_word" translatable="true">Jun</string>
+    <string name="date_parse_july_word" translatable="true">Jul</string>
+    <string name="date_parse_august_word" translatable="true">Aug</string>
+    <string name="date_parse_september_word" translatable="true">Sep</string>
+    <string name="date_parse_october_word" translatable="true">Oct</string>
+    <string name="date_parse_november_word" translatable="true">Nov</string>
+    <string name="date_parse_december_word" translatable="true">Dec</string>
+
+    <string name="date_parse_month_day_separator" translatable="false">&#160;</string>
+    <string name="date_parse_day_year_separator" translatable="false">,&#160;</string>
+
+    <!--  Movie Info Textual Data  -->
+    <string name="movie_info_original_language_category" translatable="true">Language</string>
+    <string name="movie_info_overview_category" translatable="true">Overview</string>
+    <string name="movie_info_popularity_category" translatable="true">Popularity</string>
+    <string name="movie_info_rating_category" translatable="true">Rating</string>
+    <string name="movie_info_release_date_category" translatable="true">Release Date</string>
+    <string name="movie_info_reviews_category" translatable="true">Reviews</string>
+    <string name="movie_info_trailers_category" translatable="true">Trailers</string>
+
+    <!--  Strings used in Layout Sample gui, does not need to be translated  -->
+    <string name="movie_info_original_language_sample" translatable="false">en</string>
+    <string name="movie_info_overview_sample" translatable="false">A live action version of Disney\'s classic Beauty and the Beast fairy tale</string>
+    <string name="movie_info_popularity_sample" translatable="false">129</string>
+    <string name="movie_info_rating_sample" translatable="false">6.8</string>
+    <string name="movie_info_release_date_sample" translatable="false">Apr 30, 2017</string>
+    <string name="movie_info_title_sample" translatable="false">Beauty and the Beast</string>
+    <string name="movie_review_author_sample" translatable="false">Travis Anthony Torres</string>
+    <string name="movie_review_data_sample" translatable="false">Emma Watson is more beautiful than ever!! She can cast a spell on me any day ;)</string>
+    <string name="movie_trailer_language_sample" translatable="false">Language of Video</string>
+    <string name="movie_trailer_title_sample" translatable="false">Title of Video</string>
+    <string name="movie_trailer_video_type_sample" translatable="false">Type of Video</string>
 
 </resources>

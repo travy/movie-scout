@@ -25,8 +25,6 @@ import java.util.Scanner;
  */
 
 public class NetworkManager {
-    public final static String TAG = "NetworkManager";
-
     public final static int HTTP_READ_TIMEOUT = 3000;
     public final static int HTTP_CONNECT_TIMEOUT = 3000;
     public final static String HTTP_GET_METHOD = "GET";

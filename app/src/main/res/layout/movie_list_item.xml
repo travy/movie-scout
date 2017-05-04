@@ -2,21 +2,21 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible" />
+        android:layout_width="wrap_content"
+        android:visibility="invisible"/>
 
     <ImageView
+        android:adjustViewBounds="@bool/movie_grid_poster_adjust_view_bounds"
         android:contentDescription="@string/movie_poster_content_description"
         android:id="@+id/movie_poster"
         android:layout_gravity="center"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="@bool/movie_grid_poster_adjust_view_bounds"/>
+        android:layout_width="match_parent"/>
 
 </FrameLayout>

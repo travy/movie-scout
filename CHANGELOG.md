@@ -4,16 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [UNRELEASED]
+## [v2.0.0] - 2017-05-03
 
 ###  Added
 
 -  Will display the backdrop image for the selected movie where the app bar used to be
+-  Can view trailers for the selected movie
+-  User reviews
+-  Users Favorites
 
 ###  Changed
 
 -  Gridlayout column count differs between portrait and landscape views
 -  Made enhancements which were suggested by Udacity
+-  Sort options will be hidden when there is no network connection
+-  API Key passed through strings resource and removed from settings
 
 ## [v1.2.0] - 2017-04-01
 
@@ -65,4 +70,4 @@ settings page
 [v1.1.0]: https://github.com/travy/movie-scout/compare/v1.0.0...v1.1.0
 [v1.1.1]: https://github.com/travy/movie-scout/compare/v1.1.0...v1.1.1
 [v1.2.0]: https://github.com/travy/movie-scout/compare/v1.1.1...v1.2.0
-[UNRELEASED]: https://github.com/travy/movie-scout/compare/v1.2.0...develop
+[v2.0.0]: https://github.com/travy/movie-scout/compare/v1.2.0...v2.0.0
