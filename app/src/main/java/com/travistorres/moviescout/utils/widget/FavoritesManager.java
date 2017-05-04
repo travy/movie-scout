@@ -4,13 +4,11 @@
 
 package com.travistorres.moviescout.utils.widget;
 
-import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.util.Log;
 
 import com.travistorres.moviescout.R;
 import com.travistorres.moviescout.utils.db.MoviesDatabase;
@@ -29,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 
 /**
